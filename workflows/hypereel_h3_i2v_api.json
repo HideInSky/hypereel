@@ -1,0 +1,31 @@
+{
+  "1": {
+    "class_type": "LoadImage",
+    "_meta": { "title": "Load Image (user photo)" },
+    "inputs": { "image": "example.png" }
+  },
+  "2": {
+    "class_type": "MinimaxHailuo03FirstLastFrameNode",
+    "_meta": { "title": "MiniMax H3 First-Last-Frame to Video" },
+    "inputs": {
+      "model": "MiniMax H3 Max Turbo",
+      "model.prompt": "Image 1 is the hero subject of the shot. Blockbuster movie trailer, slow dramatic push-in. A deep movie-trailer narrator says: \"In a world...\" Epic orchestral music.",
+      "model.resolution": "480P",
+      "model.duration": 5,
+      "model.prompt_expansion_mode": "balanced",
+      "first_frame": ["1", 0],
+      "seed": 42,
+      "watermark": false
+    }
+  },
+  "3": {
+    "class_type": "SaveVideo",
+    "_meta": { "title": "Save Video" },
+    "inputs": {
+      "video": ["2", 0],
+      "filename_prefix": "video/hypereel",
+      "format": "auto",
+      "format.codec": "auto"
+    }
+  }
+}

@@ -1,0 +1,44 @@
+// Prisma schema: the single source of truth for the database shape.
+// Every change here becomes a versioned SQL migration in prisma/migrations
+// (`npm run migrate:dev -- --name <what-changed>`), which is what runs in prod.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GenerationStatus {
+  queued
+  running
+  succeeded
+  failed
+}
+
+// One row per "Hypereel" request. The uploaded photo and the resulting
+// video live in object storage (local volume for now); the DB only keeps paths.
+model Generation {
+  id          String           @id @default(cuid())
+  status      GenerationStatus @default(queued)
+  genre       String
+  caption     String?
+  prompt      String
+  model       String           // which H3 variant produced it, for the credits math
+  comfyJobId  String?
+  progress    Int              @default(0)   // 0-100, best effort from Comfy events
+  inputPath   String                         // uploaded (resized) photo
+  videoPath   String?
+  posterPath  String?
+  error       String?
+  sessionId   String                         // anonymous cookie session
+  ip          String
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+
+  @@index([sessionId, createdAt])
+  @@index([ip, createdAt])
+  @@index([status, createdAt])
+}

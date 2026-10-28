@@ -1,0 +1,71 @@
+# Local development stack (dev-guide step 3).
+#   docker compose up            -> postgres + backend (:3000) + frontend (:5173)
+#   docker compose --profile tunnel up  -> also a Cloudflare tunnel (needs CLOUDFLARE_TUNNEL_TOKEN in .env)
+# Source code is bind-mounted from ./codebase for hot reload; node_modules stay
+# inside the containers (anonymous volumes) so host and container never fight.
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: hypereel
+    volumes:
+      - pgdata:/var/lib/postgresql/data   # named volume: survives `docker compose down`
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build:
+      context: .
+      dockerfile: codebase/backend/Dockerfile.dev
+    env_file: .env
+    environment:
+      DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD:-postgres}@postgres:5432/hypereel
+      DATA_DIR: /data
+      PORT: "3000"
+      PUBLIC_URL: ${PUBLIC_URL:-http://localhost:5173}
+    volumes:
+      - ./codebase:/app/codebase
+      - ./workflows:/app/workflows
+      - /app/node_modules
+      - media:/data
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: codebase/frontend/Dockerfile.dev
+    environment:
+      # Vite proxies /api and /media to this address (see vite.config.ts)
+      VITE_PROXY_TARGET: http://backend:3000
+    volumes:
+      - ./codebase:/app/codebase
+      - /app/node_modules
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+  # Optional: expose the dev stack on a public hostname through Cloudflare Tunnel.
+  cloudflared:
+    image: cloudflare/cloudflared:latest
+    profiles: ["tunnel"]
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      - frontend
+
+volumes:
+  pgdata:
+  media:
