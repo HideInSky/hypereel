@@ -1,5 +1,5 @@
 # Multi-stage build for the backend.
-#   deps    -> install ALL deps (prisma CLI is a devDependency but needed to generate the client)
+#   deps    -> install ALL deps (dev deps are needed to compile TypeScript and build the frontend)
 #   build   -> compile TypeScript, generate Prisma client, build the frontend into ../frontend/dist
 #   runtime -> small image with only production deps + compiled output
 # Build context is the REPO ROOT (see docker-compose.yml / CI), because the
@@ -17,7 +17,8 @@ COPY codebase ./codebase
 COPY workflows ./workflows
 RUN npm run build --workspace codebase/frontend \
  && npm run build --workspace codebase/backend \
- && npm prune --omit=dev
+ && npm prune --omit=dev \
+ && npm run prisma:generate --workspace codebase/backend   # re-generate: prune can drop the generated client
 
 FROM node:22-bookworm-slim AS runtime
 ENV NODE_ENV=production
@@ -32,10 +33,12 @@ COPY --from=build /app/codebase/backend/prisma ./codebase/backend/prisma
 COPY --from=build /app/codebase/frontend/dist ./codebase/frontend/dist
 COPY --from=build /app/workflows ./workflows
 WORKDIR /app/codebase/backend
-RUN mkdir -p /data && chown node:node /data
-USER node
+# Note: we run as root because managed volumes (e.g. Railway) are mounted
+# root-owned at runtime, so a non-root user couldn't write /data. On Kubernetes
+# you'd instead set `USER node` + securityContext.fsGroup on the volume.
+RUN mkdir -p /data
 ENV PORT=3000 DATA_DIR=/data
 EXPOSE 3000
 # Apply pending migrations, then start. `migrate deploy` is idempotent and
 # never generates new migrations, which is what you want in prod.
-CMD ["sh", "-c", "npx prisma migrate deploy && node dist/server.js"]
+CMD ["sh", "-c", "npm run migrate:deploy && node dist/server.js"]
