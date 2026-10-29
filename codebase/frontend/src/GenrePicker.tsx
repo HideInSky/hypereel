@@ -6,7 +6,7 @@ type Props = {
   onChange: (id: string) => void;
 };
 
-/** Horizontal row of genre chips. The selected chip also shows its tagline below. */
+/** Wrapping grid of genre chips. The selected chip also shows its tagline below. */
 export default function GenrePicker({ genres, value, onChange }: Props) {
   const selected = genres.find((g) => g.id === value) ?? null;
 
