@@ -1,6 +1,6 @@
 # Multi-stage build for the backend.
 #   deps    -> install ALL deps (dev deps are needed to compile TypeScript and build the frontend)
-#   build   -> compile TypeScript, generate Prisma client, build the frontend into ../frontend/dist
+#   build   -> generate Prisma client FIRST (tsc needs its types), compile TypeScript, build the frontend
 #   runtime -> small image with only production deps + compiled output
 # Build context is the REPO ROOT (see docker-compose.yml / CI), because the
 # workspaces' package-lock.json lives there and the backend serves the frontend build.
