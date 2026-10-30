@@ -1,48 +1,54 @@
-# hypereel 🎬
+# hypereel
 
-**Make anything overdramatic.** Upload one photo (your cat, your lunch, your houseplant), pick a genre, and get an 8-second comedy clip. An AI script writer (Claude, as a ComfyUI node) looks at your photo and writes a **new joke about that exact thing** every time; **MiniMax H3** then renders it with **narrator voiceover, music and sound effects in one pass**, running as a **ComfyUI workflow on Comfy Cloud**. Every clip gets a share link with a playable preview and a **"Make your own" / "Remix"** button.
+**Open-source viral video effects.** Upload a character (and optionally a location and products), pick an effect, and get a vertical clip with sound. Rendered by **MiniMax H3** running as a **ComfyUI workflow on Comfy Cloud**. Every clip gets a share link that plays inside chat apps.
 
 Built for the [Open Source Higgsfield](https://comfy.org/open-source-higgsfield/) challenge. #OpenSourceHiggsfield
 
-| Genre | What you get |
-|---|---|
-| 🎬 Action Trailer | "In a world..." narrator, braaam, lens flares |
-| 🌿 Nature Documentary | Whispering British naturalist, birdsong |
-| 📺 Infomercial | "But wait, there's more!", cash-register ding |
-| 💔 K-Drama | Rain, slow turn, piano ballad, a line in Korean |
-| 🕯️ Horror | Flicker, creeping camera, heartbeat |
-| 👨‍🍳 Cooking Show | Sizzle, orbit shot, applause |
+| Effect | What happens | Length |
+|---|---|---|
+| Floating Fall | They fall backward, their belongings hang in midair, and the camera glides through close-ups before the fall resumes | 8 s |
+| Vanish | Their body disappears in an instant and the empty clothes collapse flat to the ground | 5 s |
+| Eyes In | The camera dives into their eye and through the pupil, then emerges in a new scene | 8 s |
 
 ## How it works
 
 ```mermaid
 flowchart LR
-  U[Phone / browser] -->|photo + genre| FE[React SPA]
+  U[Browser] -->|"character, location, product photos + effect"| FE[React SPA]
   FE -->|REST /api| BE[Fastify backend]
   BE -->|rows| DB[(PostgreSQL)]
   BE -->|uploads + mp4| ST[(Volume /data)]
-  BE -->|"@comfyorg/sdk: submit workflow + writer brief"| CC[Comfy Cloud]
-  CC -->|photo + brief| W[Claude node: writes the scene]
-  W -->|script| H3[MiniMax H3 Max Turbo]
-  H3 -->|video + audio| CC -->|mp4 + script.txt| BE
+  BE -->|"@comfyorg/sdk: submit workflow"| CC[Comfy Cloud]
+  CC -->|ComfyUI partner node| H3[MiniMax H3 Max reference node]
+  H3 -->|video + audio| CC -->|output mp4| BE
   S[Social crawler] -->|/v/:id| BE
 ```
 
-1. The backend normalises the photo (EXIF rotate, ≤1280px JPEG) and builds a **writer brief** ([prompts.ts](codebase/backend/src/prompts.ts)): the genre's style (camera, narrator voice, music), one **randomly picked punchline beat** from that genre's list, the clip length, and the user's optional note.
-2. It loads the ComfyUI workflow [workflows/hypereel_h3_i2v_api.json](workflows/hypereel_h3_i2v_api.json), binds the photo to `LoadImage` and the brief to the script-writer node, randomizes both seeds, and submits it to Comfy Cloud with the official TypeScript SDK ([comfy.ts](codebase/backend/src/services/comfy.ts)).
-3. Inside the workflow, the **Claude node looks at the photo** and writes a two-beat scene (setup, then punchline) that names concrete details it sees. Its fixed rules live in the node's system prompt. `StringConcatenate` adds the "keep the subject's exact look" rules, and `SaveText` saves the script so the app can show it.
-4. **MiniMax H3** renders video and stereo audio together from that script (no separate TTS or music model). An 8 s 480P clip takes about a minute end to end.
-5. The result lands in storage; `/v/:id` serves a share page with `og:video` tags so it previews inside iMessage/Discord/X, then sends humans to the app.
+1. **Inputs.** A character is required (up to 4 photos). A location (up to 2) and products (up to 3) are optional. That makes at most 9, the limit of the H3 reference node.
+2. **Recipe.** Each effect in [effects.ts](codebase/backend/src/effects.ts) is a fixed recipe: a timed motion description, sound cues and a clip length. The recipe changes depending on what was uploaded. For example, Eyes In flies out into your location photo if you gave one.
+3. **Prompt.** The backend always attaches images in the order characters, locations, products. The prompt then refers to them by position ("Image 1 and Image 2 show the character"), which is how the node tells them apart. An optional user prompt is appended as extra direction.
+4. **Render.** [comfy.ts](codebase/backend/src/services/comfy.ts) loads [the workflow](workflows/hypereel_effects_h3_api.json), creates one `LoadImage` node per upload, and submits it to Comfy Cloud with the official TypeScript SDK. H3 renders picture and stereo audio together. A clip takes about 30 to 60 seconds.
+5. **Share.** The result lands in storage, and `/v/:id` serves a page with `og:video` tags so it previews inside chat apps, then sends people to the app.
 
-**The workflow is a normal ComfyUI workflow.** Open ComfyUI (local or cloud), drag `workflows/hypereel_h3_i2v_api.json` in, and it runs. To change the pipeline (e.g. turn on H3's 2K upscale or prompt-enhance nodes), edit it in ComfyUI, export with *Workflow → Export (API)*, and update node ids in [hypereel_h3_i2v_map.json](workflows/hypereel_h3_i2v_map.json). No code changes needed.
+**The workflow is a normal ComfyUI workflow.** Open ComfyUI (local or cloud), drag `workflows/hypereel_effects_h3_api.json` in, pick images, and it runs. Node ids are mapped in [hypereel_effects_h3_map.json](workflows/hypereel_effects_h3_map.json), so re-exporting needs no code changes.
+
+**Example clips.** The clips in `codebase/frontend/public/effects/` were rendered by this project from invented people and products made with Nano Banana 2. They contain no third-party footage.
 
 ### Tools and models used
-- **ComfyUI / Comfy Cloud** runs the workflow. **MiniMax H3 Max Turbo** is the core model, via its ComfyUI partner node. **Claude (Sonnet 5.5)** writes each scene, via the Claude partner node.
-- **@comfyorg/sdk** submits jobs, streams progress, and downloads outputs.
+- **ComfyUI / Comfy Cloud** runs the workflow. **MiniMax H3 Max** is the core model, via its ComfyUI partner node.
+- **Nano Banana 2** (a ComfyUI partner node) made the fictional reference images for the example clips only. It is not used at runtime.
+- **@comfyorg/sdk** submits jobs, streams progress and downloads outputs.
 - Fastify, Prisma + PostgreSQL, React + Vite, sharp.
 
 ### Cost
-H3 Max Turbo at 480P costs about 7.5 Comfy credits per second, so an 8-second clip is about 60 credits, roughly $0.28, plus a few credits for the script writer. `VIDEO_SECONDS` sets the length (5 to 15). Public deployments are protected by per-session, per-IP and global daily caps (`LIMIT_*` env vars).
+H3 Max costs about $0.0715 per second at 480P and $0.114 per second at 768P. Using several reference images can add up to about $0.10 or more.
+
+| Clip | 480P | 768P |
+|---|---|---|
+| 5 s (Vanish) | $0.36, about 75 credits | $0.57, about 120 credits |
+| 8 s (Floating Fall, Eyes In) | $0.57, about 120 credits | $0.92, about 195 credits |
+
+Public deployments are protected by per-session, per-IP and global daily caps (`LIMIT_*` env vars). The global default is 25 clips a day.
 
 ## Run it locally
 
@@ -62,7 +68,7 @@ npm run dev -w codebase/frontend              # terminal 3: app on http://localh
 
 **Try the model without the app:**
 ```bash
-COMFY_MODE=workflow npm run smoke -w codebase/backend -- ~/Pictures/cat.jpg nature "my cat Mochi"
+COMFY_MODE=workflow npm run smoke -w codebase/backend -- vanish character:$HOME/Pictures/me.jpg product:$HOME/Pictures/phone.jpg
 ```
 
 ### With Docker Compose

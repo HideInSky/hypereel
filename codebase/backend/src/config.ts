@@ -16,21 +16,16 @@ const schema = z.object({
 
   // --- Comfy / MiniMax H3 ---
   // "workflow": run the exported ComfyUI workflow JSON through Comfy Cloud (default).
-  // "router":   call the model directly through Comfy Router (no workflow file).
   // "fake":     no network; returns a fixture video. For UI work and tests.
-  COMFY_MODE: z.enum(["workflow", "router", "fake"]).default("fake"),
+  COMFY_MODE: z.enum(["workflow", "fake"]).default("fake"),
   COMFY_API_KEY: z.string().optional(),
-  COMFY_WORKFLOW_PATH: z.string().default("../../workflows/hypereel_h3_i2v_api.json"),
-  COMFY_WORKFLOW_MAP_PATH: z.string().default("../../workflows/hypereel_h3_i2v_map.json"),
-  COMFY_ROUTER_MODEL: z.string().default("minimax/minimax-h3"),
-  // 8s leaves room for a setup AND a punchline (5s only fit one line).
-  VIDEO_SECONDS: z.coerce.number().int().min(5).max(15).default(8),
-  VIDEO_RESOLUTION: z.string().default("480P"),
+  COMFY_WORKFLOW_PATH: z.string().default("../../workflows/hypereel_effects_h3_api.json"),
+  COMFY_WORKFLOW_MAP_PATH: z.string().default("../../workflows/hypereel_effects_h3_map.json"),
 
   // --- Credit protection: every clip costs real money ---
   LIMIT_PER_SESSION_PER_HOUR: z.coerce.number().default(3),
   LIMIT_PER_IP_PER_DAY: z.coerce.number().default(10),
-  LIMIT_GLOBAL_PER_DAY: z.coerce.number().default(150),
+  LIMIT_GLOBAL_PER_DAY: z.coerce.number().default(25),
   MAX_UPLOAD_MB: z.coerce.number().default(10),
 });
 

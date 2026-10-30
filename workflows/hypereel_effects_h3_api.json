@@ -1,0 +1,73 @@
+{
+  "10": {
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Character"
+    },
+    "inputs": {
+      "image": "character.png"
+    }
+  },
+  "11": {
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Location (optional)"
+    },
+    "inputs": {
+      "image": "location.png"
+    }
+  },
+  "12": {
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Product (optional)"
+    },
+    "inputs": {
+      "image": "product.png"
+    }
+  },
+  "2": {
+    "class_type": "MinimaxHailuo03ReferenceNode",
+    "_meta": {
+      "title": "MiniMax H3 Max (video + audio from references)"
+    },
+    "inputs": {
+      "model": "MiniMax H3 Max",
+      "model.prompt": "Image 1 shows the character. Image 2 shows the location. Image 3 shows the product items. Locked-off camera. At 2s the character's body vanishes in a single frame and the empty clothes collapse flat to the ground, with the product items landing on top.",
+      "model.resolution": "480P",
+      "model.ratio": "9:16",
+      "model.duration": 5,
+      "model.prompt_expansion_mode": "balanced",
+      "model.reference_detail": "standard",
+      "model.reference_images.image_1": [
+        "10",
+        0
+      ],
+      "model.reference_images.image_2": [
+        "11",
+        0
+      ],
+      "model.reference_images.image_3": [
+        "12",
+        0
+      ],
+      "seed": 42,
+      "watermark": false
+    }
+  },
+  "3": {
+    "class_type": "SaveVideo",
+    "_meta": {
+      "title": "Save video"
+    },
+    "inputs": {
+      "video": [
+        "2",
+        0
+      ],
+      "filename_prefix": "video/hypereel",
+      "format": "auto",
+      "format.codec": "auto"
+    }
+  }
+}

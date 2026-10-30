@@ -7,7 +7,13 @@ afterAll(async () => { await db.$disconnect(); });
 describe("POST /api/generations", () => {
   it("creates a generation, runs it, and exposes a share page with OG tags", async () => {
     const { app } = await testApp();
-    const body = multipart({ genre: "trailer", caption: "my cat Mochi" }, { name: "image", data: await tinyJpeg(), filename: "cat.jpg" });
+    const img = await tinyJpeg();
+    const body = multipart({ effect: "vanish", prompt: "red coat", aspectRatio: "1:1" }, [
+      { name: "product", data: img, filename: "p.jpg" },
+      { name: "character", data: img, filename: "c1.jpg" },
+      { name: "character", data: img, filename: "c2.jpg" },
+      { name: "location", data: img, filename: "l.jpg" },
+    ]);
     const res = await app.inject({ method: "POST", url: "/api/generations", ...body });
     expect(res.statusCode).toBe(202);
     const created = res.json();
@@ -21,7 +27,9 @@ describe("POST /api/generations", () => {
     });
     expect(done.videoUrl).toMatch(/^\/media\/.*\.mp4$/);
     expect(done.shareUrl).toBe(`http://test.local/v/${created.id}`);
-    expect(done.script).toBe("A test scene.");
+    expect(done.references.map((r: { role: string }) => r.role)).toEqual(["character", "character", "location", "product"]);
+    expect(done.aspectRatio).toBe("1:1");
+    expect(done.effectLabel).toBe("Vanish");
 
     const media = await app.inject({ method: "GET", url: done.videoUrl });
     expect(media.statusCode).toBe(200);
@@ -30,16 +38,19 @@ describe("POST /api/generations", () => {
     const share = await app.inject({ method: "GET", url: `/v/${created.id}` });
     expect(share.statusCode).toBe(200);
     expect(share.body).toContain('property="og:video"');
-    expect(share.body).toContain("my cat Mochi");
+    expect(share.body).toContain("Vanish");
 
-    const feed = await app.inject({ method: "GET", url: "/api/feed" });
-    expect(feed.json()).toHaveLength(1);
+    const cookie = String(res.headers["set-cookie"]).split(";")[0]!;
+    const mine = await app.inject({ method: "GET", url: "/api/history", headers: { cookie } });
+    expect(mine.json()).toHaveLength(1);
+    const others = await app.inject({ method: "GET", url: "/api/history" });
+    expect(others.json()).toHaveLength(0);
     await app.close();
   });
 
   it("marks failed provider runs as failed with a message", async () => {
     const { app } = await testApp({}, stubProvider({ fail: true }));
-    const body = multipart({ genre: "horror" }, { name: "image", data: await tinyJpeg(), filename: "x.jpg" });
+    const body = multipart({ effect: "eyes-in" }, [{ name: "character", data: await tinyJpeg(), filename: "x.jpg" }]);
     const res = await app.inject({ method: "POST", url: "/api/generations", ...body });
     const { id } = res.json();
     const failed = await waitFor(async () => {
@@ -50,13 +61,16 @@ describe("POST /api/generations", () => {
     await app.close();
   });
 
-  it("rejects missing image, bad genre, and unreadable images", async () => {
+  it("rejects no character, bad effect, too many photos, and unreadable images", async () => {
     const { app } = await testApp();
-    const noImage = await app.inject({ method: "POST", url: "/api/generations", ...multipart({ genre: "trailer" }) });
+    const noImage = await app.inject({ method: "POST", url: "/api/generations", ...multipart({ effect: "vanish" }, [{ name: "location", data: await tinyJpeg(), filename: "l.jpg" }]) });
     expect(noImage.statusCode).toBe(400);
-    const badGenre = await app.inject({ method: "POST", url: "/api/generations", ...multipart({ genre: "western" }, { name: "image", data: await tinyJpeg(), filename: "a.jpg" }) });
-    expect(badGenre.statusCode).toBe(400);
-    const garbage = await app.inject({ method: "POST", url: "/api/generations", ...multipart({ genre: "trailer" }, { name: "image", data: Buffer.from("hello"), filename: "a.jpg" }) });
+    const badEffect = await app.inject({ method: "POST", url: "/api/generations", ...multipart({ effect: "western" }, [{ name: "character", data: await tinyJpeg(), filename: "a.jpg" }]) });
+    expect(badEffect.statusCode).toBe(400);
+    const tiny = await tinyJpeg();
+    const tooMany = await app.inject({ method: "POST", url: "/api/generations", ...multipart({ effect: "vanish" }, Array.from({ length: 5 }, (_, i) => ({ name: "character", data: tiny, filename: `${i}.jpg` }))) });
+    expect(tooMany.statusCode).toBe(400);
+    const garbage = await app.inject({ method: "POST", url: "/api/generations", ...multipart({ effect: "vanish" }, [{ name: "character", data: Buffer.from("hello"), filename: "a.jpg" }]) });
     expect(garbage.statusCode).toBe(400);
     await app.close();
   });
@@ -64,10 +78,10 @@ describe("POST /api/generations", () => {
   it("enforces the per-session hourly limit", async () => {
     const { app } = await testApp({ LIMIT_PER_SESSION_PER_HOUR: "1" });
     const img = await tinyJpeg();
-    const first = await app.inject({ method: "POST", url: "/api/generations", ...multipart({ genre: "trailer" }, { name: "image", data: img, filename: "a.jpg" }) });
+    const first = await app.inject({ method: "POST", url: "/api/generations", ...multipart({ effect: "vanish" }, [{ name: "character", data: img, filename: "a.jpg" }]) });
     expect(first.statusCode).toBe(202);
     const cookie = String(first.headers["set-cookie"]).split(";")[0];
-    const b = multipart({ genre: "trailer" }, { name: "image", data: img, filename: "a.jpg" });
+    const b = multipart({ effect: "vanish" }, [{ name: "character", data: img, filename: "a.jpg" }]);
     const second = await app.inject({ method: "POST", url: "/api/generations", payload: b.payload, headers: { ...b.headers, cookie } });
     expect(second.statusCode).toBe(429);
     expect(second.json().reason).toBe("session");
@@ -76,7 +90,7 @@ describe("POST /api/generations", () => {
 
   it("enforces the global daily cap", async () => {
     const { app } = await testApp({ LIMIT_GLOBAL_PER_DAY: "0" });
-    const res = await app.inject({ method: "POST", url: "/api/generations", ...multipart({ genre: "trailer" }, { name: "image", data: await tinyJpeg(), filename: "a.jpg" }) });
+    const res = await app.inject({ method: "POST", url: "/api/generations", ...multipart({ effect: "vanish" }, [{ name: "character", data: await tinyJpeg(), filename: "a.jpg" }]) });
     expect(res.statusCode).toBe(429);
     expect(res.json().reason).toBe("global");
     await app.close();

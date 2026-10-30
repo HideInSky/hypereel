@@ -6,7 +6,7 @@ import sharp from "sharp";
 import type { VideoProvider } from "./comfy.js";
 import type { Storage } from "./storage.js";
 import type { Config } from "../config.js";
-import { buildPrompt, buildWriterBrief } from "../prompts.js";
+import { buildEffectPrompt, getEffect, type ReferenceRole } from "../effects.js";
 
 export interface GeneratorDeps {
   db: PrismaClient;
@@ -16,46 +16,62 @@ export interface GeneratorDeps {
   log: { info: (o: object, m?: string) => void; error: (o: object, m?: string) => void };
 }
 
-/** Normalise the upload: strip EXIF, cap size, always JPEG. Also makes the poster. */
-export async function prepareImage(bytes: Uint8Array): Promise<{ jpeg: Uint8Array; width: number; height: number }> {
-  const img = sharp(bytes, { failOn: "error" }).rotate(); // rotate() applies EXIF orientation
-  const resized = await img.resize({ width: 1280, height: 1280, fit: "inside", withoutEnlargement: true })
+export interface UploadedReference {
+  role: ReferenceRole;
+  bytes: Uint8Array;
+}
+
+/** Normalise an upload: strip EXIF, cap size, always JPEG. */
+export async function prepareImage(bytes: Uint8Array): Promise<Uint8Array> {
+  const out = await sharp(bytes, { failOn: "error" })
+    .rotate() // applies EXIF orientation
+    .resize({ width: 1280, height: 1280, fit: "inside", withoutEnlargement: true })
     .jpeg({ quality: 90 })
-    .toBuffer({ resolveWithObject: true });
-  return { jpeg: new Uint8Array(resized.data), width: resized.info.width, height: resized.info.height };
+    .toBuffer();
+  return new Uint8Array(out);
 }
 
 export async function createGeneration(
   deps: GeneratorDeps,
-  args: { imageBytes: Uint8Array; genre: string; caption?: string; sessionId: string; ip: string },
+  args: {
+    effect: string;
+    references: UploadedReference[]; // already ordered: characters, locations, products
+    userPrompt?: string;
+    resolution: string;
+    aspectRatio: string;
+    sessionId: string;
+    ip: string;
+  },
 ) {
-  const { jpeg } = await prepareImage(args.imageBytes);
-  const inputPath = await deps.storage.put(jpeg, "jpg");
-  // Writer workflows get a brief (a random punchline beat each time); others get
-  // the finished static prompt. Either way it is stored so every clip is traceable.
-  const prompt =
-    deps.provider.promptKind === "brief"
-      ? buildWriterBrief(args.genre, args.caption, deps.cfg.VIDEO_SECONDS)
-      : buildPrompt(args.genre, args.caption);
+  const effect = getEffect(args.effect);
+  if (!effect) throw new Error(`Unknown effect: ${args.effect}`);
+
+  const jpegs = await Promise.all(args.references.map((r) => prepareImage(r.bytes)));
+  const paths = await Promise.all(jpegs.map((j) => deps.storage.put(j, "jpg")));
+  const prompt = buildEffectPrompt(args.effect, args.references, args.userPrompt);
+
   const row = await deps.db.generation.create({
     data: {
-      genre: args.genre,
-      caption: args.caption || null,
+      genre: args.effect, // column keeps its old name; it now holds the effect id
+      caption: args.userPrompt || null,
       prompt,
       model: deps.provider.name,
-      inputPath,
-      posterPath: inputPath, // the photo doubles as the poster until the video exists
+      inputPath: paths[0]!,
+      posterPath: paths[0]!, // the character photo doubles as the poster until the video exists
+      references: args.references.map((r, i) => ({ role: r.role, path: paths[i]! })),
+      resolution: args.resolution,
+      aspectRatio: args.aspectRatio,
       sessionId: args.sessionId,
       ip: args.ip,
     },
   });
   // Fire and forget; status is polled by the client.
-  void runGeneration(deps, row.id, jpeg).catch((err) => deps.log.error({ id: row.id, err }, "generation crashed"));
+  void runGeneration(deps, row.id, jpegs, effect.seconds).catch((err) => deps.log.error({ id: row.id, err }, "generation crashed"));
   return row;
 }
 
-export async function runGeneration(deps: GeneratorDeps, id: string, jpeg: Uint8Array): Promise<void> {
-  const { db, provider, storage, cfg, log } = deps;
+export async function runGeneration(deps: GeneratorDeps, id: string, references: Uint8Array[], seconds: number): Promise<void> {
+  const { db, provider, storage, log } = deps;
   const row = await db.generation.findUniqueOrThrow({ where: { id } });
   await db.generation.update({ where: { id }, data: { status: "running", progress: 3 } });
 
@@ -69,28 +85,23 @@ export async function runGeneration(deps: GeneratorDeps, id: string, jpeg: Uint8
 
   try {
     const out = await provider.generate({
-      imageBytes: jpeg,
-      imageExt: "jpg",
+      references,
       prompt: row.prompt,
-      seconds: cfg.VIDEO_SECONDS,
-      resolution: cfg.VIDEO_RESOLUTION,
+      seconds,
+      resolution: row.resolution ?? "480P",
+      aspectRatio: row.aspectRatio ?? "9:16",
       onProgress,
     });
     const videoPath = await storage.put(out.video, out.mime.includes("webm") ? "webm" : "mp4");
     await db.generation.update({
       where: { id },
-      data: {
-        status: "succeeded",
-        progress: 100,
-        videoPath,
-        comfyJobId: out.jobId ?? null,
-        model: out.model,
-        script: out.script ?? null,
-      },
+      data: { status: "succeeded", progress: 100, videoPath, comfyJobId: out.jobId ?? null, model: out.model },
     });
     log.info({ id, jobId: out.jobId, model: out.model }, "generation succeeded");
   } catch (err) {
-    const message = err instanceof Error ? err.message : String(err);
+    const cause = (err as { cause?: { code?: string; message?: string } }).cause;
+    const reason = cause?.code ?? cause?.message;
+    const message = (err instanceof Error ? err.message : String(err)) + (reason ? ` (${reason})` : "");
     log.error({ id, err: message }, "generation failed");
     // The row may have been deleted meanwhile (tests, admin cleanup): never crash the process over it.
     await db.generation

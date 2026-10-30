@@ -29,6 +29,10 @@ model Generation {
   prompt      String
   /// Scene written by the script-writer LLM node (null for static-template clips)
   script      String?
+  /// Uploaded references in the order sent to the model: [{ role, path }]
+  references  Json?
+  resolution  String?
+  aspectRatio String?
   model       String           // which H3 variant produced it, for the credits math
   comfyJobId  String?
   progress    Int              @default(0)   // 0-100, best effort from Comfy events

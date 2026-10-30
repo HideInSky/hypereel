@@ -1,6 +1,6 @@
 // End-to-end smoke test of the Comfy/MiniMax H3 path, no server, no DB:
-//   npm run smoke -- path/to/photo.jpg trailer "my cat Mochi"
-// Writes the video next to the photo and prints the Comfy job id.
+//   npm run smoke -- vanish character:me.jpg location:street.jpg product:phone.jpg
+// Writes the video to <effect>.mp4 in the current folder and prints the job id.
 // Load ../../.env (repo root) for local dev. In Docker/Railway, real env vars are injected instead.
 import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -9,24 +9,25 @@ if (existsSync(rootEnv)) process.loadEnvFile(rootEnv);
 import { promises as fs } from "node:fs";
 import { loadConfig } from "../src/config.js";
 import { createProvider } from "../src/services/comfy.js";
-import { buildPrompt, buildWriterBrief } from "../src/prompts.js";
+import { buildEffectPrompt, getEffect, type ReferenceRole } from "../src/effects.js";
 import { prepareImage } from "../src/services/generator.js";
 
-const [file, genre = "trailer", caption] = process.argv.slice(2);
-if (!file) { console.error("usage: smoke <image> [genre] [caption]"); process.exit(1); }
+const [effectId, ...specs] = process.argv.slice(2);
+const effect = effectId ? getEffect(effectId) : undefined;
+if (!effect || specs.length === 0) { console.error("usage: smoke <effect> character:a.jpg [location:b.jpg] [product:c.jpg]"); process.exit(1); }
+const order: ReferenceRole[] = ["character", "location", "product"];
+const refs = specs
+  .map((s) => { const i = s.indexOf(":"); return { role: s.slice(0, i) as ReferenceRole, file: s.slice(i + 1) }; })
+  .sort((a, b) => order.indexOf(a.role) - order.indexOf(b.role));
 const cfg = loadConfig({ ...process.env, DATABASE_URL: process.env.DATABASE_URL ?? "postgresql://unused" });
 const provider = createProvider(cfg);
-const { jpeg } = await prepareImage(new Uint8Array(await fs.readFile(file)));
-const prompt =
-  provider.promptKind === "brief" ? buildWriterBrief(genre, caption, cfg.VIDEO_SECONDS) : buildPrompt(genre, caption);
-console.log(`provider=${provider.name} model-mode=${cfg.COMFY_MODE} seconds=${cfg.VIDEO_SECONDS} res=${cfg.VIDEO_RESOLUTION}`);
-console.log("prompt:", prompt);
+const prompt = buildEffectPrompt(effect.id, refs);
+console.log(`provider=${provider.name} seconds=${effect.seconds}\nprompt: ${prompt}`);
 const t0 = Date.now();
 const out = await provider.generate({
-  imageBytes: jpeg, imageExt: "jpg", prompt, seconds: cfg.VIDEO_SECONDS, resolution: cfg.VIDEO_RESOLUTION,
+  references: await Promise.all(refs.map(async (r) => prepareImage(new Uint8Array(await fs.readFile(r.file))))),
+  prompt, seconds: effect.seconds, resolution: process.env.SMOKE_RESOLUTION ?? "480P", aspectRatio: process.env.SMOKE_RATIO ?? "9:16",
   onProgress: (p, note) => console.log(`  ${p}% ${note ?? ""}`),
 });
-const outPath = file.replace(/\.[^.]+$/, "") + `.${genre}.mp4`;
-await fs.writeFile(outPath, out.video);
-if (out.script) console.log("script:", out.script);
-console.log(`done in ${((Date.now() - t0) / 1000).toFixed(1)}s -> ${outPath} (${out.video.length} bytes, job ${out.jobId ?? "n/a"}, model ${out.model})`);
+await fs.writeFile(`${effect.id}.mp4`, out.video);
+console.log(`done in ${((Date.now() - t0) / 1000).toFixed(1)}s -> ${effect.id}.mp4 (${out.video.length} bytes, job ${out.jobId ?? "n/a"})`);

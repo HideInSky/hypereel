@@ -13,11 +13,10 @@ export const db = new PrismaClient();
 export function stubProvider(opts: { fail?: boolean } = {}): VideoProvider {
   return {
     name: "stub",
-    promptKind: "brief",
     async generate(input) {
       input.onProgress?.(50);
       if (opts.fail) throw new Error("boom");
-      return { video: new TextEncoder().encode("not-really-mp4"), mime: "video/mp4", jobId: "job-1", model: "stub", script: "A test scene." };
+      return { video: new TextEncoder().encode("not-really-mp4"), mime: "video/mp4", jobId: "job-1", model: "stub" };
     },
   };
 }
@@ -41,13 +40,13 @@ export async function tinyJpeg(): Promise<Buffer> {
 }
 
 /** Multipart body builder (no extra deps). */
-export function multipart(fields: Record<string, string>, file?: { name: string; data: Buffer; filename: string }) {
+export function multipart(fields: Record<string, string>, files: { name: string; data: Buffer; filename: string }[] = []) {
   const boundary = "----hypereel" + Math.random().toString(36).slice(2);
   const parts: Buffer[] = [];
   for (const [k, v] of Object.entries(fields)) {
     parts.push(Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="${k}"\r\n\r\n${v}\r\n`));
   }
-  if (file) {
+  for (const file of files) {
     parts.push(Buffer.from(`--${boundary}\r\nContent-Disposition: form-data; name="${file.name}"; filename="${file.filename}"\r\nContent-Type: image/jpeg\r\n\r\n`));
     parts.push(file.data, Buffer.from("\r\n"));
   }

@@ -1,24 +1,24 @@
 # Submission kit
 
-## Demo video script (≤ 2:00)
+## Demo video script (2:00 or less)
 
-| Time | Shot | Voiceover / on-screen |
+| Time | Shot | Voiceover |
 |---|---|---|
-| 0:00–0:08 | Hook: phone screen, a photo of a houseplant becomes a Nature Documentary clip **with sound** | "This is my houseplant. hypereel turned it into a nature documentary." |
-| 0:08–0:20 | Same photo remixed into Action Trailer and Infomercial, quick cuts | "One photo. Six genres. Narrator, music and sound effects, all in one pass." |
-| 0:20–0:45 | Live use on a phone: pick photo of a pet/lunch/mug, pick genre, optionally tell the writer something, tap **Hypereel it**, the progress screen, the result | "Upload anything, pick a genre, an AI writes a joke about your exact photo, and about a minute later you get the clip. Same photo again? A different joke." |
-| 0:45–1:00 | Tap Share, paste link in a chat app, the video preview unfurls, friend taps **Make your own** | "Every clip is a share link that plays inline and has a Make-your-own button. That's the viral loop." |
-| 1:00–1:30 | Screen: ComfyUI with `workflows/hypereel_h3_i2v_api.json` loaded (LoadImage, Claude script writer, MiniMax H3, SaveVideo), then the backend code that submits it with `@comfyorg/sdk` | "Under the hood it's a ComfyUI workflow on Comfy Cloud. A Claude node looks at the photo and writes the scene. MiniMax H3 Max Turbo is the core model. It generates the video and the audio together, so no separate text-to-speech or music model. The backend sends the workflow with the Comfy TypeScript SDK." |
-| 1:30–1:50 | README: architecture diagram, docker compose, CI badge | "Everything's open source under MIT. Fastify, Postgres, React, Docker Compose and GitHub Actions. Swap the workflow in ComfyUI and the app follows." |
-| 1:50–2:00 | Outro: grid of clips | "hypereel. Make anything overdramatic. Link below. #OpenSourceHiggsfield" |
+| 0:00-0:08 | Hook: full-screen Vanish clip, the clothes hit the ground | "That's not a VFX studio. That's one photo." |
+| 0:08-0:20 | Quick cuts of Floating Fall and Eyes In | "hypereel is an open-source take on viral video effects. One photo, one click, picture and sound." |
+| 0:20-0:50 | Screen: add a character, a location and a product, pick an effect, Generate, the progress screen, the result | "Add a character. Location and products are optional. Pick an effect and about a minute later you have a clip." |
+| 0:50-1:05 | Same character, product changed, shows the product floating in Floating Fall | "Your references really drive it. Swap the product and the shot changes." |
+| 1:05-1:35 | ComfyUI with `workflows/hypereel_effects_h3_api.json` loaded, then `effects.ts` | "Under the hood it's a ComfyUI workflow on Comfy Cloud. MiniMax H3's reference node takes up to nine images. Each effect is a recipe in plain text, so adding a new one is just a few lines." |
+| 1:35-1:50 | README, architecture diagram, CI | "It's MIT licensed, with Fastify, Postgres, React, Docker Compose and GitHub Actions." |
+| 1:50-2:00 | Outro: three tiles playing | "hypereel. Link below. #OpenSourceHiggsfield" |
 
-**Tools to mention (rule: explain other tools):** ComfyUI + Comfy Cloud, MiniMax H3 Max Turbo (partner node), @comfyorg/sdk, Fastify, Prisma/PostgreSQL, React/Vite, sharp, Docker, GitHub Actions, Railway. No other AI models.
+**Tools to mention:** ComfyUI + Comfy Cloud, MiniMax H3 Max (partner node), Nano Banana 2 (example references only), @comfyorg/sdk, Fastify, Prisma/PostgreSQL, React/Vite, sharp, Docker, GitHub Actions, Railway.
 
 ## Social post (X / LinkedIn / Reddit)
 
-> I made my houseplant the star of a nature documentary 🌿🎬
+> One photo. The body vanishes. The clothes hit the floor.
 >
-> **hypereel**: upload any photo, pick a genre (action trailer, nature doc, infomercial, K-drama, horror, cooking show), and an AI writes a new joke about your photo, then MiniMax H3 renders an 8-second clip with narrator, music and SFX in one pass running as a ComfyUI workflow on Comfy Cloud.
+> **hypereel** is an open-source take on viral video effects: Floating Fall, Vanish and Eyes In. Add a character, plus a location and products if you like, and MiniMax H3 renders the clip with sound, running as a ComfyUI workflow on Comfy Cloud.
 >
 > Try it: <APP_URL>
 > Code (MIT): https://github.com/HideInSky/hypereel
@@ -28,6 +28,7 @@
 ## Checklist
 - [ ] Repo is **public** (Settings → General → Danger zone → Change visibility)
 - [ ] Railway deploy live, `PUBLIC_URL` set to the real URL
-- [ ] Seed the gallery with 6–10 good clips (your own pet/plant/food photos; no faces of real people, no brands/characters)
+- [ ] Use only your own face with consent, or fictional people, in the demo. No brands or characters.
+- [ ] Check credits: each clip costs about 75 to 195. Set `LIMIT_GLOBAL_PER_DAY` to fit your balance.
 - [ ] Record demo (≤2 min), upload, post with #OpenSourceHiggsfield
 - [ ] Submit the entry form before **Oct 30, 9:00 PT**: repo URL, video URL, app URL, post URL. Bonus category: **Built with MiniMax H3**

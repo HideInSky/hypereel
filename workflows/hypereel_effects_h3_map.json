@@ -1,0 +1,12 @@
+{
+  "_comment": "Maps app inputs to the workflow. The backend replaces the example LoadImage nodes with one per uploaded image, in order. If you re-export from ComfyUI, update the ids here.",
+  "video": "2",
+  "prompt": "model.prompt",
+  "duration": "model.duration",
+  "resolution": "model.resolution",
+  "ratio": "model.ratio",
+  "seed": "seed",
+  "referencePrefix": "model.reference_images.image_",
+  "output": "3",
+  "modelLabel": "MiniMax H3 Max"
+}
