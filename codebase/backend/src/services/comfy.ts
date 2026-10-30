@@ -8,7 +8,7 @@
 //    the same workflow file opens in the ComfyUI editor.
 //  - RouterProvider:   calls the model directly via Comfy Router (fallback).
 //  - FakeProvider:     offline stub for UI work and tests. Costs nothing.
-import { promises as fs } from "node:fs";
+import { promises as fs, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Config } from "../config.js";
@@ -28,10 +28,20 @@ export interface GenerateOutput {
   mime: string;
   jobId?: string;
   model: string;
+  /** The scene the script-writer node wrote (writer workflows only). */
+  script?: string;
 }
+
+/**
+ * "brief":  the provider has its own script-writer step; send it a writer brief
+ *           (genre style + punchline beat + user note), see buildWriterBrief().
+ * "prompt": send the finished video prompt directly (static templates).
+ */
+export type PromptKind = "brief" | "prompt";
 
 export interface VideoProvider {
   readonly name: string;
+  readonly promptKind: PromptKind;
   generate(input: GenerateInput): Promise<GenerateOutput>;
 }
 
@@ -42,7 +52,11 @@ export interface VideoProvider {
  */
 interface WorkflowMap {
   loadImage: { node: string; input: string }; // LoadImage node, file widget
+  // Where the text goes: the script-writer node's prompt (writer workflow) or
+  // the video node's prompt (plain workflow).
   prompt: { node: string; input: string };
+  writerSeed?: { node: string; input: string }; // randomized so the writer varies too
+  script?: string; // node id of SaveText holding the written script; its presence = writer workflow
   duration?: { node: string; input: string };
   resolution?: { node: string; input: string };
   model?: { node: string; input: string; value: string };
@@ -55,16 +69,21 @@ const here = path.dirname(fileURLToPath(import.meta.url));
 
 export class WorkflowProvider implements VideoProvider {
   readonly name = "comfy-workflow";
-  constructor(private readonly cfg: Config) {}
+  readonly promptKind: PromptKind;
+  private readonly map: WorkflowMap;
+
+  constructor(private readonly cfg: Config) {
+    const mapPath = path.resolve(here, "../..", cfg.COMFY_WORKFLOW_MAP_PATH);
+    this.map = JSON.parse(readFileSync(mapPath, "utf8")) as WorkflowMap;
+    this.promptKind = this.map.script ? "brief" : "prompt";
+  }
 
   async generate(input: GenerateInput): Promise<GenerateOutput> {
     const { Comfy } = await import("@comfyorg/sdk");
     const client = new Comfy({ apiKey: this.cfg.COMFY_API_KEY });
+    const map = this.map;
 
     const wfPath = path.resolve(here, "../..", this.cfg.COMFY_WORKFLOW_PATH);
-    const mapPath = path.resolve(here, "../..", this.cfg.COMFY_WORKFLOW_MAP_PATH);
-    const map = JSON.parse(await fs.readFile(mapPath, "utf8")) as WorkflowMap;
-
     const wf = await client.workflows.fromFile(wfPath);
     // The SDK hashes + uploads the image (dedup-aware) and binds the server-side
     // filename to the LoadImage node's file widget.
@@ -75,6 +94,7 @@ export class WorkflowProvider implements VideoProvider {
     if (map.resolution) wf.setInput(map.resolution.node, map.resolution.input, input.resolution);
     if (map.model) wf.setInput(map.model.node, map.model.input, map.model.value);
     if (map.seed) wf.setInput(map.seed.node, map.seed.input, Math.floor(Math.random() * 4_294_967_295));
+    if (map.writerSeed) wf.setInput(map.writerSeed.node, map.writerSeed.input, Math.floor(Math.random() * 2_147_483_647));
 
     input.onProgress?.(5, "Submitting to Comfy Cloud");
     // Two different keys, often the same value: the constructor key authenticates
@@ -110,12 +130,19 @@ export class WorkflowProvider implements VideoProvider {
       throw new Error(`Comfy job ${job.id} (${job.status}) produced no output on node ${map.output}; outputs: ${seen}`);
     }
     const bytes = await video.toBytes();
-    return { video: bytes, mime: video.contentType || "video/mp4", jobId: job.id, model: map.modelLabel };
+    // The script is nice-to-have (shown under the video); never fail the clip over it.
+    let script: string | undefined;
+    if (map.script) {
+      const file = job.getOutputs(map.script)[0];
+      if (file) script = new TextDecoder().decode(await file.toBytes()).trim().slice(0, 2000) || undefined;
+    }
+    return { video: bytes, mime: video.contentType || "video/mp4", jobId: job.id, model: map.modelLabel, script };
   }
 }
 
 export class RouterProvider implements VideoProvider {
   readonly name = "comfy-router";
+  readonly promptKind = "prompt";
   constructor(private readonly cfg: Config) {}
 
   async generate(input: GenerateInput): Promise<GenerateOutput> {
@@ -172,6 +199,7 @@ function findVideoUrl(data: unknown): string | undefined {
 
 export class FakeProvider implements VideoProvider {
   readonly name = "fake";
+  readonly promptKind = "prompt";
   constructor(private readonly delayMs = 1500) {}
 
   async generate(input: GenerateInput): Promise<GenerateOutput> {

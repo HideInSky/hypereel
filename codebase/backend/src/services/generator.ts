@@ -6,7 +6,7 @@ import sharp from "sharp";
 import type { VideoProvider } from "./comfy.js";
 import type { Storage } from "./storage.js";
 import type { Config } from "../config.js";
-import { buildPrompt } from "../prompts.js";
+import { buildPrompt, buildWriterBrief } from "../prompts.js";
 
 export interface GeneratorDeps {
   db: PrismaClient;
@@ -31,7 +31,12 @@ export async function createGeneration(
 ) {
   const { jpeg } = await prepareImage(args.imageBytes);
   const inputPath = await deps.storage.put(jpeg, "jpg");
-  const prompt = buildPrompt(args.genre, args.caption);
+  // Writer workflows get a brief (a random punchline beat each time); others get
+  // the finished static prompt. Either way it is stored so every clip is traceable.
+  const prompt =
+    deps.provider.promptKind === "brief"
+      ? buildWriterBrief(args.genre, args.caption, deps.cfg.VIDEO_SECONDS)
+      : buildPrompt(args.genre, args.caption);
   const row = await deps.db.generation.create({
     data: {
       genre: args.genre,
@@ -74,7 +79,14 @@ export async function runGeneration(deps: GeneratorDeps, id: string, jpeg: Uint8
     const videoPath = await storage.put(out.video, out.mime.includes("webm") ? "webm" : "mp4");
     await db.generation.update({
       where: { id },
-      data: { status: "succeeded", progress: 100, videoPath, comfyJobId: out.jobId ?? null, model: out.model },
+      data: {
+        status: "succeeded",
+        progress: 100,
+        videoPath,
+        comfyJobId: out.jobId ?? null,
+        model: out.model,
+        script: out.script ?? null,
+      },
     });
     log.info({ id, jobId: out.jobId, model: out.model }, "generation succeeded");
   } catch (err) {

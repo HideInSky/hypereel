@@ -19,6 +19,7 @@ export function toPublic(g: Generation, ctx: AppContext) {
     genre: g.genre,
     caption: g.caption,
     model: g.model,
+    script: g.script,
     error: g.status === "failed" ? g.error : null,
     videoUrl: g.videoPath ? ctx.storage.publicPath(g.videoPath) : null,
     posterUrl: g.posterPath ? ctx.storage.publicPath(g.posterPath) : null,

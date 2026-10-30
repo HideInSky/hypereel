@@ -21,6 +21,7 @@ describe("POST /api/generations", () => {
     });
     expect(done.videoUrl).toMatch(/^\/media\/.*\.mp4$/);
     expect(done.shareUrl).toBe(`http://test.local/v/${created.id}`);
+    expect(done.script).toBe("A test scene.");
 
     const media = await app.inject({ method: "GET", url: done.videoUrl });
     expect(media.statusCode).toBe(200);

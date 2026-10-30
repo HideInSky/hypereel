@@ -18,6 +18,8 @@ export type Generation = {
   progress: number;
   genre: string;
   caption: string | null;
+  /** The scene the AI script writer wrote for this clip (null for older clips). */
+  script: string | null;
   model: string;
   error: string | null;
   /** e.g. "/media/abc.mp4" — only set once status is "succeeded" */

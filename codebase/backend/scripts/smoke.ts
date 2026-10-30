@@ -9,7 +9,7 @@ if (existsSync(rootEnv)) process.loadEnvFile(rootEnv);
 import { promises as fs } from "node:fs";
 import { loadConfig } from "../src/config.js";
 import { createProvider } from "../src/services/comfy.js";
-import { buildPrompt } from "../src/prompts.js";
+import { buildPrompt, buildWriterBrief } from "../src/prompts.js";
 import { prepareImage } from "../src/services/generator.js";
 
 const [file, genre = "trailer", caption] = process.argv.slice(2);
@@ -17,7 +17,8 @@ if (!file) { console.error("usage: smoke <image> [genre] [caption]"); process.ex
 const cfg = loadConfig({ ...process.env, DATABASE_URL: process.env.DATABASE_URL ?? "postgresql://unused" });
 const provider = createProvider(cfg);
 const { jpeg } = await prepareImage(new Uint8Array(await fs.readFile(file)));
-const prompt = buildPrompt(genre, caption);
+const prompt =
+  provider.promptKind === "brief" ? buildWriterBrief(genre, caption, cfg.VIDEO_SECONDS) : buildPrompt(genre, caption);
 console.log(`provider=${provider.name} model-mode=${cfg.COMFY_MODE} seconds=${cfg.VIDEO_SECONDS} res=${cfg.VIDEO_RESOLUTION}`);
 console.log("prompt:", prompt);
 const t0 = Date.now();
@@ -27,4 +28,5 @@ const out = await provider.generate({
 });
 const outPath = file.replace(/\.[^.]+$/, "") + `.${genre}.mp4`;
 await fs.writeFile(outPath, out.video);
+if (out.script) console.log("script:", out.script);
 console.log(`done in ${((Date.now() - t0) / 1000).toFixed(1)}s -> ${outPath} (${out.video.length} bytes, job ${out.jobId ?? "n/a"}, model ${out.model})`);

@@ -13,10 +13,11 @@ export const db = new PrismaClient();
 export function stubProvider(opts: { fail?: boolean } = {}): VideoProvider {
   return {
     name: "stub",
+    promptKind: "brief",
     async generate(input) {
       input.onProgress?.(50);
       if (opts.fail) throw new Error("boom");
-      return { video: new TextEncoder().encode("not-really-mp4"), mime: "video/mp4", jobId: "job-1", model: "stub" };
+      return { video: new TextEncoder().encode("not-really-mp4"), mime: "video/mp4", jobId: "job-1", model: "stub", script: "A test scene." };
     },
   };
 }

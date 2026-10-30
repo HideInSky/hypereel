@@ -23,7 +23,8 @@ const schema = z.object({
   COMFY_WORKFLOW_PATH: z.string().default("../../workflows/hypereel_h3_i2v_api.json"),
   COMFY_WORKFLOW_MAP_PATH: z.string().default("../../workflows/hypereel_h3_i2v_map.json"),
   COMFY_ROUTER_MODEL: z.string().default("minimax/minimax-h3"),
-  VIDEO_SECONDS: z.coerce.number().int().min(4).max(15).default(5),
+  // 8s leaves room for a setup AND a punchline (5s only fit one line).
+  VIDEO_SECONDS: z.coerce.number().int().min(5).max(15).default(8),
   VIDEO_RESOLUTION: z.string().default("480P"),
 
   // --- Credit protection: every clip costs real money ---

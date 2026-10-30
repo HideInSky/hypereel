@@ -119,7 +119,7 @@ export default function Compose({ genres, remixId, onSubmitted, onOpen }: Props)
       <section className="hero">
         <h1 className="headline">hypereel</h1>
         <p className="sub">
-          Make anything overdramatic. <span className="nowrap">One photo →</span> a 5-second trailer with narrator,
+          Make anything overdramatic. <span className="nowrap">One photo →</span> an 8-second trailer with narrator,
           music &amp; SFX.
         </p>
       </section>
@@ -164,10 +164,10 @@ export default function Compose({ genres, remixId, onSubmitted, onOpen }: Props)
         {/* Step 2: the genre */}
         <GenrePicker genres={genres} value={genre} onChange={setGenre} />
 
-        {/* Step 3: optional caption */}
+        {/* Step 3: optional note for the AI script writer (a name, a fact, or a line to say) */}
         <label className="field">
           <span className="field-label">
-            What is it? <span className="muted">(optional)</span>
+            Tell the writer something <span className="muted">(optional)</span>
             <span className={"counter" + (caption.length >= CAPTION_MAX ? " counter--max" : "")}>
               {caption.length}/{CAPTION_MAX}
             </span>
@@ -176,7 +176,7 @@ export default function Compose({ genres, remixId, onSubmitted, onOpen }: Props)
             type="text"
             value={caption}
             maxLength={CAPTION_MAX}
-            placeholder="e.g. my cat Mochi"
+            placeholder="e.g. Mochi. Has never caught a single mouse."
             onChange={(e) => setCaption(e.target.value)}
             onKeyDown={(e) => {
               if (e.key === "Enter") void submit();
@@ -193,7 +193,7 @@ export default function Compose({ genres, remixId, onSubmitted, onOpen }: Props)
         <button type="button" className="btn btn--primary btn--big" disabled={!canSubmit} onClick={() => void submit()}>
           {busy ? "Uploading…" : "🎬 Hypereel it"}
         </button>
-        <p className="muted small center">Takes about 30–90 seconds. Worth it.</p>
+        <p className="muted small center">An AI writes a new joke for your photo every time. About a minute.</p>
       </section>
 
       <Gallery genres={genres} onOpen={onOpen} />

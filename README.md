@@ -1,6 +1,6 @@
 # hypereel 🎬
 
-**Make anything overdramatic.** Upload one photo (your cat, your lunch, your houseplant), pick a genre, and get a 5-second clip with a **narrator voiceover, music and sound effects**, all generated in **one pass** by **MiniMax H3** running as a **ComfyUI workflow on Comfy Cloud**. Every clip gets a share link with a playable preview and a **"Make your own" / "Remix"** button.
+**Make anything overdramatic.** Upload one photo (your cat, your lunch, your houseplant), pick a genre, and get an 8-second comedy clip. An AI script writer (Claude, as a ComfyUI node) looks at your photo and writes a **new joke about that exact thing** every time; **MiniMax H3** then renders it with **narrator voiceover, music and sound effects in one pass**, running as a **ComfyUI workflow on Comfy Cloud**. Every clip gets a share link with a playable preview and a **"Make your own" / "Remix"** button.
 
 Built for the [Open Source Higgsfield](https://comfy.org/open-source-higgsfield/) challenge. #OpenSourceHiggsfield
 
@@ -21,26 +21,28 @@ flowchart LR
   FE -->|REST /api| BE[Fastify backend]
   BE -->|rows| DB[(PostgreSQL)]
   BE -->|uploads + mp4| ST[(Volume /data)]
-  BE -->|"@comfyorg/sdk: submit workflow"| CC[Comfy Cloud]
-  CC -->|ComfyUI partner node| H3[MiniMax H3 Max Turbo]
-  H3 -->|video + audio| CC -->|output mp4| BE
+  BE -->|"@comfyorg/sdk: submit workflow + writer brief"| CC[Comfy Cloud]
+  CC -->|photo + brief| W[Claude node: writes the scene]
+  W -->|script| H3[MiniMax H3 Max Turbo]
+  H3 -->|video + audio| CC -->|mp4 + script.txt| BE
   S[Social crawler] -->|/v/:id| BE
 ```
 
-1. The backend normalises the photo (EXIF rotate, ≤1280px JPEG) and builds a genre prompt. Each prompt is a tiny screenplay: camera direction, a narrator line, and music/SFX cues ([prompts.ts](codebase/backend/src/prompts.ts)).
-2. It loads the ComfyUI workflow [workflows/hypereel_h3_i2v_api.json](workflows/hypereel_h3_i2v_api.json), binds the photo to `LoadImage` and the prompt to the `MiniMax H3 First-Last-Frame to Video` node, and submits it to Comfy Cloud with the official TypeScript SDK ([comfy.ts](codebase/backend/src/services/comfy.ts)).
-3. H3 renders video and stereo audio together (no separate TTS or music model). A 5 s 480P clip takes about 25 s.
-4. The result lands in storage; `/v/:id` serves a share page with `og:video` tags so it previews inside iMessage/Discord/X, then sends humans to the app.
+1. The backend normalises the photo (EXIF rotate, ≤1280px JPEG) and builds a **writer brief** ([prompts.ts](codebase/backend/src/prompts.ts)): the genre's style (camera, narrator voice, music), one **randomly picked punchline beat** from that genre's list, the clip length, and the user's optional note.
+2. It loads the ComfyUI workflow [workflows/hypereel_h3_i2v_api.json](workflows/hypereel_h3_i2v_api.json), binds the photo to `LoadImage` and the brief to the script-writer node, randomizes both seeds, and submits it to Comfy Cloud with the official TypeScript SDK ([comfy.ts](codebase/backend/src/services/comfy.ts)).
+3. Inside the workflow, the **Claude node looks at the photo** and writes a two-beat scene (setup, then punchline) that names concrete details it sees. Its fixed rules live in the node's system prompt. `StringConcatenate` adds the "keep the subject's exact look" rules, and `SaveText` saves the script so the app can show it.
+4. **MiniMax H3** renders video and stereo audio together from that script (no separate TTS or music model). An 8 s 480P clip takes about a minute end to end.
+5. The result lands in storage; `/v/:id` serves a share page with `og:video` tags so it previews inside iMessage/Discord/X, then sends humans to the app.
 
 **The workflow is a normal ComfyUI workflow.** Open ComfyUI (local or cloud), drag `workflows/hypereel_h3_i2v_api.json` in, and it runs. To change the pipeline (e.g. turn on H3's 2K upscale or prompt-enhance nodes), edit it in ComfyUI, export with *Workflow → Export (API)*, and update node ids in [hypereel_h3_i2v_map.json](workflows/hypereel_h3_i2v_map.json). No code changes needed.
 
 ### Tools and models used
-- **ComfyUI / Comfy Cloud** runs the workflow. **MiniMax H3 Max Turbo** is the core model, via its ComfyUI partner node.
+- **ComfyUI / Comfy Cloud** runs the workflow. **MiniMax H3 Max Turbo** is the core model, via its ComfyUI partner node. **Claude (Sonnet 5.5)** writes each scene, via the Claude partner node.
 - **@comfyorg/sdk** submits jobs, streams progress, and downloads outputs.
-- Fastify, Prisma + PostgreSQL, React + Vite, sharp. No other AI models.
+- Fastify, Prisma + PostgreSQL, React + Vite, sharp.
 
 ### Cost
-H3 Max Turbo at 480P costs about 7.5 Comfy credits per second, so a 5-second clip is about 38 credits, roughly $0.18. Public deployments are protected by per-session, per-IP and global daily caps (`LIMIT_*` env vars).
+H3 Max Turbo at 480P costs about 7.5 Comfy credits per second, so an 8-second clip is about 60 credits, roughly $0.28, plus a few credits for the script writer. `VIDEO_SECONDS` sets the length (5 to 15). Public deployments are protected by per-session, per-IP and global daily caps (`LIMIT_*` env vars).
 
 ## Run it locally
 

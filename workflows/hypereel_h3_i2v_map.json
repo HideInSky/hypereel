@@ -1,10 +1,30 @@
 {
   "_comment": "Maps app inputs to node ids/inputs in hypereel_h3_i2v_api.json. If you re-export the workflow from ComfyUI (Workflow > Export (API)), update the ids here; no code changes needed.",
-  "loadImage": { "node": "1", "input": "image" },
-  "prompt": { "node": "2", "input": "model.prompt" },
-  "duration": { "node": "2", "input": "model.duration" },
-  "resolution": { "node": "2", "input": "model.resolution" },
-  "seed": { "node": "2", "input": "seed" },
+  "loadImage": {
+    "node": "1",
+    "input": "image"
+  },
+  "prompt": {
+    "node": "4",
+    "input": "prompt"
+  },
+  "duration": {
+    "node": "2",
+    "input": "model.duration"
+  },
+  "resolution": {
+    "node": "2",
+    "input": "model.resolution"
+  },
+  "seed": {
+    "node": "2",
+    "input": "seed"
+  },
   "output": "3",
-  "modelLabel": "MiniMax H3 Max Turbo"
+  "modelLabel": "MiniMax H3 Max Turbo + Claude script writer",
+  "writerSeed": {
+    "node": "4",
+    "input": "seed"
+  },
+  "script": "6"
 }

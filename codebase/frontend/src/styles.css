@@ -357,3 +357,8 @@ body::after {
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* Collapsible "script the AI wrote" under the result video. */
+.script { border: 1px solid var(--border); border-radius: 12px; background: var(--bg-2); padding: 10px 14px; }
+.script summary { cursor: pointer; font-weight: 700; font-size: 14px; }
+.script p { margin-top: 8px; color: var(--muted); font-size: 14px; line-height: 1.5; white-space: pre-wrap; }

@@ -2,7 +2,8 @@
   "version": "0.0.1",
   "configurations": [
     { "name": "db", "runtimeExecutable": "npm", "runtimeArgs": ["run", "db:local", "-w", "codebase/backend"], "port": 54329 },
-    { "name": "backend", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "-w", "codebase/backend"], "port": 3000 },
+    { "name": "backend", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "-w", "codebase/backend"], "port": 3000,
+      "env": { "DATABASE_URL": "postgresql://postgres:postgres@localhost:54329/hypereel", "PUBLIC_URL": "http://localhost:5173" } },
     { "name": "frontend", "runtimeExecutable": "npm", "runtimeArgs": ["run", "dev", "-w", "codebase/frontend"], "port": 5173 }
   ]
 }

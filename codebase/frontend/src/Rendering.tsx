@@ -2,6 +2,8 @@ import { useEffect, useRef, useState } from "react";
 import type { Generation, Genre } from "./api";
 
 const STATUS_LINES = [
+  "Studying your photo for comedic potential…",
+  "Writing the punchline…",
   "Hiring a narrator…",
   "Cueing the orchestra…",
   "Adding unnecessary lens flares…",

@@ -9,7 +9,7 @@ const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&
 export function renderSharePage(g: Generation, publicUrl: string, paths: { video?: string; poster?: string }): string {
   const genre = getGenre(g.genre);
   const title = `${genre?.emoji ?? "🎬"} ${genre?.label ?? "Hypereel"}: ${g.caption ? esc(g.caption) : "a very dramatic clip"}`;
-  const desc = "Made with Hypereel — turn any photo into an overdramatic 5-second clip with narrator, music and SFX (MiniMax H3 via ComfyUI). Make your own!";
+  const desc = "Made with Hypereel — turn any photo into an overdramatic 8-second clip with narrator, music and SFX (MiniMax H3 via ComfyUI). Make your own!";
   const pageUrl = `${publicUrl}/v/${g.id}`;
   const video = paths.video ? `${publicUrl}${paths.video}` : "";
   const poster = paths.poster ? `${publicUrl}${paths.poster}` : "";

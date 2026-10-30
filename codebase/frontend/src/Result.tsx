@@ -74,6 +74,13 @@ export default function Result({ gen, genres, onRemix, onFresh, showToast }: Pro
         )}
       </div>
 
+      {gen.script && (
+        <details className="script">
+          <summary>📝 Read the script the AI wrote</summary>
+          <p>{gen.script}</p>
+        </details>
+      )}
+
       <div className="actions">
         <button type="button" className="btn btn--primary" onClick={() => void share()}>
           Share

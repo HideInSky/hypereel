@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { GENRES, buildPrompt, sanitizeCaption } from "../src/prompts.js";
+import { GENRES, buildPrompt, buildWriterBrief, sanitizeCaption } from "../src/prompts.js";
 
 describe("prompts", () => {
   it("every genre produces a prompt that references Image 1 and audio", () => {
@@ -20,5 +20,21 @@ describe("prompts", () => {
     expect(sanitizeCaption('a "quoted"\nthing  here')).toBe("a quoted thing here");
     expect(sanitizeCaption("x".repeat(500)).length).toBe(120);
     expect(sanitizeCaption(undefined)).toBe("");
+  });
+  it("writer brief carries genre, a punchline beat, length and the user note", () => {
+    for (const g of GENRES) {
+      expect(g.beats.length).toBeGreaterThanOrEqual(3);
+      const b = buildWriterBrief(g.id, "Mochi, has never caught a mouse", 8, () => 0);
+      expect(b).toContain(g.label);
+      expect(b).toContain(g.beats[0]);
+      expect(b).toContain("8 seconds");
+      expect(b).toContain("Mochi, has never caught a mouse");
+    }
+  });
+  it("writer brief picks different beats for different random draws", () => {
+    const first = buildWriterBrief("trailer", "", 8, () => 0);
+    const last = buildWriterBrief("trailer", "", 8, () => 0.999);
+    expect(first).not.toBe(last);
+    expect(first).toContain("find the joke in what you see");
   });
 });

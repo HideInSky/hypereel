@@ -27,6 +27,8 @@ model Generation {
   genre       String
   caption     String?
   prompt      String
+  /// Scene written by the script-writer LLM node (null for static-template clips)
+  script      String?
   model       String           // which H3 variant produced it, for the credits math
   comfyJobId  String?
   progress    Int              @default(0)   // 0-100, best effort from Comfy events
