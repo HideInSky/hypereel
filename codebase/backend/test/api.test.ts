@@ -57,11 +57,34 @@ describe("POST /api/generations", () => {
     const body = multipart({ effect: "eyes-in" }, [{ name: "character", data: await tinyJpeg(), filename: "x.jpg" }]);
     const res = await app.inject({ method: "POST", url: "/api/generations", ...body });
     const { id } = res.json();
+    const cookie = String(res.headers["set-cookie"]).split(";")[0]!;
     const failed = await waitFor(async () => {
-      const j = (await app.inject({ method: "GET", url: `/api/generations/${id}` })).json();
+      const j = (await app.inject({ method: "GET", url: `/api/generations/${id}`, headers: { cookie } })).json();
       return j.status === "failed" ? j : undefined;
     });
     expect(failed.error).toBe("boom");
+    const stranger = (await app.inject({ method: "GET", url: `/api/generations/${id}` })).json();
+    expect(stranger.status).toBe("failed");
+    expect(stranger.error).toBeNull();
+    await app.close();
+  });
+
+  it("never stores the API key in an error message", async () => {
+    const { app } = await testApp({ COMFY_API_KEY: "boom" }, stubProvider({ fail: true }));
+    const body = multipart({ effect: "vanish" }, [{ name: "character", data: await tinyJpeg(), filename: "x.jpg" }]);
+    const { id } = (await app.inject({ method: "POST", url: "/api/generations", ...body })).json();
+    const row = await waitFor(async () => {
+      const r = await db.generation.findUnique({ where: { id } });
+      return r?.status === "failed" ? r : undefined;
+    });
+    expect(row.error).toBe("[redacted]");
+    await app.close();
+  });
+
+  it("doesn't grant other websites access to the API", async () => {
+    const { app } = await testApp();
+    const res = await app.inject({ method: "GET", url: "/api/effects", headers: { origin: "https://evil.example" } });
+    expect(res.headers["access-control-allow-origin"]).not.toBe("https://evil.example");
     await app.close();
   });
 

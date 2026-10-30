@@ -47,7 +47,8 @@ export async function buildApp(opts: { cfg: Config; db: PrismaClient; provider: 
   });
 
   await app.register(cookie, { secret: cfg.COOKIE_SECRET });
-  await app.register(cors, { origin: true, credentials: true });
+  // The app and API share one origin (dev goes through the Vite proxy). Other sites get no access.
+  await app.register(cors, { origin: cfg.PUBLIC_URL, credentials: true });
   await app.register(multipart, { limits: { fileSize: cfg.MAX_UPLOAD_MB * 1024 * 1024, files: 9 } }); // 9 = most images the H3 reference node accepts
 
   // Anonymous session: a signed random id in a cookie. No accounts, no friction.

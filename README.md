@@ -55,8 +55,9 @@ Public deployments are protected by per-session, per-IP and global daily caps (`
 ### Reliability and limits
 - **Spending caps are atomic.** Checking the caps and creating the clip happen under one Postgres lock, so parallel requests can't slip past them.
 - **Renders survive restarts.** The Comfy job id is saved as soon as the job exists, and on startup the server re-attaches to unfinished jobs. A render that never reached Comfy is marked failed.
+- **API key.** `COMFY_API_KEY` stays on the server and never reaches the browser. Visitors render on the deployer's credits, limited by the `LIMIT_*` caps.
 - **Client IP.** `CLIENT_IP_HEADER` names the header your proxy sets, and Railway is detected automatically. `X-Forwarded-For` is never trusted.
-- **Privacy.** Only the clip's owner can see the photos and note behind it. Share pages show the video and a generic preview image.
+- **Privacy.** Only the clip's owner can see the photos, note and error details behind it. Share pages show the video and a generic preview image.
 - **Smooth playback.** The model's clips run 6-9 Mbps at 480P. Finished clips are re-encoded to about 1.9 Mbps for the player. Gallery clips are about 0.5-1 Mbps, show a poster at once, start together only after buffering, and pause off-screen. `ffmpeg-static` provides the encoder, so there's nothing to install on the host.
 - **Current scaling limit: one instance.** Media lives on a local volume and renders run inside the web process. To scale out, swap `storage.ts` for S3 or R2, and move renders to a queue worker.
 

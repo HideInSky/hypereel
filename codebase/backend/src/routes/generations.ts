@@ -36,7 +36,8 @@ export function toPublic(g: Generation, ctx: AppContext, viewerSessionId: string
     model: g.model,
     resolution: g.resolution,
     aspectRatio: g.aspectRatio,
-    error: g.status === "failed" ? g.error : null,
+    // Provider errors can hold internal detail, so only the owner sees them.
+    error: isOwner && g.status === "failed" ? g.error : null,
     videoUrl: g.videoPath ? ctx.storage.publicPath(g.videoPath) : null,
     posterUrl: isOwner && g.posterPath ? ctx.storage.publicPath(g.posterPath) : null,
     shareUrl: `${ctx.cfg.PUBLIC_URL}/v/${g.id}`,

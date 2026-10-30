@@ -129,7 +129,10 @@ async function settle(deps: GeneratorDeps, id: string, call: () => Promise<Gener
   } catch (err) {
     const cause = (err as { cause?: { code?: string; message?: string } }).cause;
     const reason = cause?.code ?? cause?.message;
-    const message = (err instanceof Error ? err.message : String(err)) + (reason ? ` (${reason})` : "");
+    const raw = (err instanceof Error ? err.message : String(err)) + (reason ? ` (${reason})` : "");
+    // This text reaches the logs and the clip's owner, so it must never carry the API key.
+    const key = deps.cfg.COMFY_API_KEY;
+    const message = key ? raw.replaceAll(key, "[redacted]") : raw;
     log.error({ id, err: message }, "generation failed");
     // The row may have been deleted meanwhile (tests, admin cleanup): never crash the process over it.
     await db.generation
