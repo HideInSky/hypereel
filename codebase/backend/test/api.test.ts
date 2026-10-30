@@ -1,4 +1,6 @@
 import { afterAll, beforeEach, describe, expect, it } from "vitest";
+import { loadConfig } from "../src/config.js";
+import { resumeInterrupted } from "../src/services/generator.js";
 import { db, multipart, stubProvider, testApp, tinyJpeg, waitFor } from "./helpers.js";
 
 beforeEach(async () => { await db.generation.deleteMany(); });
@@ -27,7 +29,9 @@ describe("POST /api/generations", () => {
     });
     expect(done.videoUrl).toMatch(/^\/media\/.*\.mp4$/);
     expect(done.shareUrl).toBe(`http://test.local/v/${created.id}`);
-    expect(done.references.map((r: { role: string }) => r.role)).toEqual(["character", "character", "location", "product"]);
+    const row = await db.generation.findUniqueOrThrow({ where: { id: created.id } });
+    expect((row.references as { role: string }[]).map((r) => r.role)).toEqual(["character", "character", "location", "product"]);
+    expect(row.comfyJobId).toBe("job-1");
     expect(done.aspectRatio).toBe("1:1");
     expect(done.effectLabel).toBe("Vanish");
 
@@ -94,5 +98,97 @@ describe("POST /api/generations", () => {
     expect(res.statusCode).toBe(429);
     expect(res.json().reason).toBe("global");
     await app.close();
+  });
+
+  it("holds the global cap under parallel requests", async () => {
+    const { app } = await testApp({ LIMIT_GLOBAL_PER_DAY: "2", LIMIT_PER_IP_PER_DAY: "99", LIMIT_PER_SESSION_PER_HOUR: "99" });
+    const img = await tinyJpeg();
+    const res = await Promise.all(Array.from({ length: 10 }, () =>
+      app.inject({ method: "POST", url: "/api/generations", ...multipart({ effect: "vanish" }, [{ name: "character", data: img, filename: "a.jpg" }]) }),
+    ));
+    expect(res.filter((r) => r.statusCode === 202)).toHaveLength(2);
+    expect(res.filter((r) => r.statusCode === 429)).toHaveLength(8);
+    await app.close();
+  });
+
+  it("ignores a spoofed X-Forwarded-For", async () => {
+    const { app } = await testApp({ LIMIT_PER_IP_PER_DAY: "1", LIMIT_PER_SESSION_PER_HOUR: "99" });
+    const img = await tinyJpeg();
+    const send = (ip: string) => {
+      const b = multipart({ effect: "vanish" }, [{ name: "character", data: img, filename: "a.jpg" }]);
+      return app.inject({ method: "POST", url: "/api/generations", payload: b.payload, headers: { ...b.headers, "x-forwarded-for": ip } });
+    };
+    expect((await send("1.1.1.1")).statusCode).toBe(202);
+    expect((await send("2.2.2.2")).statusCode).toBe(429);
+    await app.close();
+  });
+
+  it("reads the client IP from the configured proxy header", async () => {
+    const { app } = await testApp({ LIMIT_PER_IP_PER_DAY: "1", LIMIT_PER_SESSION_PER_HOUR: "99", CLIENT_IP_HEADER: "x-real-ip" });
+    const img = await tinyJpeg();
+    const send = (ip: string) => {
+      const b = multipart({ effect: "vanish" }, [{ name: "character", data: img, filename: "a.jpg" }]);
+      return app.inject({ method: "POST", url: "/api/generations", payload: b.payload, headers: { ...b.headers, "x-real-ip": ip } });
+    };
+    expect((await send("1.1.1.1")).statusCode).toBe(202);
+    expect((await send("1.1.1.1")).statusCode).toBe(429);
+    expect((await send("2.2.2.2")).statusCode).toBe(202);
+    await app.close();
+  });
+
+  it("shows uploaded photos and notes only to the clip's owner", async () => {
+    const { app } = await testApp();
+    const res = await app.inject({ method: "POST", url: "/api/generations", ...multipart({ effect: "vanish", prompt: "secret note" }, [{ name: "character", data: await tinyJpeg(), filename: "a.jpg" }]) });
+    const created = res.json();
+    expect(created.posterUrl).toMatch(/^\/media\//);
+    const cookie = String(res.headers["set-cookie"]).split(";")[0]!;
+
+    const stranger = await waitFor(async () => {
+      const j = (await app.inject({ method: "GET", url: `/api/generations/${created.id}` })).json();
+      return j.status === "succeeded" ? j : undefined;
+    });
+    expect(stranger.posterUrl).toBeNull();
+    expect(stranger.prompt).toBeNull();
+    expect(stranger.references).toBeUndefined();
+    expect(stranger.videoUrl).toBeTruthy();
+
+    const owner = (await app.inject({ method: "GET", url: `/api/generations/${created.id}`, headers: { cookie } })).json();
+    expect(owner.posterUrl).toBe(created.posterUrl);
+    expect(owner.prompt).toBe("secret note");
+
+    const share = await app.inject({ method: "GET", url: `/v/${created.id}` });
+    expect(share.body).not.toContain(created.posterUrl);
+    expect(share.body).toContain("/og.png");
+    await app.close();
+  });
+
+  it("recovers renders interrupted by a restart", async () => {
+    const { app, cfg } = await testApp();
+    const base = { genre: "vanish", prompt: "p", model: "m", inputPath: "media/x.jpg", sessionId: "s", ip: "i", status: "running" as const };
+    const paid = await db.generation.create({ data: { ...base, comfyJobId: "job-9" } });
+    const unsent = await db.generation.create({ data: base });
+    const quiet = { info: () => {}, error: () => {} };
+    const { finished } = await resumeInterrupted({ db, provider: stubProvider(), storage: app.storage, cfg, log: quiet });
+    await finished;
+
+    const recovered = await db.generation.findUniqueOrThrow({ where: { id: paid.id } });
+    expect(recovered.status).toBe("succeeded");
+    expect(recovered.videoPath).toBeTruthy();
+    const lost = await db.generation.findUniqueOrThrow({ where: { id: unsent.id } });
+    expect(lost.status).toBe("failed");
+    await app.close();
+  });
+});
+
+describe("production config", () => {
+  const prod = { NODE_ENV: "production", DATABASE_URL: "postgresql://x", COMFY_MODE: "fake" } as NodeJS.ProcessEnv;
+  it("refuses to start with the default cookie secret", () => {
+    expect(() => loadConfig(prod)).toThrow(/COOKIE_SECRET/);
+    expect(loadConfig({ ...prod, COOKIE_SECRET: "a-long-enough-real-secret" }).NODE_ENV).toBe("production");
+  });
+  it("uses x-real-ip on Railway unless told otherwise", () => {
+    const env = { ...prod, COOKIE_SECRET: "a-long-enough-real-secret", RAILWAY_PROJECT_ID: "p" };
+    expect(loadConfig(env).CLIENT_IP_HEADER).toBe("x-real-ip");
+    expect(loadConfig({ ...env, CLIENT_IP_HEADER: "cf-connecting-ip" }).CLIENT_IP_HEADER).toBe("cf-connecting-ip");
   });
 });

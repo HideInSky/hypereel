@@ -7,7 +7,7 @@ import type { Config } from "../config.js";
 export type LimitResult = { ok: true } | { ok: false; reason: "session" | "ip" | "global"; message: string };
 
 export async function checkLimits(
-  db: PrismaClient,
+  db: Pick<PrismaClient, "generation">,
   cfg: Config,
   who: { sessionId: string; ip: string },
   now: Date = new Date(),

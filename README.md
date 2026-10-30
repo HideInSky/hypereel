@@ -52,6 +52,13 @@ H3 Max costs about $0.0715 per second at 480P and $0.114 per second at 768P. Usi
 
 Public deployments are protected by per-session, per-IP and global daily caps (`LIMIT_*` env vars). The global default is 25 clips a day.
 
+### Reliability and limits
+- **Spending caps are atomic.** Checking the caps and creating the clip happen under one Postgres lock, so parallel requests can't slip past them.
+- **Renders survive restarts.** The Comfy job id is saved as soon as the job exists, and on startup the server re-attaches to unfinished jobs. A render that never reached Comfy is marked failed.
+- **Client IP.** `CLIENT_IP_HEADER` names the header your proxy sets, and Railway is detected automatically. `X-Forwarded-For` is never trusted.
+- **Privacy.** Only the clip's owner can see the photos and note behind it. Share pages show the video and a generic preview image.
+- **Current scaling limit: one instance.** Media lives on a local volume and renders run inside the web process. To scale out, swap `storage.ts` for S3 or R2, and move renders to a queue worker.
+
 ## Run it locally
 
 Requirements: Node 22+, a Comfy Cloud account with API access and an API key from [platform.comfy.org](https://platform.comfy.org). Docker is optional.

@@ -27,11 +27,10 @@ export type Generation = {
   model: string;
   resolution: string | null;
   aspectRatio: string | null;
-  references: { role: ReferenceRole; url: string }[];
   error: string | null;
   /** e.g. "/media/abc.mp4" — only set once status is "succeeded" */
   videoUrl: string | null;
-  /** The first character photo, e.g. "/media/abc.jpg" */
+  /** The first character photo, only for the clip's owner, e.g. "/media/abc.jpg" */
   posterUrl: string | null;
   /** Absolute URL of the share page (/v/:id) */
   shareUrl: string;

@@ -21,6 +21,10 @@ export interface Effect {
   seconds: number;
   /** The effect sets its own scene, so don't ask the model to invent one from the photo. */
   ownSetting?: boolean;
+  /** Deliberately not photorealistic (comic, paint...). */
+  stylized?: boolean;
+  /** The look depends on overlay text or numbers, so don't forbid on-screen text. */
+  overlayText?: boolean;
   motion: (ctx: EffectContext) => string;
 }
 
@@ -254,10 +258,11 @@ export const EFFECTS: Effect[] = [
   {
     id: "lidar",
     label: "Lidar Transition",
-    description: "The scene dissolves into a glowing 3D laser scan, then rebuilds as somewhere new.",
+    description: "The scene dissolves into glowing soft fibres on black as the camera rushes through, then rebuilds somewhere new.",
     seconds: 6,
+    stylized: true,
     motion: (c) =>
-      `Fast forward fly-through. 0-2s: the character stands ${PLACE(c)}. 2-4s: the whole scene dissolves into a glowing colored 3D lidar point cloud, with scan lines sweeping across it as the camera rushes through the dots. 4-6s: the points rebuild into a dramatically different real environment around the same character. Sound: digital scanning sweeps, a rising data whoosh, then a deep bass hit.`,
+      `Fast forward fly-through. 0-2s: the character stands ${PLACE(c)}. 2-4s: everything, including the character, dissolves into millions of glowing soft fibres and light streaks in teal and white against pure black, like a fluffy motion-blurred laser scan, as the camera rushes through them. 4-6s: the fibres rebuild into a dramatically different real environment around the same character. Sound: a rising data whoosh, soft crackling, then a deep bass hit.`,
   },
   {
     id: "mighty-fighter",
@@ -374,58 +379,68 @@ export const EFFECTS: Effect[] = [
   {
     id: "canvas",
     label: "Canvas",
-    description: "The whole clip turns into a hand-drawn artwork on canvas.",
+    description: "A thick spray-paint outline around them, with marker doodles scribbled over the real scene.",
     seconds: 5,
+    stylized: true,
     motion: (c) =>
-      `The character moves naturally ${PLACE(c)}, with the entire clip rendered as hand-drawn artwork on textured canvas, with visible pencil and charcoal lines that redraw on every frame. Sound: pencil scratching on canvas, a soft piano.`,
+      `The character moves naturally ${PLACE(c)} in a real, unaltered photographic scene. A thick rough white spray-paint outline hugs their silhouette like a sticker border and redraws slightly on every frame. Colored marker scribbles in red, green and yellow, simple graffiti shapes and childish doodles with no readable words, are drawn over the buildings and background and wiggle as they animate. Choppy stop-motion feel, as if played at 8 frames per second. Sound: spray can hiss, marker squeaks, a loose hip-hop beat.`,
   },
   {
     id: "comic",
     label: "Comic",
-    description: "The whole clip turns into a graphic illustrated comic.",
+    description: "The whole clip becomes an inked, illustrated comic with bold shadows.",
     seconds: 5,
+    stylized: true,
     motion: (c) =>
-      `The character moves with energy ${PLACE(c)}, with the entire clip rendered as a bold graphic comic with thick ink outlines, halftone dots and flat saturated color. No speech bubbles and no text. Sound: punchy comic whooshes, an upbeat rock riff.`,
+      `The character moves with energy ${PLACE(c)}. The entire clip is redrawn as a hand-illustrated graphic novel: confident black ink linework, flat cel-shaded color in a moody limited palette, hard graphic shadows and fine hatching, with small details such as leaves drifting. It looks like a printed comic panel come to life, not a filter. No speech bubbles and no text. Choppy stop-motion feel, as if played at 8 frames per second. Sound: punchy whooshes, a tense funk groove.`,
   },
   {
     id: "lsd",
     label: "Color Trip",
-    description: "Waves of shifting, surreal color wash through the clip.",
+    description: "They turn into a cracked black-and-white photocopy while rainbow swirls warp the world around them.",
     seconds: 5,
+    stylized: true,
     motion: (c) =>
-      `The character moves slowly ${PLACE(c)}, while waves of liquid rainbow color and gentle kaleidoscopic ripples wash through the image and leave soft color trails behind their movement. Sound: a warm psychedelic synth, a slow phaser sweep.`,
+      `The character poses ${PLACE(c)}. Their whole figure is rendered as a stark high-contrast black-and-white photocopy, with white skin and clothes, solid black shadows, and fine black cracks running across them like shattered porcelain. Everything else keeps normal color, with oily iridescent rainbow swirls and warped concentric ripples spreading through the background and heavy film grain. Choppy stop-motion feel, as if played at 8 frames per second. Sound: a warped tape-wobble synth, vinyl crackle, a slow heavy beat.`,
   },
   {
     id: "palette",
     label: "Palette",
-    description: "The whole clip turns into a hand-painted color composition.",
+    description: "The whole clip becomes thick oil paint, with brushstrokes flowing around them.",
     seconds: 5,
+    stylized: true,
     motion: (c) =>
-      `The character moves naturally ${PLACE(c)}, with the entire clip rendered as thick hand-painted oil brushwork in a bold limited color palette, with strokes that shift and flow on every frame. Sound: soft brush strokes, gentle strings.`,
+      `The character moves naturally ${PLACE(c)}. The entire clip is repainted in thick impasto oil paint, with heavy visible brushstrokes that follow the shapes of their clothes and face and swirl through the background. The strokes shift and reform on every frame, keeping the subject clearly recognizable and the colors rich. Choppy stop-motion feel, as if played at 8 frames per second. Sound: wet brush strokes, warm old-school soul loop.`,
   },
   {
     id: "particles",
     label: "Particles",
-    description: "Luminous particles stream and swirl around them.",
+    description: "They become a glowing point cloud, a body made of thousands of tiny lights.",
     seconds: 5,
+    stylized: true,
+    overlayText: true,
     motion: (c) =>
-      `The character moves slowly ${PLACE(c)} with streams of small luminous particles swirling around their body and following every movement, against slightly darkened surroundings. Sound: shimmering chimes, a soft airy pad.`,
+      `The character moves slowly ${PLACE(c)}. Their whole body is made of thousands of tiny glowing white and cyan dots, a 3D point cloud that keeps their exact silhouette and clothing folds. The rest of the scene is dark and teal-tinted, with beams of light and dust-like particles drifting. Small sci-fi scanner labels reading "POINT CLOUD" and "SCAN ERROR" sit in the corners. Choppy stop-motion feel, as if played at 8 frames per second. Sound: shimmering digital chimes, a low hum, scanner blips.`,
   },
   {
     id: "tracking",
     label: "Tracking",
-    description: "Motion-tracking lines and boxes follow every moving thing in the shot.",
+    description: "Small tracking squares, curved lines and flickering numbers lock on to every part of them.",
     seconds: 5,
+    stylized: true,
+    overlayText: true,
     motion: (c) =>
-      `The character walks ${PLACE(c)}, with a technical computer-vision overlay of thin glowing tracking lines, connected nodes and empty bounding boxes following them and other moving objects. No text or numbers on the overlay. Sound: subtle data blips, a tense electronic pulse.`,
+      `The character moves with energy ${PLACE(c)}, in a gritty real film look. A computer-vision overlay follows them: small hollow white squares lock on to their joints and clothing, thin white curved lines sweep between the squares and out of the frame, and small flickering decimal numbers such as 44.73 and -51.41 sit beside the squares. Slight digital glitch streaks. Choppy stop-motion feel, as if played at 8 frames per second. Sound: data blips, a tense electronic pulse.`,
   },
   {
     id: "windows",
-    label: "Windows",
-    description: "Overlapping digital interface windows open and stack around them.",
+    label: "Glitch Windows",
+    description: "Y2K computer error screens and glitchy desktop windows burst over the shot in electric blue.",
     seconds: 5,
+    stylized: true,
+    overlayText: true,
     motion: (c) =>
-      `The character poses and moves ${PLACE(c)}, while overlapping blank digital interface windows pop open around them, each one showing a different moving crop of the same scene, stacking and sliding in a retro desktop look. No readable text or logos. Sound: soft window pop clicks, a glitchy retro beat.`,
+      `The character moves naturally ${PLACE(c)}, shot like low-resolution early-2000s camcorder footage with a strong electric-blue color cast. Solid blue error-screen panels with small generic white system text, and retro desktop windows with a mouse cursor, pop up and overlap parts of the frame, tearing with glitch bars. No logos and no brand names. Choppy stop-motion feel, as if played at 8 frames per second. Sound: error beeps, a dial-up crackle, a glitchy breakbeat.`,
   },
 ];
 
@@ -471,7 +486,10 @@ export function buildEffectPrompt(effectId: string, refs: OrderedReference[], us
     has("location") || effect.ownSetting ? "" : "Set the scene in a location that suits the character's photo.",
     effect.motion({ hasLocation: has("location"), hasProducts: has("product") }),
     sanitizeUserPrompt(userPrompt) ? `Additional direction from the user: ${sanitizeUserPrompt(userPrompt)}.` : "",
-    "Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark.",
+    effect.stylized ? "Cinematic and safe for work." : "Photorealistic, cinematic, safe for work.",
+    effect.overlayText
+      ? "The only on-screen text is the overlay described above. No subtitles, no logos, no watermark."
+      : "No on-screen text, no subtitles, no logos, no watermark.",
   ];
   return lines.filter(Boolean).join(" ");
 }

@@ -26,6 +26,11 @@ describe("effect prompts", () => {
     expect(buildEffectPrompt("vanish", [{ role: "character" }], "wearing a red coat")).toContain("wearing a red coat");
     expect(() => buildEffectPrompt("nope", [{ role: "character" }])).toThrow(/Unknown effect/);
   });
+  it("only allows on-screen text for overlay effects", () => {
+    expect(buildEffectPrompt("tracking", [{ role: "character" }])).toContain("only on-screen text is the overlay");
+    expect(buildEffectPrompt("vanish", [{ role: "character" }])).toContain("No on-screen text");
+    expect(buildEffectPrompt("comic", [{ role: "character" }])).not.toContain("Photorealistic");
+  });
   it("sanitizes the user prompt", () => {
     expect(sanitizeUserPrompt(" a\nb  c ")).toBe("a b c");
     expect(sanitizeUserPrompt("x".repeat(500)).length).toBe(300);

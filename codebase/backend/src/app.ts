@@ -21,7 +21,17 @@ export interface AppContext {
   db: PrismaClient;
   provider: VideoProvider;
   storage: Storage;
+  /** Returns this visitor's session id, creating the cookie if needed. */
   getSessionId: (req: FastifyRequest, reply: FastifyReply) => string;
+  /** Returns the session id if there is a valid cookie. Never sets one. */
+  readSessionId: (req: FastifyRequest) => string | null;
+  clientIp: (req: FastifyRequest) => string;
+}
+
+declare module "fastify" {
+  interface FastifyInstance {
+    storage: Storage;
+  }
 }
 
 const here = path.dirname(fileURLToPath(import.meta.url));
@@ -33,7 +43,6 @@ export async function buildApp(opts: { cfg: Config; db: PrismaClient; provider: 
 
   const app = Fastify({
     logger: cfg.NODE_ENV !== "test",
-    trustProxy: true, // Railway/any reverse proxy: get the real client IP for rate limits
     bodyLimit: cfg.MAX_UPLOAD_MB * 1024 * 1024,
   });
 
@@ -42,10 +51,14 @@ export async function buildApp(opts: { cfg: Config; db: PrismaClient; provider: 
   await app.register(multipart, { limits: { fileSize: cfg.MAX_UPLOAD_MB * 1024 * 1024, files: 9 } }); // 9 = most images the H3 reference node accepts
 
   // Anonymous session: a signed random id in a cookie. No accounts, no friction.
-  const getSessionId = (req: FastifyRequest, reply: FastifyReply): string => {
+  const readSessionId = (req: FastifyRequest): string | null => {
     const raw = req.cookies["tz_session"];
     const unsigned = raw ? req.unsignCookie(raw) : null;
-    if (unsigned?.valid && unsigned.value) return unsigned.value;
+    return unsigned?.valid && unsigned.value ? unsigned.value : null;
+  };
+  const getSessionId = (req: FastifyRequest, reply: FastifyReply): string => {
+    const existing = readSessionId(req);
+    if (existing) return existing;
     const id = randomBytes(16).toString("hex");
     reply.setCookie("tz_session", id, {
       signed: true, httpOnly: true, sameSite: "lax", path: "/",
@@ -54,7 +67,15 @@ export async function buildApp(opts: { cfg: Config; db: PrismaClient; provider: 
     return id;
   };
 
-  const ctx: AppContext = { cfg, db, provider, storage, getSessionId };
+  // Rate limits need the real client IP. X-Forwarded-For can't be used: its first
+  // entry is whatever the client sent. See CLIENT_IP_HEADER in config.ts.
+  const clientIp = (req: FastifyRequest): string => {
+    const header = cfg.CLIENT_IP_HEADER ? req.headers[cfg.CLIENT_IP_HEADER.toLowerCase()] : undefined;
+    const value = Array.isArray(header) ? header[0] : header;
+    return value?.trim() || req.ip;
+  };
+
+  const ctx: AppContext = { cfg, db, provider, storage, getSessionId, readSessionId, clientIp };
 
   // Uploaded photos and rendered videos.
   await app.register(fastifyStatic, {
@@ -65,6 +86,8 @@ export async function buildApp(opts: { cfg: Config; db: PrismaClient; provider: 
     maxAge: "7d",
     immutable: true,
   });
+
+  app.decorate("storage", storage);
 
   await generationRoutes(app, ctx);
   await shareRoutes(app, ctx);

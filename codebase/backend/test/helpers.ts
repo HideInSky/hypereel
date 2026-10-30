@@ -16,7 +16,12 @@ export function stubProvider(opts: { fail?: boolean } = {}): VideoProvider {
     async generate(input) {
       input.onProgress?.(50);
       if (opts.fail) throw new Error("boom");
+      await input.onJobCreated?.("job-1");
       return { video: new TextEncoder().encode("not-really-mp4"), mime: "video/mp4", jobId: "job-1", model: "stub" };
+    },
+    async resume({ jobId }) {
+      if (opts.fail) throw new Error("boom");
+      return { video: new TextEncoder().encode("resumed-mp4"), mime: "video/mp4", jobId, model: "stub" };
     },
   };
 }

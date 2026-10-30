@@ -10,6 +10,7 @@ import { promises as fs } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import type { Config } from "../config.js";
+import type { Job } from "@comfyorg/sdk";
 
 export interface GenerateInput {
   /** JPEG reference images, in the order the prompt calls "Image 1", "Image 2"... */
@@ -18,6 +19,14 @@ export interface GenerateInput {
   seconds: number;
   resolution: string;
   aspectRatio: string;
+  onProgress?: (percent: number, note?: string) => void;
+  /** Called as soon as the job exists, so a restart can find it again. */
+  onJobCreated?: (jobId: string) => Promise<void>;
+  signal?: AbortSignal;
+}
+
+export interface ResumeInput {
+  jobId: string;
   onProgress?: (percent: number, note?: string) => void;
   signal?: AbortSignal;
 }
@@ -32,6 +41,8 @@ export interface GenerateOutput {
 export interface VideoProvider {
   readonly name: string;
   generate(input: GenerateInput): Promise<GenerateOutput>;
+  /** Re-attach to a job submitted before a restart, and collect its result. */
+  resume(input: ResumeInput): Promise<GenerateOutput>;
 }
 
 /** Where the app's inputs go in the workflow (workflows/*_map.json). */
@@ -100,13 +111,16 @@ export class WorkflowProvider implements VideoProvider {
   readonly name = "comfy-workflow";
   constructor(private readonly cfg: Config) {}
 
+  private async read<T>(p: string): Promise<T> {
+    return JSON.parse(await fs.readFile(path.resolve(here, "../..", p), "utf8")) as T;
+  }
+
   async generate(input: GenerateInput): Promise<GenerateOutput> {
     const { Comfy } = await import("@comfyorg/sdk");
     const client = new Comfy({ apiKey: this.cfg.COMFY_API_KEY });
 
-    const read = async <T>(p: string) => JSON.parse(await fs.readFile(path.resolve(here, "../..", p), "utf8")) as T;
-    const map = await read<WorkflowMap>(this.cfg.COMFY_WORKFLOW_MAP_PATH);
-    const template = await read<WorkflowGraph>(this.cfg.COMFY_WORKFLOW_PATH);
+    const map = await this.read<WorkflowMap>(this.cfg.COMFY_WORKFLOW_MAP_PATH);
+    const template = await this.read<WorkflowGraph>(this.cfg.COMFY_WORKFLOW_PATH);
     const { graph, loaders } = withReferenceSlots(template, map, input.references.length);
 
     const wf = client.workflows.fromJson(graph as never);
@@ -126,7 +140,20 @@ export class WorkflowProvider implements VideoProvider {
     // US to Comfy Cloud; this one authenticates the partner node (MiniMax H3)
     // INSIDE the workflow and is what gets billed.
     const job = await withNetworkRetry(() => client.submit(wf, { signal: input.signal, apiKey: this.cfg.COMFY_API_KEY }));
+    await input.onJobCreated?.(job.id);
+    return this.collect(job, map, input);
+  }
 
+  async resume(input: ResumeInput): Promise<GenerateOutput> {
+    const { Comfy } = await import("@comfyorg/sdk");
+    const client = new Comfy({ apiKey: this.cfg.COMFY_API_KEY });
+    const map = await this.read<WorkflowMap>(this.cfg.COMFY_WORKFLOW_MAP_PATH);
+    const job = await withNetworkRetry(() => client.jobs.get(input.jobId));
+    return this.collect(job, map, input);
+  }
+
+  /** Waits for a submitted job to finish, then downloads the video. */
+  private async collect(job: Job, map: WorkflowMap, input: Pick<GenerateInput, "onProgress" | "signal">): Promise<GenerateOutput> {
     // The event stream only drives the progress bar, so losing it must not lose the
     // (already paid for) job: result() below is what decides success.
     try {
@@ -177,6 +204,10 @@ export class FakeProvider implements VideoProvider {
     }
     const video = await fs.readFile(fixture);
     return { video: new Uint8Array(video), mime: "video/mp4", model: "fake" };
+  }
+
+  async resume(): Promise<GenerateOutput> {
+    throw new Error("The fake provider has no jobs to resume.");
   }
 }
 
