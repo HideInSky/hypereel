@@ -39,7 +39,7 @@ export default function Sidebar({ effect, form, setForm, busy, error, setError, 
     <aside className="sidebar">
       <div className="sidebar-scroll">
         <div className="effect-card">
-          {effect && <video key={effect.id} src={effect.preview} autoPlay muted loop playsInline />}
+          {effect?.preview && <video key={effect.id} src={effect.preview} autoPlay muted loop playsInline />}
           <button type="button" className="effect-change" onClick={onChangeEffect}>
             <PencilIcon /> Change
           </button>

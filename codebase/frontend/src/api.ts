@@ -7,8 +7,8 @@ export type Effect = {
   label: string;
   description: string;
   seconds: number;
-  /** Example clip, e.g. "/effects/vanish.mp4" */
-  preview: string;
+  /** Example clip, e.g. "/effects/vanish.mp4". Null until one has been rendered. */
+  preview: string | null;
 };
 
 export type ReferenceRole = "character" | "location" | "product";

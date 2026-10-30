@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import { EFFECTS, EFFECT_IDS, getEffect, sanitizeUserPrompt, type ReferenceRole } from "../effects.js";
+import { EFFECTS, EFFECT_IDS, getEffect, previewUrl, sanitizeUserPrompt, type ReferenceRole } from "../effects.js";
 import { checkLimits } from "../services/limits.js";
 import { createGeneration, type UploadedReference } from "../services/generator.js";
 import type { AppContext } from "../app.js";
@@ -42,7 +42,7 @@ export function toPublic(g: Generation, ctx: AppContext) {
 
 export async function generationRoutes(app: FastifyInstance, ctx: AppContext) {
   app.get("/api/effects", async () =>
-    EFFECTS.map(({ id, label, description, seconds, preview }) => ({ id, label, description, seconds, preview })),
+    EFFECTS.map(({ id, label, description, seconds }) => ({ id, label, description, seconds, preview: previewUrl(id) })),
   );
 
   app.post("/api/generations", async (req, reply) => {

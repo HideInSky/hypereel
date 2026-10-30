@@ -3,6 +3,7 @@ import { ApiError, createGeneration, fetchEffects, fetchHistory, type Effect, ty
 import Sidebar, { type FormState } from "./Sidebar";
 import Stage from "./Stage";
 import HowItWorks from "./HowItWorks";
+import LazyClip from "./LazyClip";
 import { CheckIcon, ClockIcon, GridIcon, InfoIcon, SearchIcon } from "./Icons";
 
 type Tab = "effects" | "history" | "how";
@@ -151,7 +152,7 @@ export default function App() {
                       title={e.description}
                       onClick={() => setSelected(e.id)}
                     >
-                      <video src={e.preview} autoPlay muted loop playsInline preload="metadata" />
+                      {e.preview ? <LazyClip src={e.preview} /> : <span className="tile-placeholder">No example yet</span>}
                       {e.id === selected && <span className="tile-check"><CheckIcon /></span>}
                       <span className="tile-text">
                         <span className="tile-label">{e.label}</span>

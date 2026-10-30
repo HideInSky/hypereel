@@ -4,11 +4,13 @@
 
 Built for the [Open Source Higgsfield](https://comfy.org/open-source-higgsfield/) challenge. #OpenSourceHiggsfield
 
-| Effect | What happens | Length |
-|---|---|---|
-| Floating Fall | They fall backward, their belongings hang in midair, and the camera glides through close-ups before the fall resumes | 8 s |
-| Vanish | Their body disappears in an instant and the empty clothes collapse flat to the ground | 5 s |
-| Eyes In | The camera dives into their eye and through the pupil, then emerges in a new scene | 8 s |
+It ships with 45 effects, from Vanish and Floating Fall to Earth Zoom, Melting and Infinite Clones. Each is a short recipe in [effects.ts](codebase/backend/src/effects.ts), so adding one takes a few lines. Effects with an example clip have been rendered and checked. The rest are written but not yet rendered, so their results may need tuning.
+
+Render example clips for more effects (each one costs real credits):
+
+```bash
+npm run previews -w codebase/backend -- melting earth-zoom
+```
 
 ## How it works
 
