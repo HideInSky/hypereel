@@ -1,6 +1,6 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import { EFFECTS, EFFECT_IDS, getEffect, previewUrl, sanitizeUserPrompt, type ReferenceRole } from "../effects.js";
+import { EFFECTS, EFFECT_IDS, getEffect, previewUrl, sanitizeUserPrompt, tileRatio, type ReferenceRole } from "../effects.js";
 import { checkLimits } from "../services/limits.js";
 import { LimitExceededError, createGeneration, type UploadedReference } from "../services/generator.js";
 import type { AppContext } from "../app.js";
@@ -46,7 +46,7 @@ export function toPublic(g: Generation, ctx: AppContext, viewerSessionId: string
 
 export async function generationRoutes(app: FastifyInstance, ctx: AppContext) {
   app.get("/api/effects", async () =>
-    EFFECTS.map(({ id, label, description, seconds }) => ({ id, label, description, seconds, preview: previewUrl(id), poster: previewUrl(id)?.replace(/\.mp4$/, ".jpg") ?? null })),
+    EFFECTS.map(({ id, label, description, seconds }) => ({ id, label, description, seconds, preview: previewUrl(id), poster: previewUrl(id)?.replace(/\.mp4$/, ".jpg") ?? null, ratio: tileRatio(id) })),
   );
 
   app.post("/api/generations", async (req, reply) => {

@@ -18,7 +18,7 @@ const COMMON = ["-c:v", "libx264", "-pix_fmt", "yuv420p", "-movflags", "+faststa
 /** For the player: same picture size, far lower bitrate, audio kept. */
 const PLAYBACK = [...COMMON, "-preset", "veryfast", "-crf", "23", "-maxrate", "1800k", "-bufsize", "3600k", "-c:a", "copy"];
 /** For gallery tiles: small, silent, and with a steady bitrate so many can play at once. */
-const GALLERY = [...COMMON, "-vf", "scale=360:-2", "-preset", "slow", "-crf", "28", "-maxrate", "800k", "-bufsize", "1600k", "-an"];
+const GALLERY = [...COMMON, "-vf", "scale=480:-2", "-preset", "slow", "-crf", "28", "-maxrate", "1000k", "-bufsize", "2000k", "-an"];
 
 function run(args: string[], timeoutMs: number): Promise<void> {
   return new Promise((resolve, reject) => {

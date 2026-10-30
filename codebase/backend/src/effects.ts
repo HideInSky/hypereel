@@ -5,6 +5,7 @@
 // order, and the prompt calls them "Image 1", "Image 2"... by that order.
 
 import { PREVIEWS } from "./previews.js";
+import { SHOWCASE } from "./showcase.js";
 
 export type ReferenceRole = "character" | "location" | "product";
 
@@ -392,7 +393,7 @@ export const EFFECTS: Effect[] = [
     seconds: 5,
     stylized: true,
     motion: (c) =>
-      `The character moves with energy ${PLACE(c)}. The entire clip is redrawn as a hand-illustrated graphic novel: confident black ink linework, flat cel-shaded color in a moody limited palette, hard graphic shadows and fine hatching, with small details such as leaves drifting. It looks like a printed comic panel come to life, not a filter. No speech bubbles and no text. Sound: punchy whooshes, a tense funk groove.`,
+      `STYLE, most important: this is 2D hand-drawn comic book animation from the very first frame to the last, not live action and not a photograph. Every frame is drawn with thick black ink outlines, flat cel-shaded color in a limited palette, solid black shadows and cross-hatching, on visible printed paper texture. Only the character's design, outfit and pose come from the photo, redrawn as an illustration. The character moves with energy ${PLACE(c)}. It looks like a printed comic panel come to life. No speech bubbles and no text. Sound: punchy whooshes, a tense funk groove.`,
   },
   {
     id: "lsd",
@@ -410,7 +411,7 @@ export const EFFECTS: Effect[] = [
     seconds: 5,
     stylized: true,
     motion: (c) =>
-      `The character moves naturally ${PLACE(c)}. The entire clip is repainted in thick impasto oil paint, with heavy visible brushstrokes that follow the shapes of their clothes and face and swirl through the background. The strokes shift and reform on every frame, keeping the subject clearly recognizable and the colors rich. Sound: wet brush strokes, warm old-school soul loop.`,
+      `STYLE, most important: this is a moving oil painting from the very first frame to the last, not live action and not a photograph. Every frame is thick impasto oil paint on canvas, with heavy visible palette-knife and brush strokes covering the face, clothes and background and no photographic detail left anywhere. The strokes follow the shapes of the subject, swirl through the background and shift on every frame, like a Post-Impressionist canvas come to life. The character moves naturally ${PLACE(c)}, still recognizable, with rich colors. Sound: wet brush strokes, warm old-school soul loop.`,
   },
   {
     id: "particles",
@@ -444,10 +445,26 @@ export const EFFECTS: Effect[] = [
   },
 ];
 
-// Effects that have a rendered example clip come first (see scripts/render-previews.ts).
-EFFECTS.sort((a, b) => Number(PREVIEWS.includes(b.id)) - Number(PREVIEWS.includes(a.id)));
+// Gallery order: the showcase in its own order, then other effects with an example clip,
+// then the ones still without. sort() is stable, so each group keeps its order.
+const SHOWCASE_IDS = Object.keys(SHOWCASE);
+const galleryRank = (id: string) => {
+  const at = SHOWCASE_IDS.indexOf(id);
+  return at >= 0 ? at : SHOWCASE_IDS.length + (PREVIEWS.includes(id) ? 0 : 1);
+};
+EFFECTS.sort((a, b) => galleryRank(a.id) - galleryRank(b.id));
 
 export const previewUrl = (id: string) => (PREVIEWS.includes(id) ? `/effects/${id}.mp4` : null);
+
+// Empty tiles have no clip to keep the shape of, so they vary just to keep the stagger going.
+const EMPTY_TILE_RATIOS = ["9:16", "3:4", "1:1"];
+
+/** The shape of an effect's gallery tile, as "width:height". */
+export function tileRatio(id: string): string {
+  if (SHOWCASE[id]) return SHOWCASE[id];
+  if (PREVIEWS.includes(id)) return "9:16";
+  return EMPTY_TILE_RATIOS[EFFECTS.findIndex((e) => e.id === id) % EMPTY_TILE_RATIOS.length]!;
+}
 
 export const EFFECT_IDS = EFFECTS.map((e) => e.id);
 

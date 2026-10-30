@@ -11,6 +11,8 @@ export type Effect = {
   preview: string | null;
   /** Still frame shown until the clip is ready. */
   poster: string | null;
+  /** Shape of the gallery tile, as "width:height". */
+  ratio: string;
 };
 
 export type ReferenceRole = "character" | "location" | "product";

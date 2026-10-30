@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { EFFECTS, buildEffectPrompt, sanitizeUserPrompt } from "../src/effects.js";
+import { EFFECTS, buildEffectPrompt, previewUrl, sanitizeUserPrompt, tileRatio } from "../src/effects.js";
+import { SHOWCASE } from "../src/showcase.js";
 import { withNetworkRetry, withReferenceSlots } from "../src/services/comfy.js";
 import { toPlayback } from "../src/services/transcode.js";
 
@@ -36,6 +37,19 @@ describe("effect prompts", () => {
     expect(sanitizeUserPrompt(" a\nb  c ")).toBe("a b c");
     expect(sanitizeUserPrompt("x".repeat(500)).length).toBe(300);
     expect(sanitizeUserPrompt(undefined)).toBe("");
+  });
+});
+
+describe("gallery order", () => {
+  it("puts the showcase first, then other clips, then effects without one", () => {
+    const showcase = Object.keys(SHOWCASE);
+    expect(EFFECTS.slice(0, showcase.length).map((e) => e.id)).toEqual(showcase);
+    const rest = EFFECTS.slice(showcase.length).map((e) => Boolean(previewUrl(e.id)));
+    expect(rest).toEqual([...rest].sort((a, b) => Number(b) - Number(a)));
+  });
+  it("keeps every clip in the shape it was rendered at", () => {
+    expect(tileRatio("particles")).toBe("1:1");
+    expect(tileRatio("vanish")).toBe("9:16");
   });
 });
 

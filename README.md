@@ -34,7 +34,7 @@ flowchart LR
 
 **The workflow is a normal ComfyUI workflow.** Open ComfyUI (local or cloud), drag `workflows/hypereel_effects_h3_api.json` in, pick images, and it runs. Node ids are mapped in [hypereel_effects_h3_map.json](workflows/hypereel_effects_h3_map.json), so re-exporting needs no code changes.
 
-**Example clips.** The clips in `codebase/frontend/public/effects/` were rendered by this project from invented people and products made with Nano Banana 2. They contain no third-party footage.
+**Example clips.** The clips in `codebase/frontend/public/effects/` were rendered by this project from invented people and products made with Nano Banana 2. They contain no third-party footage. The gallery opens with a showcase where every effect has its own person, scene and shape: see [render-showcase.ts](codebase/backend/scripts/render-showcase.ts) and [showcase.ts](codebase/backend/src/showcase.ts).
 
 ### Tools and models used
 - **ComfyUI / Comfy Cloud** runs the workflow. **MiniMax H3 Max** is the core model, via its ComfyUI partner node.
@@ -57,7 +57,7 @@ Public deployments are protected by per-session, per-IP and global daily caps (`
 - **Renders survive restarts.** The Comfy job id is saved as soon as the job exists, and on startup the server re-attaches to unfinished jobs. A render that never reached Comfy is marked failed.
 - **Client IP.** `CLIENT_IP_HEADER` names the header your proxy sets, and Railway is detected automatically. `X-Forwarded-For` is never trusted.
 - **Privacy.** Only the clip's owner can see the photos and note behind it. Share pages show the video and a generic preview image.
-- **Smooth playback.** The model's clips run 6-9 Mbps at 480P. Finished clips are re-encoded to about 1.9 Mbps for the player. Gallery clips are about 0.5 Mbps, show a poster at once, start together only after buffering, and pause off-screen. `ffmpeg-static` provides the encoder, so there's nothing to install on the host.
+- **Smooth playback.** The model's clips run 6-9 Mbps at 480P. Finished clips are re-encoded to about 1.9 Mbps for the player. Gallery clips are about 0.5-1 Mbps, show a poster at once, start together only after buffering, and pause off-screen. `ffmpeg-static` provides the encoder, so there's nothing to install on the host.
 - **Current scaling limit: one instance.** Media lives on a local volume and renders run inside the web process. To scale out, swap `storage.ts` for S3 or R2, and move renders to a queue worker.
 
 ## Run it locally

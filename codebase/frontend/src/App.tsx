@@ -4,6 +4,7 @@ import Sidebar, { type FormState } from "./Sidebar";
 import Stage from "./Stage";
 import HowItWorks from "./HowItWorks";
 import LazyClip from "./LazyClip";
+import Masonry from "./Masonry";
 import { CheckIcon, ClockIcon, GridIcon, InfoIcon, SearchIcon } from "./Icons";
 
 type Tab = "effects" | "history" | "how";
@@ -142,14 +143,17 @@ export default function App() {
               <Stage id={viewId} seed={seed} onBack={() => showTab("effects")} onDone={onStageDone} toast={toast} />
             ) : tab === "effects" ? (
               shown.length ? (
-                <div className="effects-grid">
-                  {shown.map((e) => (
+                <Masonry
+                  items={shown}
+                  itemKey={(e) => e.id}
+                  ratio={(e) => e.ratio}
+                  renderItem={(e) => (
                     <button
                       type="button"
-                      key={e.id}
                       className={`effect-tile${e.id === selected ? " effect-tile--on" : ""}`}
                       aria-pressed={e.id === selected}
                       title={e.description}
+                      style={{ aspectRatio: e.ratio.replace(":", " / ") }}
                       onClick={() => setSelected(e.id)}
                     >
                       {e.preview ? <LazyClip src={e.preview} poster={e.poster} /> : <span className="tile-placeholder">No example yet</span>}
@@ -159,8 +163,8 @@ export default function App() {
                         <span className="tile-desc">{e.description}</span>
                       </span>
                     </button>
-                  ))}
-                </div>
+                  )}
+                />
               ) : (
                 <p className="muted empty">No effects match that search.</p>
               )
