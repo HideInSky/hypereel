@@ -8,6 +8,7 @@ import type { Storage } from "./storage.js";
 import type { Config } from "../config.js";
 import { buildEffectPrompt, getEffect, type ReferenceRole } from "../effects.js";
 import { checkLimits } from "./limits.js";
+import { toPlayback } from "./transcode.js";
 
 export interface GeneratorDeps {
   db: PrismaClient;
@@ -114,7 +115,12 @@ async function settle(deps: GeneratorDeps, id: string, call: () => Promise<Gener
   const { db, storage, log } = deps;
   try {
     const out = await call();
-    const videoPath = await storage.put(out.video, out.mime.includes("webm") ? "webm" : "mp4");
+    // Smoother playback, but never worth losing a paid clip: fall back to the original.
+    const video = await toPlayback(out.video).catch((err) => {
+      log.error({ id, err: String(err) }, "could not compress clip, keeping the original");
+      return out.video;
+    });
+    const videoPath = await storage.put(video, "mp4");
     await db.generation.update({
       where: { id },
       data: { status: "succeeded", progress: 100, videoPath, comfyJobId: out.jobId ?? null, model: out.model },

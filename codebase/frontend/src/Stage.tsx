@@ -94,7 +94,7 @@ export default function Stage({ id, seed, onBack, onDone, toast }: Props) {
   return (
     <div className="stage">
       <div className="stage-frame">
-        <video src={gen.videoUrl ?? undefined} poster={gen.posterUrl ?? undefined} controls autoPlay loop playsInline />
+        <video src={gen.videoUrl ?? undefined} poster={gen.posterUrl ?? undefined} controls autoPlay loop playsInline preload="auto" />
       </div>
       <h2 className="stage-title">{gen.effectLabel}</h2>
       <div className="stage-actions">

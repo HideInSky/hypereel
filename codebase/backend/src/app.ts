@@ -96,7 +96,19 @@ export async function buildApp(opts: { cfg: Config; db: PrismaClient; provider: 
   // one URL). In dev, Vite serves it on :5173 and proxies /api here.
   const frontendDist = path.resolve(here, "../../frontend/dist");
   if (existsSync(frontendDist)) {
-    await app.register(fastifyStatic, { root: frontendDist, prefix: "/", decorateReply: true, wildcard: false });
+    await app.register(fastifyStatic, {
+      root: frontendDist,
+      prefix: "/",
+      decorateReply: true,
+      wildcard: false,
+      cacheControl: false, // set per file type below
+      setHeaders: (res, filePath) => {
+        // Hashed build files never change. Example clips rarely do. index.html must stay fresh.
+        if (filePath.includes(`${path.sep}assets${path.sep}`)) res.header("Cache-Control", "public, max-age=31536000, immutable");
+        else if (filePath.includes(`${path.sep}effects${path.sep}`)) res.header("Cache-Control", "public, max-age=86400");
+        else res.header("Cache-Control", "no-cache");
+      },
+    });
     app.setNotFoundHandler((req, reply) => {
       if (req.raw.url?.startsWith("/api/") || req.raw.url?.startsWith("/media/")) {
         return reply.code(404).send({ error: "Not found" });

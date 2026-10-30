@@ -1,5 +1,6 @@
 import { useState } from "react";
 import type { Effect, ReferenceRole } from "./api";
+import LazyClip from "./LazyClip";
 import UploadCard from "./UploadCard";
 import { BoxIcon, PencilIcon, PersonIcon, PinIcon, SparkIcon } from "./Icons";
 
@@ -39,7 +40,7 @@ export default function Sidebar({ effect, form, setForm, busy, error, setError, 
     <aside className="sidebar">
       <div className="sidebar-scroll">
         <div className="effect-card">
-          {effect?.preview && <video key={effect.id} src={effect.preview} autoPlay muted loop playsInline />}
+          {effect?.preview && <LazyClip key={effect.id} src={effect.preview} poster={effect.poster} />}
           <button type="button" className="effect-change" onClick={onChangeEffect}>
             <PencilIcon /> Change
           </button>

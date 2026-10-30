@@ -152,7 +152,7 @@ export default function App() {
                       title={e.description}
                       onClick={() => setSelected(e.id)}
                     >
-                      {e.preview ? <LazyClip src={e.preview} /> : <span className="tile-placeholder">No example yet</span>}
+                      {e.preview ? <LazyClip src={e.preview} poster={e.poster} /> : <span className="tile-placeholder">No example yet</span>}
                       {e.id === selected && <span className="tile-check"><CheckIcon /></span>}
                       <span className="tile-text">
                         <span className="tile-label">{e.label}</span>

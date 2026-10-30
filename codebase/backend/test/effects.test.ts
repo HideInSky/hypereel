@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { EFFECTS, buildEffectPrompt, sanitizeUserPrompt } from "../src/effects.js";
 import { withNetworkRetry, withReferenceSlots } from "../src/services/comfy.js";
+import { toPlayback } from "../src/services/transcode.js";
 
 describe("effect prompts", () => {
   it("numbers images in attachment order, by role", () => {
@@ -52,6 +53,25 @@ describe("workflow reference slots", () => {
     expect(graph["2"]!.inputs["refs.image_3"]).toEqual(["ref_3", 0]);
     expect(template["10"]).toBeDefined(); // template untouched
   });
+});
+
+describe("transcode", () => {
+  it("compresses video, moves the index to the front, and rejects garbage", async () => {
+    const { spawnSync } = await import("node:child_process");
+    const { mkdtempSync, readFileSync } = await import("node:fs");
+    const { tmpdir } = await import("node:os");
+    const path = await import("node:path");
+    const { default: ffmpeg } = await import("ffmpeg-static");
+    const dir = mkdtempSync(path.join(tmpdir(), "hypereel-t-"));
+    const source = path.join(dir, "s.mp4");
+    // High-bitrate noise with no faststart, like the model's output but smaller.
+    spawnSync(ffmpeg as unknown as string, ["-y", "-loglevel", "error", "-f", "lavfi", "-i", "testsrc2=s=480x832:r=24:d=1", "-c:v", "libx264", "-qp", "4", source]);
+    const original = new Uint8Array(readFileSync(source));
+    const out = await toPlayback(original);
+    expect(out.length).toBeLessThan(original.length / 2);
+    expect(Buffer.from(out).indexOf("moov")).toBeLessThan(Buffer.from(out).indexOf("mdat"));
+    await expect(toPlayback(new TextEncoder().encode("not a video"))).rejects.toThrow(/ffmpeg/);
+  }, 30_000);
 });
 
 describe("withNetworkRetry", () => {

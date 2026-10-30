@@ -12,6 +12,7 @@ import { loadConfig } from "../src/config.js";
 import { createProvider } from "../src/services/comfy.js";
 import { EFFECTS, buildEffectPrompt } from "../src/effects.js";
 import { PREVIEWS } from "../src/previews.js";
+import { toGalleryClip } from "../src/services/transcode.js";
 
 const args = process.argv.slice(2);
 const maxAt = args.indexOf("--max");
@@ -45,7 +46,7 @@ await Promise.all(Array.from({ length: 3 }, async () => {
         prompt: buildEffectPrompt(e.id, refs),
         seconds: e.seconds, resolution: "480P", aspectRatio: "9:16",
       });
-      await fs.writeFile(new URL(`${e.id}.mp4`, outDir), out.video);
+      await toGalleryClip(out.video, fileURLToPath(new URL(`${e.id}.mp4`, outDir)), fileURLToPath(new URL(`${e.id}.jpg`, outDir)));
       done.push(e.id);
       console.log(`ok ${e.id}`);
     } catch (err) {

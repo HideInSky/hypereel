@@ -9,6 +9,8 @@ export type Effect = {
   seconds: number;
   /** Example clip, e.g. "/effects/vanish.mp4". Null until one has been rendered. */
   preview: string | null;
+  /** Still frame shown until the clip is ready. */
+  poster: string | null;
 };
 
 export type ReferenceRole = "character" | "location" | "product";

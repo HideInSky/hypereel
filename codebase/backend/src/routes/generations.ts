@@ -46,7 +46,7 @@ export function toPublic(g: Generation, ctx: AppContext, viewerSessionId: string
 
 export async function generationRoutes(app: FastifyInstance, ctx: AppContext) {
   app.get("/api/effects", async () =>
-    EFFECTS.map(({ id, label, description, seconds }) => ({ id, label, description, seconds, preview: previewUrl(id) })),
+    EFFECTS.map(({ id, label, description, seconds }) => ({ id, label, description, seconds, preview: previewUrl(id), poster: previewUrl(id)?.replace(/\.mp4$/, ".jpg") ?? null })),
   );
 
   app.post("/api/generations", async (req, reply) => {

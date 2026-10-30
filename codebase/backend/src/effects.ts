@@ -383,7 +383,7 @@ export const EFFECTS: Effect[] = [
     seconds: 5,
     stylized: true,
     motion: (c) =>
-      `The character moves naturally ${PLACE(c)} in a real, unaltered photographic scene. A thick rough white spray-paint outline hugs their silhouette like a sticker border and redraws slightly on every frame. Colored marker scribbles in red, green and yellow, simple graffiti shapes and childish doodles with no readable words, are drawn over the buildings and background and wiggle as they animate. Choppy stop-motion feel, as if played at 8 frames per second. Sound: spray can hiss, marker squeaks, a loose hip-hop beat.`,
+      `The character moves naturally ${PLACE(c)} in a real, unaltered photographic scene. A thick rough white spray-paint outline hugs their silhouette like a sticker border and redraws slightly on every frame. Colored marker scribbles in red, green and yellow, simple graffiti shapes and childish doodles with no readable words, are drawn over the buildings and background and wiggle as they animate. Sound: spray can hiss, marker squeaks, a loose hip-hop beat.`,
   },
   {
     id: "comic",
@@ -392,7 +392,7 @@ export const EFFECTS: Effect[] = [
     seconds: 5,
     stylized: true,
     motion: (c) =>
-      `The character moves with energy ${PLACE(c)}. The entire clip is redrawn as a hand-illustrated graphic novel: confident black ink linework, flat cel-shaded color in a moody limited palette, hard graphic shadows and fine hatching, with small details such as leaves drifting. It looks like a printed comic panel come to life, not a filter. No speech bubbles and no text. Choppy stop-motion feel, as if played at 8 frames per second. Sound: punchy whooshes, a tense funk groove.`,
+      `The character moves with energy ${PLACE(c)}. The entire clip is redrawn as a hand-illustrated graphic novel: confident black ink linework, flat cel-shaded color in a moody limited palette, hard graphic shadows and fine hatching, with small details such as leaves drifting. It looks like a printed comic panel come to life, not a filter. No speech bubbles and no text. Sound: punchy whooshes, a tense funk groove.`,
   },
   {
     id: "lsd",
@@ -401,7 +401,7 @@ export const EFFECTS: Effect[] = [
     seconds: 5,
     stylized: true,
     motion: (c) =>
-      `The character poses ${PLACE(c)}. Their whole figure is rendered as a stark high-contrast black-and-white photocopy, with white skin and clothes, solid black shadows, and fine black cracks running across them like shattered porcelain. Everything else keeps normal color, with oily iridescent rainbow swirls and warped concentric ripples spreading through the background and heavy film grain. Choppy stop-motion feel, as if played at 8 frames per second. Sound: a warped tape-wobble synth, vinyl crackle, a slow heavy beat.`,
+      `The character poses ${PLACE(c)}. Their whole figure is rendered as a stark high-contrast black-and-white photocopy, with white skin and clothes, solid black shadows, and fine black cracks running across them like shattered porcelain. Everything else keeps normal color, with oily iridescent rainbow swirls and warped concentric ripples spreading through the background and heavy film grain. Sound: a warped tape-wobble synth, vinyl crackle, a slow heavy beat.`,
   },
   {
     id: "palette",
@@ -410,7 +410,7 @@ export const EFFECTS: Effect[] = [
     seconds: 5,
     stylized: true,
     motion: (c) =>
-      `The character moves naturally ${PLACE(c)}. The entire clip is repainted in thick impasto oil paint, with heavy visible brushstrokes that follow the shapes of their clothes and face and swirl through the background. The strokes shift and reform on every frame, keeping the subject clearly recognizable and the colors rich. Choppy stop-motion feel, as if played at 8 frames per second. Sound: wet brush strokes, warm old-school soul loop.`,
+      `The character moves naturally ${PLACE(c)}. The entire clip is repainted in thick impasto oil paint, with heavy visible brushstrokes that follow the shapes of their clothes and face and swirl through the background. The strokes shift and reform on every frame, keeping the subject clearly recognizable and the colors rich. Sound: wet brush strokes, warm old-school soul loop.`,
   },
   {
     id: "particles",
@@ -420,7 +420,7 @@ export const EFFECTS: Effect[] = [
     stylized: true,
     overlayText: true,
     motion: (c) =>
-      `The character moves slowly ${PLACE(c)}. Their whole body is made of thousands of tiny glowing white and cyan dots, a 3D point cloud that keeps their exact silhouette and clothing folds. The rest of the scene is dark and teal-tinted, with beams of light and dust-like particles drifting. Small sci-fi scanner labels reading "POINT CLOUD" and "SCAN ERROR" sit in the corners. Choppy stop-motion feel, as if played at 8 frames per second. Sound: shimmering digital chimes, a low hum, scanner blips.`,
+      `The character moves slowly ${PLACE(c)}. Their whole body is made of thousands of tiny glowing white and cyan dots, a 3D point cloud that keeps their exact silhouette and clothing folds. The rest of the scene is dark and teal-tinted, with beams of light and dust-like particles drifting. Small sci-fi scanner labels reading "POINT CLOUD" and "SCAN ERROR" sit in the corners. Sound: shimmering digital chimes, a low hum, scanner blips.`,
   },
   {
     id: "tracking",
@@ -430,7 +430,7 @@ export const EFFECTS: Effect[] = [
     stylized: true,
     overlayText: true,
     motion: (c) =>
-      `The character moves with energy ${PLACE(c)}, in a gritty real film look. A computer-vision overlay follows them: small hollow white squares lock on to their joints and clothing, thin white curved lines sweep between the squares and out of the frame, and small flickering decimal numbers such as 44.73 and -51.41 sit beside the squares. Slight digital glitch streaks. Choppy stop-motion feel, as if played at 8 frames per second. Sound: data blips, a tense electronic pulse.`,
+      `The character moves with energy ${PLACE(c)}, in a gritty real film look. A computer-vision overlay follows them: small hollow white squares lock on to their joints and clothing, thin white curved lines sweep between the squares and out of the frame, and small flickering decimal numbers such as 44.73 and -51.41 sit beside the squares. Slight digital glitch streaks. Sound: data blips, a tense electronic pulse.`,
   },
   {
     id: "windows",
@@ -440,7 +440,7 @@ export const EFFECTS: Effect[] = [
     stylized: true,
     overlayText: true,
     motion: (c) =>
-      `The character moves naturally ${PLACE(c)}, shot like low-resolution early-2000s camcorder footage with a strong electric-blue color cast. Solid blue error-screen panels with small generic white system text, and retro desktop windows with a mouse cursor, pop up and overlap parts of the frame, tearing with glitch bars. No logos and no brand names. Choppy stop-motion feel, as if played at 8 frames per second. Sound: error beeps, a dial-up crackle, a glitchy breakbeat.`,
+      `The character moves naturally ${PLACE(c)}, shot like low-resolution early-2000s camcorder footage with a strong electric-blue color cast. Solid blue error-screen panels with small generic white system text, and retro desktop windows with a mouse cursor, pop up and overlap parts of the frame, tearing with glitch bars. No logos and no brand names. Sound: error beeps, a dial-up crackle, a glitchy breakbeat.`,
   },
 ];
 
