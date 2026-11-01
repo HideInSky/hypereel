@@ -8,3 +8,5 @@ data/
 .DS_Store
 codebase/backend/generated/
 codebase/backend/test/fixtures/*.mp4
+__pycache__/
+*.pyc

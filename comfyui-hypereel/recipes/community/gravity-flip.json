@@ -1,0 +1,15 @@
+{
+  "format": "hypereel-effect/1",
+  "name": "Gravity Flip",
+  "description": "Gravity switches off and everything, them included, falls up into the sky.",
+  "seconds": 6,
+  "look": "photoreal",
+  "camera": "Handheld medium-wide shot of the character {place}, looking at the camera.",
+  "beats": [
+    { "from": 0, "to": 2, "action": "The character stands relaxed. Small loose things nearby begin to tremble and lift a little off the ground." },
+    { "from": 2, "to": 4, "action": "Gravity reverses. The character's feet leave the ground and they rise slowly, arms out and hair floating upward, while loose objects tumble up past them." },
+    { "from": 4, "to": 6, "action": "The camera tilts up and follows them as they drift higher into the open sky, calm and amused, looking back down at the lens." }
+  ],
+  "product": "The product items float up beside them, turning slowly and staying in sharp focus.",
+  "sound": "a rising low hum, ambience fading away, soft airy wind, a light dreamy synth."
+}

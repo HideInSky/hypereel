@@ -8,7 +8,7 @@ const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&
 
 export function renderSharePage(g: Generation, publicUrl: string, paths: { video?: string }): string {
   const effect = getEffect(g.genre);
-  const title = `${esc(effect?.label ?? "hypereel")}, made with hypereel`;
+  const title = `${esc(g.effectName ?? effect?.label ?? "hypereel")}, made with hypereel`;
   const desc = "Upload a photo, pick an effect, and get a viral clip with sound. Rendered by MiniMax H3 on ComfyUI. Make your own!";
   const pageUrl = `${publicUrl}/v/${g.id}`;
   const video = paths.video ? `${publicUrl}${paths.video}` : "";

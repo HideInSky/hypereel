@@ -107,6 +107,24 @@ export function withReferenceSlots(graph: WorkflowGraph, map: WorkflowMap, count
   return { graph: next, loaders };
 }
 
+/** A ready-to-run copy of the workflow for one effect, to open in the ComfyUI editor. */
+export async function exportWorkflow(
+  cfg: Config,
+  input: { prompt: string; seconds: number; resolution: string; aspectRatio: string; imageTitles: string[] },
+): Promise<WorkflowGraph> {
+  const read = async <T>(p: string) => JSON.parse(await fs.readFile(path.resolve(here, "../..", p), "utf8")) as T;
+  const map = await read<WorkflowMap>(cfg.COMFY_WORKFLOW_MAP_PATH);
+  const { graph, loaders } = withReferenceSlots(await read<WorkflowGraph>(cfg.COMFY_WORKFLOW_PATH), map, input.imageTitles.length);
+  loaders.forEach((id, i) => { graph[id]!._meta = { title: input.imageTitles[i]! }; });
+  Object.assign(graph[map.video]!.inputs, {
+    [map.prompt]: input.prompt,
+    [map.duration]: input.seconds,
+    [map.resolution]: input.resolution,
+    [map.ratio]: input.aspectRatio,
+  });
+  return graph;
+}
+
 export class WorkflowProvider implements VideoProvider {
   readonly name = "comfy-workflow";
   constructor(private readonly cfg: Config) {}

@@ -495,6 +495,11 @@ function describeRole(refs: OrderedReference[], role: ReferenceRole, text: strin
 export function buildEffectPrompt(effectId: string, refs: OrderedReference[], userPrompt?: string | null): string {
   const effect = getEffect(effectId);
   if (!effect) throw new Error(`Unknown effect: ${effectId}`);
+  return buildPromptFor(effect, refs, userPrompt);
+}
+
+/** The same, for any effect object. comfyui-hypereel/nodes.py mirrors this (see its parity test). */
+export function buildPromptFor(effect: Effect, refs: OrderedReference[], userPrompt?: string | null): string {
   const has = (role: ReferenceRole) => refs.some((r) => r.role === role);
   const lines = [
     describeRole(refs, "character", "the character. Keep their face, build, hair and outfit exactly the same throughout."),

@@ -1,16 +1,20 @@
 # Submission kit
 
-## Demo video script (2:00 or less)
+## Demo video script (about 90 seconds)
+
+Most Innovative requires the demo to explain why the entry is innovative, so say it out loud.
 
 | Time | Shot | Voiceover |
 |---|---|---|
-| 0:00-0:08 | Hook: full-screen Vanish clip, the clothes hit the ground | "That's not a VFX studio. That's one photo." |
-| 0:08-0:20 | Quick cuts of Floating Fall and Eyes In | "hypereel is an open-source take on viral video effects. One photo, one click, picture and sound." |
-| 0:20-0:50 | Screen: add a character, a location and a product, pick an effect, Generate, the progress screen, the result | "Add a character. Location and products are optional. Pick an effect and about a minute later you have a clip." |
-| 0:50-1:05 | Same character, product changed, shows the product floating in Floating Fall | "Your references really drive it. Swap the product and the shot changes." |
-| 1:05-1:35 | ComfyUI with `workflows/hypereel_effects_h3_api.json` loaded, then `effects.ts` | "Under the hood it's a ComfyUI workflow on Comfy Cloud. MiniMax H3's reference node takes up to nine images. Each effect is a recipe in plain text, so adding a new one is just a few lines." |
-| 1:35-1:50 | README, architecture diagram, CI | "It's MIT licensed, with Fastify, Postgres, React, Docker Compose and GitHub Actions." |
-| 1:50-2:00 | Outro: three tiles playing | "hypereel. Link below. #OpenSourceHiggsfield" |
+| 0:00-0:10 | Gallery playing, scroll slowly | "Viral video effects are all closed. You get the ones the app ships. hypereel makes an effect something you can write, remix and share." |
+| 0:10-0:30 | Pick an effect, press Remix. Studio opens with its timed beats and the live prompt | "Any effect opens as an editable recipe: camera, timed beats and sound. On the right is the exact prompt MiniMax H3 will read." |
+| 0:30-0:45 | Change a beat, press Save, press Copy link | "Change a beat, save it, and it has its own link. Anyone who opens it can run it or remix it again." |
+| 0:45-1:00 | Add a photo, Generate, cut to the finished clip with sound | "One photo, and H3 renders picture and sound together." |
+| 1:00-1:20 | Press ComfyUI, drop the file into ComfyUI. Then show the hypereel Effect node's dropdown | "Every effect exports as a normal ComfyUI workflow. There's also a custom node that lists every recipe. An effect is just a JSON file, so adding one is a pull request, no code." |
+| 1:20-1:30 | README and community folder | "Open format, open source, MIT licensed. #OpenSourceHiggsfield" |
+
+### Why this is innovative (for the form)
+> Most effect apps treat an effect as a closed preset. hypereel defines an open format, hypereel-effect/1: an effect is a JSON file with camera, timed beats, sound and product rules. The same file runs in the web app, shares by link, remixes, exports as a ComfyUI workflow, and appears in a custom node's dropdown. Anyone can add an effect with a pull request and no code. A parity test keeps the app and the node producing identical MiniMax H3 prompts.
 
 **Tools to mention:** ComfyUI + Comfy Cloud, MiniMax H3 Max (partner node), Nano Banana 2 (example references only), @comfyorg/sdk, Fastify, Prisma/PostgreSQL, React/Vite, sharp, Docker, GitHub Actions, Railway.
 
@@ -18,7 +22,7 @@
 
 > One photo. The body vanishes. The clothes hit the floor.
 >
-> **hypereel** is an open-source take on viral video effects: Floating Fall, Vanish and Eyes In. Add a character, plus a location and products if you like, and MiniMax H3 renders the clip with sound, running as a ComfyUI workflow on Comfy Cloud.
+> **hypereel** is an open-source take on viral video effects: Floating Fall, Vanish and Eyes In, plus a Studio to write and remix your own. Add a character, plus a location and products if you like, and MiniMax H3 renders the clip with sound, running as a ComfyUI workflow on Comfy Cloud.
 >
 > Try it: <APP_URL>
 > Code (MIT): https://github.com/HideInSky/hypereel
@@ -31,4 +35,4 @@
 - [ ] Use only your own face with consent, or fictional people, in the demo. No brands or characters.
 - [ ] Check credits: each clip costs about 75 to 195. Set `LIMIT_GLOBAL_PER_DAY` to fit your balance.
 - [ ] Record demo (≤2 min), upload, post with #OpenSourceHiggsfield
-- [ ] Submit the entry form before **Oct 30, 9:00 PT**: repo URL, video URL, app URL, post URL. Bonus category: **Built with MiniMax H3**
+- [ ] Submit the entry form before **Nov 3, 9:00 PT**: repo URL, video URL, app URL, post URL. Main category: **Most Innovative**. Bonus category: **Built with MiniMax H3**

@@ -24,10 +24,13 @@ type Props = {
   setError: (message: string | null) => void;
   onChangeEffect: () => void;
   onGenerate: () => void;
+  onRemix: () => void;
+  onCopyLink: () => void;
+  workflowHref: string | null;
 };
 
 /** The left control panel: chosen effect, uploads, prompt, output settings, Generate. */
-export default function Sidebar({ effect, form, setForm, busy, error, setError, onChangeEffect, onGenerate }: Props) {
+export default function Sidebar({ effect, form, setForm, busy, error, setError, onChangeEffect, onGenerate, onRemix, onCopyLink, workflowHref }: Props) {
   const [nudge, setNudge] = useState(false);
   const setUploads = (role: ReferenceRole, files: File[]) => {
     setError(null);
@@ -45,6 +48,12 @@ export default function Sidebar({ effect, form, setForm, busy, error, setError, 
             <PencilIcon /> Change
           </button>
           <span className="effect-name">{effect?.label ?? "Loading"}</span>
+        </div>
+
+        <div className="effect-actions">
+          <button type="button" onClick={onRemix} disabled={!effect}>Remix</button>
+          {effect?.custom && <button type="button" onClick={onCopyLink}>Copy link</button>}
+          {workflowHref && <a href={workflowHref} download title="Download this effect as a ComfyUI workflow, with these inputs">ComfyUI</a>}
         </div>
 
         <div className="upload-pair">

@@ -1,0 +1,14 @@
+[project]
+name = "comfyui-hypereel"
+description = "Viral video effects as open JSON recipes: pick one, get a timed MiniMax H3 prompt."
+version = "0.1.0"
+license = { text = "MIT" }
+dependencies = []
+
+[project.urls]
+Repository = "https://github.com/HideInSky/hypereel"
+
+[tool.comfy]
+PublisherId = ""
+DisplayName = "hypereel"
+Icon = ""

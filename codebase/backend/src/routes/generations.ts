@@ -1,9 +1,11 @@
 import type { FastifyInstance } from "fastify";
 import { z } from "zod";
-import { EFFECTS, EFFECT_IDS, getEffect, previewUrl, sanitizeUserPrompt, tileRatio, type ReferenceRole } from "../effects.js";
+import { EFFECTS, getEffect, previewUrl, sanitizeUserPrompt, tileRatio, type ReferenceRole } from "../effects.js";
 import { checkLimits } from "../services/limits.js";
 import { LimitExceededError, createGeneration, type UploadedReference } from "../services/generator.js";
 import type { AppContext } from "../app.js";
+import { communityEffects, resolveEffect } from "./customEffects.js";
+import { SHOWCASE } from "../showcase.js";
 import type { Generation } from "@prisma/client";
 
 export const RESOLUTIONS = ["480P", "768P"] as const;
@@ -13,7 +15,7 @@ export const ROLE_LIMITS: Record<ReferenceRole, number> = { character: 4, locati
 const ROLES = Object.keys(ROLE_LIMITS) as ReferenceRole[];
 
 const createSchema = z.object({
-  effect: z.enum(EFFECT_IDS as [string, ...string[]]),
+  effect: z.string().max(80),
   prompt: z.string().max(300).optional(),
   resolution: z.enum(RESOLUTIONS).default("480P"),
   aspectRatio: z.enum(ASPECT_RATIOS).default("9:16"),
@@ -31,7 +33,7 @@ export function toPublic(g: Generation, ctx: AppContext, viewerSessionId: string
     status: g.status,
     progress: g.progress,
     effect: g.genre,
-    effectLabel: getEffect(g.genre)?.label ?? "hypereel",
+    effectLabel: g.effectName ?? getEffect(g.genre)?.label ?? "hypereel",
     prompt: isOwner ? g.caption : null,
     model: g.model,
     resolution: g.resolution,
@@ -46,9 +48,12 @@ export function toPublic(g: Generation, ctx: AppContext, viewerSessionId: string
 }
 
 export async function generationRoutes(app: FastifyInstance, ctx: AppContext) {
-  app.get("/api/effects", async () =>
-    EFFECTS.map(({ id, label, description, seconds }) => ({ id, label, description, seconds, preview: previewUrl(id), poster: previewUrl(id)?.replace(/\.mp4$/, ".jpg") ?? null, ratio: tileRatio(id) })),
-  );
+  app.get("/api/effects", async () => {
+    const builtIn = EFFECTS.map(({ id, label, description, seconds }) => ({ id, label, description, seconds, preview: previewUrl(id), poster: previewUrl(id)?.replace(/\.mp4$/, ".jpg") ?? null, ratio: tileRatio(id) }));
+    // Gallery order: the showcase, then community recipes, then everything else.
+    const after = Object.keys(SHOWCASE).length;
+    return [...builtIn.slice(0, after), ...communityEffects(), ...builtIn.slice(after)];
+  });
 
   app.post("/api/generations", async (req, reply) => {
     const uploads: Record<ReferenceRole, Uint8Array[]> = { character: [], location: [], product: [] };
@@ -63,6 +68,8 @@ export async function generationRoutes(app: FastifyInstance, ctx: AppContext) {
     }
     const parsed = createSchema.safeParse(fields);
     if (!parsed.success) return reply.code(400).send({ error: "Pick a valid effect, resolution and aspect ratio." });
+    const effect = await resolveEffect(ctx, parsed.data.effect);
+    if (!effect) return reply.code(400).send({ error: "Pick a valid effect, resolution and aspect ratio." });
     if (uploads.character.length === 0) return reply.code(400).send({ error: "Add at least one character photo." });
     for (const role of ROLES) {
       if (uploads[role].length > ROLE_LIMITS[role]) {
@@ -83,7 +90,7 @@ export async function generationRoutes(app: FastifyInstance, ctx: AppContext) {
       const row = await createGeneration(
         { db: ctx.db, provider: ctx.provider, storage: ctx.storage, cfg: ctx.cfg, log: app.log },
         {
-          effect: parsed.data.effect,
+          effect,
           references,
           userPrompt: sanitizeUserPrompt(parsed.data.prompt),
           resolution: parsed.data.resolution,

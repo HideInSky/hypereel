@@ -7,6 +7,9 @@
 
 FROM node:22-bookworm-slim AS deps
 WORKDIR /app
+# Prisma picks its engine from the OpenSSL it finds here. Without this it builds for the
+# wrong version, and the runtime stage (which has OpenSSL 3) can't start on some machines.
+RUN apt-get update && apt-get install -y --no-install-recommends openssl && rm -rf /var/lib/apt/lists/*
 COPY package.json package-lock.json ./
 COPY codebase/backend/package.json codebase/backend/
 COPY codebase/frontend/package.json codebase/frontend/
@@ -15,6 +18,7 @@ RUN npm ci
 FROM deps AS build
 COPY codebase ./codebase
 COPY workflows ./workflows
+COPY comfyui-hypereel ./comfyui-hypereel
 RUN npm run build --workspace codebase/frontend \
  && npm run build --workspace codebase/backend \
  && npm prune --omit=dev \
@@ -32,6 +36,7 @@ COPY --from=build /app/codebase/backend/dist ./codebase/backend/dist
 COPY --from=build /app/codebase/backend/prisma ./codebase/backend/prisma
 COPY --from=build /app/codebase/frontend/dist ./codebase/frontend/dist
 COPY --from=build /app/workflows ./workflows
+COPY --from=build /app/comfyui-hypereel/recipes ./comfyui-hypereel/recipes
 WORKDIR /app/codebase/backend
 # Note: we run as root because managed volumes (e.g. Railway) are mounted
 # root-owned at runtime, so a non-root user couldn't write /data. On Kubernetes

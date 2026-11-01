@@ -4,13 +4,24 @@
 
 Built for the [Open Source Higgsfield](https://comfy.org/open-source-higgsfield/) challenge. #OpenSourceHiggsfield
 
-It ships with 45 effects, from Vanish and Floating Fall to Earth Zoom, Melting and Infinite Clones. Each is a short recipe in [effects.ts](codebase/backend/src/effects.ts), so adding one takes a few lines. Effects with an example clip have been rendered and checked. The rest are written but not yet rendered, so their results may need tuning.
+It ships with 45 effects, from Vanish and Floating Fall to Earth Zoom, Melting and Infinite Clones, plus community recipes and a Studio for writing your own. Each is a short recipe in [effects.ts](codebase/backend/src/effects.ts), so adding one takes a few lines. Effects with an example clip have been rendered and checked. The rest are written but not yet rendered, so their results may need tuning.
 
 Render example clips for more effects (each one costs real credits):
 
 ```bash
 npm run previews -w codebase/backend -- melting earth-zoom
 ```
+
+## Effects are open recipes
+
+Higgsfield's effects are closed: you get what they ship. In hypereel an effect is a small JSON file in an open format, `hypereel-effect/1`, and that one file works everywhere:
+
+- **Write it.** Effect Studio turns an idea into timed beats and shows the exact prompt H3 will read.
+- **Remix it.** "Remix" opens any effect, built-in or not, as an editable recipe. Your version gets its own link.
+- **Share it.** Send the link, download the JSON, or add it to [`recipes/community`](comfyui-hypereel/recipes/community) with a pull request.
+- **Run it in ComfyUI.** The "ComfyUI" button downloads a ready-to-run workflow with your prompt, clip length and image slots filled in. The [`comfyui-hypereel`](comfyui-hypereel) custom node also lists every recipe, so ComfyUI users get the same effects without the website. A parity test makes sure the node and the app write identical prompts.
+
+Saving, sharing and exporting cost nothing. Only rendering uses credits, and it goes through the same caps as any other clip. Custom effects are reachable only by their link, so there's no public feed of user-written text to moderate.
 
 ## How it works
 
@@ -95,6 +106,8 @@ Postgres data lives in the named volume `pgdata`, and generated media in `media`
 ```bash
 npm run lint && npm run typecheck && npm test && npm run build
 ```
+The custom node has its own tests: `cd comfyui-hypereel && python3 -m unittest discover -s tests`.
+
 Backend tests boot a throwaway embedded PostgreSQL, apply the real migrations, and exercise the HTTP API with a stubbed video provider. [GitHub Actions](.github/workflows/ci.yml) runs the same steps against a Postgres service container on every push and PR, then builds the production Docker image. On `main` it pushes the image to Docker Hub as `<user>/hypereel:<git-sha>`, but only when `DOCKERHUB_USERNAME`/`DOCKERHUB_TOKEN` secrets are set. CI never deploys.
 
 ## Database migrations

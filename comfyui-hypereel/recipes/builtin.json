@@ -1,0 +1,632 @@
+[
+  {
+    "id": "canvas",
+    "label": "Canvas",
+    "seconds": 5,
+    "ownSetting": false,
+    "stylized": true,
+    "overlayText": false,
+    "motion": {
+      "none": "The character moves naturally in a setting that suits the photo in a real, unaltered photographic scene. A thick rough white spray-paint outline hugs their silhouette like a sticker border and redraws slightly on every frame. Colored marker scribbles in red, green and yellow, simple graffiti shapes and childish doodles with no readable words, are drawn over the buildings and background and wiggle as they animate. Sound: spray can hiss, marker squeaks, a loose hip-hop beat.",
+      "location": "The character moves naturally at the location from the location image in a real, unaltered photographic scene. A thick rough white spray-paint outline hugs their silhouette like a sticker border and redraws slightly on every frame. Colored marker scribbles in red, green and yellow, simple graffiti shapes and childish doodles with no readable words, are drawn over the buildings and background and wiggle as they animate. Sound: spray can hiss, marker squeaks, a loose hip-hop beat.",
+      "products": "The character moves naturally in a setting that suits the photo in a real, unaltered photographic scene. A thick rough white spray-paint outline hugs their silhouette like a sticker border and redraws slightly on every frame. Colored marker scribbles in red, green and yellow, simple graffiti shapes and childish doodles with no readable words, are drawn over the buildings and background and wiggle as they animate. Sound: spray can hiss, marker squeaks, a loose hip-hop beat.",
+      "both": "The character moves naturally at the location from the location image in a real, unaltered photographic scene. A thick rough white spray-paint outline hugs their silhouette like a sticker border and redraws slightly on every frame. Colored marker scribbles in red, green and yellow, simple graffiti shapes and childish doodles with no readable words, are drawn over the buildings and background and wiggle as they animate. Sound: spray can hiss, marker squeaks, a loose hip-hop beat."
+    }
+  },
+  {
+    "id": "comic",
+    "label": "Comic",
+    "seconds": 5,
+    "ownSetting": false,
+    "stylized": true,
+    "overlayText": false,
+    "motion": {
+      "none": "STYLE, most important: this is 2D hand-drawn comic book animation from the very first frame to the last, not live action and not a photograph. Every frame is drawn with thick black ink outlines, flat cel-shaded color in a limited palette, solid black shadows and cross-hatching, on visible printed paper texture. Only the character's design, outfit and pose come from the photo, redrawn as an illustration. The character moves with energy in a setting that suits the photo. It looks like a printed comic panel come to life. No speech bubbles and no text. Sound: punchy whooshes, a tense funk groove.",
+      "location": "STYLE, most important: this is 2D hand-drawn comic book animation from the very first frame to the last, not live action and not a photograph. Every frame is drawn with thick black ink outlines, flat cel-shaded color in a limited palette, solid black shadows and cross-hatching, on visible printed paper texture. Only the character's design, outfit and pose come from the photo, redrawn as an illustration. The character moves with energy at the location from the location image. It looks like a printed comic panel come to life. No speech bubbles and no text. Sound: punchy whooshes, a tense funk groove.",
+      "products": "STYLE, most important: this is 2D hand-drawn comic book animation from the very first frame to the last, not live action and not a photograph. Every frame is drawn with thick black ink outlines, flat cel-shaded color in a limited palette, solid black shadows and cross-hatching, on visible printed paper texture. Only the character's design, outfit and pose come from the photo, redrawn as an illustration. The character moves with energy in a setting that suits the photo. It looks like a printed comic panel come to life. No speech bubbles and no text. Sound: punchy whooshes, a tense funk groove.",
+      "both": "STYLE, most important: this is 2D hand-drawn comic book animation from the very first frame to the last, not live action and not a photograph. Every frame is drawn with thick black ink outlines, flat cel-shaded color in a limited palette, solid black shadows and cross-hatching, on visible printed paper texture. Only the character's design, outfit and pose come from the photo, redrawn as an illustration. The character moves with energy at the location from the location image. It looks like a printed comic panel come to life. No speech bubbles and no text. Sound: punchy whooshes, a tense funk groove."
+    }
+  },
+  {
+    "id": "particles",
+    "label": "Particles",
+    "seconds": 5,
+    "ownSetting": false,
+    "stylized": true,
+    "overlayText": true,
+    "motion": {
+      "none": "The character moves slowly in a setting that suits the photo. Their whole body is made of thousands of tiny glowing white and cyan dots, a 3D point cloud that keeps their exact silhouette and clothing folds. The rest of the scene is dark and teal-tinted, with beams of light and dust-like particles drifting. Small sci-fi scanner labels reading \"POINT CLOUD\" and \"SCAN ERROR\" sit in the corners. Sound: shimmering digital chimes, a low hum, scanner blips.",
+      "location": "The character moves slowly at the location from the location image. Their whole body is made of thousands of tiny glowing white and cyan dots, a 3D point cloud that keeps their exact silhouette and clothing folds. The rest of the scene is dark and teal-tinted, with beams of light and dust-like particles drifting. Small sci-fi scanner labels reading \"POINT CLOUD\" and \"SCAN ERROR\" sit in the corners. Sound: shimmering digital chimes, a low hum, scanner blips.",
+      "products": "The character moves slowly in a setting that suits the photo. Their whole body is made of thousands of tiny glowing white and cyan dots, a 3D point cloud that keeps their exact silhouette and clothing folds. The rest of the scene is dark and teal-tinted, with beams of light and dust-like particles drifting. Small sci-fi scanner labels reading \"POINT CLOUD\" and \"SCAN ERROR\" sit in the corners. Sound: shimmering digital chimes, a low hum, scanner blips.",
+      "both": "The character moves slowly at the location from the location image. Their whole body is made of thousands of tiny glowing white and cyan dots, a 3D point cloud that keeps their exact silhouette and clothing folds. The rest of the scene is dark and teal-tinted, with beams of light and dust-like particles drifting. Small sci-fi scanner labels reading \"POINT CLOUD\" and \"SCAN ERROR\" sit in the corners. Sound: shimmering digital chimes, a low hum, scanner blips."
+    }
+  },
+  {
+    "id": "windows",
+    "label": "Glitch Windows",
+    "seconds": 5,
+    "ownSetting": false,
+    "stylized": true,
+    "overlayText": true,
+    "motion": {
+      "none": "The character moves naturally in a setting that suits the photo, shot like low-resolution early-2000s camcorder footage with a strong electric-blue color cast. Solid blue error-screen panels with small generic white system text, and retro desktop windows with a mouse cursor, pop up and overlap parts of the frame, tearing with glitch bars. No logos and no brand names. Sound: error beeps, a dial-up crackle, a glitchy breakbeat.",
+      "location": "The character moves naturally at the location from the location image, shot like low-resolution early-2000s camcorder footage with a strong electric-blue color cast. Solid blue error-screen panels with small generic white system text, and retro desktop windows with a mouse cursor, pop up and overlap parts of the frame, tearing with glitch bars. No logos and no brand names. Sound: error beeps, a dial-up crackle, a glitchy breakbeat.",
+      "products": "The character moves naturally in a setting that suits the photo, shot like low-resolution early-2000s camcorder footage with a strong electric-blue color cast. Solid blue error-screen panels with small generic white system text, and retro desktop windows with a mouse cursor, pop up and overlap parts of the frame, tearing with glitch bars. No logos and no brand names. Sound: error beeps, a dial-up crackle, a glitchy breakbeat.",
+      "both": "The character moves naturally at the location from the location image, shot like low-resolution early-2000s camcorder footage with a strong electric-blue color cast. Solid blue error-screen panels with small generic white system text, and retro desktop windows with a mouse cursor, pop up and overlap parts of the frame, tearing with glitch bars. No logos and no brand names. Sound: error beeps, a dial-up crackle, a glitchy breakbeat."
+    }
+  },
+  {
+    "id": "palette",
+    "label": "Palette",
+    "seconds": 5,
+    "ownSetting": false,
+    "stylized": true,
+    "overlayText": false,
+    "motion": {
+      "none": "STYLE, most important: this is a moving oil painting from the very first frame to the last, not live action and not a photograph. Every frame is thick impasto oil paint on canvas, with heavy visible palette-knife and brush strokes covering the face, clothes and background and no photographic detail left anywhere. The strokes follow the shapes of the subject, swirl through the background and shift on every frame, like a Post-Impressionist canvas come to life. The character moves naturally in a setting that suits the photo, still recognizable, with rich colors. Sound: wet brush strokes, warm old-school soul loop.",
+      "location": "STYLE, most important: this is a moving oil painting from the very first frame to the last, not live action and not a photograph. Every frame is thick impasto oil paint on canvas, with heavy visible palette-knife and brush strokes covering the face, clothes and background and no photographic detail left anywhere. The strokes follow the shapes of the subject, swirl through the background and shift on every frame, like a Post-Impressionist canvas come to life. The character moves naturally at the location from the location image, still recognizable, with rich colors. Sound: wet brush strokes, warm old-school soul loop.",
+      "products": "STYLE, most important: this is a moving oil painting from the very first frame to the last, not live action and not a photograph. Every frame is thick impasto oil paint on canvas, with heavy visible palette-knife and brush strokes covering the face, clothes and background and no photographic detail left anywhere. The strokes follow the shapes of the subject, swirl through the background and shift on every frame, like a Post-Impressionist canvas come to life. The character moves naturally in a setting that suits the photo, still recognizable, with rich colors. Sound: wet brush strokes, warm old-school soul loop.",
+      "both": "STYLE, most important: this is a moving oil painting from the very first frame to the last, not live action and not a photograph. Every frame is thick impasto oil paint on canvas, with heavy visible palette-knife and brush strokes covering the face, clothes and background and no photographic detail left anywhere. The strokes follow the shapes of the subject, swirl through the background and shift on every frame, like a Post-Impressionist canvas come to life. The character moves naturally at the location from the location image, still recognizable, with rich colors. Sound: wet brush strokes, warm old-school soul loop."
+    }
+  },
+  {
+    "id": "lsd",
+    "label": "Color Trip",
+    "seconds": 5,
+    "ownSetting": false,
+    "stylized": true,
+    "overlayText": false,
+    "motion": {
+      "none": "The character poses in a setting that suits the photo. Their whole figure is rendered as a stark high-contrast black-and-white photocopy, with white skin and clothes, solid black shadows, and fine black cracks running across them like shattered porcelain. Everything else keeps normal color, with oily iridescent rainbow swirls and warped concentric ripples spreading through the background and heavy film grain. Sound: a warped tape-wobble synth, vinyl crackle, a slow heavy beat.",
+      "location": "The character poses at the location from the location image. Their whole figure is rendered as a stark high-contrast black-and-white photocopy, with white skin and clothes, solid black shadows, and fine black cracks running across them like shattered porcelain. Everything else keeps normal color, with oily iridescent rainbow swirls and warped concentric ripples spreading through the background and heavy film grain. Sound: a warped tape-wobble synth, vinyl crackle, a slow heavy beat.",
+      "products": "The character poses in a setting that suits the photo. Their whole figure is rendered as a stark high-contrast black-and-white photocopy, with white skin and clothes, solid black shadows, and fine black cracks running across them like shattered porcelain. Everything else keeps normal color, with oily iridescent rainbow swirls and warped concentric ripples spreading through the background and heavy film grain. Sound: a warped tape-wobble synth, vinyl crackle, a slow heavy beat.",
+      "both": "The character poses at the location from the location image. Their whole figure is rendered as a stark high-contrast black-and-white photocopy, with white skin and clothes, solid black shadows, and fine black cracks running across them like shattered porcelain. Everything else keeps normal color, with oily iridescent rainbow swirls and warped concentric ripples spreading through the background and heavy film grain. Sound: a warped tape-wobble synth, vinyl crackle, a slow heavy beat."
+    }
+  },
+  {
+    "id": "tracking",
+    "label": "Tracking",
+    "seconds": 5,
+    "ownSetting": false,
+    "stylized": true,
+    "overlayText": true,
+    "motion": {
+      "none": "The character moves with energy in a setting that suits the photo, in a gritty real film look. A computer-vision overlay follows them: small hollow white squares lock on to their joints and clothing, thin white curved lines sweep between the squares and out of the frame, and small flickering decimal numbers such as 44.73 and -51.41 sit beside the squares. Slight digital glitch streaks. Sound: data blips, a tense electronic pulse.",
+      "location": "The character moves with energy at the location from the location image, in a gritty real film look. A computer-vision overlay follows them: small hollow white squares lock on to their joints and clothing, thin white curved lines sweep between the squares and out of the frame, and small flickering decimal numbers such as 44.73 and -51.41 sit beside the squares. Slight digital glitch streaks. Sound: data blips, a tense electronic pulse.",
+      "products": "The character moves with energy in a setting that suits the photo, in a gritty real film look. A computer-vision overlay follows them: small hollow white squares lock on to their joints and clothing, thin white curved lines sweep between the squares and out of the frame, and small flickering decimal numbers such as 44.73 and -51.41 sit beside the squares. Slight digital glitch streaks. Sound: data blips, a tense electronic pulse.",
+      "both": "The character moves with energy at the location from the location image, in a gritty real film look. A computer-vision overlay follows them: small hollow white squares lock on to their joints and clothing, thin white curved lines sweep between the squares and out of the frame, and small flickering decimal numbers such as 44.73 and -51.41 sit beside the squares. Slight digital glitch streaks. Sound: data blips, a tense electronic pulse."
+    }
+  },
+  {
+    "id": "stop-world",
+    "label": "Stop World",
+    "seconds": 5,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Handheld shot in a setting that suits the photo with people and objects in motion. 0-2s: the character snaps their fingers. 2-5s: everything else freezes instantly, including people mid-step and birds in the air, while the character walks freely through the frozen scene and looks around. Sound: a finger snap, ambience cutting to total silence, their footsteps alone.",
+      "location": "Handheld shot at the location from the location image with people and objects in motion. 0-2s: the character snaps their fingers. 2-5s: everything else freezes instantly, including people mid-step and birds in the air, while the character walks freely through the frozen scene and looks around. Sound: a finger snap, ambience cutting to total silence, their footsteps alone.",
+      "products": "Handheld shot in a setting that suits the photo with people and objects in motion. 0-2s: the character snaps their fingers. 2-5s: everything else freezes instantly, including people mid-step and birds in the air, while the character walks freely through the frozen scene and looks around. They pick the product items out of the air. Sound: a finger snap, ambience cutting to total silence, their footsteps alone.",
+      "both": "Handheld shot at the location from the location image with people and objects in motion. 0-2s: the character snaps their fingers. 2-5s: everything else freezes instantly, including people mid-step and birds in the air, while the character walks freely through the frozen scene and looks around. They pick the product items out of the air. Sound: a finger snap, ambience cutting to total silence, their footsteps alone."
+    }
+  },
+  {
+    "id": "lidar",
+    "label": "Lidar Transition",
+    "seconds": 6,
+    "ownSetting": false,
+    "stylized": true,
+    "overlayText": false,
+    "motion": {
+      "none": "Fast forward fly-through. 0-2s: the character stands in a setting that suits the photo. 2-4s: everything, including the character, dissolves into millions of glowing soft fibres and light streaks in teal and white against pure black, like a fluffy motion-blurred laser scan, as the camera rushes through them. 4-6s: the fibres rebuild into a dramatically different real environment around the same character. Sound: a rising data whoosh, soft crackling, then a deep bass hit.",
+      "location": "Fast forward fly-through. 0-2s: the character stands at the location from the location image. 2-4s: everything, including the character, dissolves into millions of glowing soft fibres and light streaks in teal and white against pure black, like a fluffy motion-blurred laser scan, as the camera rushes through them. 4-6s: the fibres rebuild into a dramatically different real environment around the same character. Sound: a rising data whoosh, soft crackling, then a deep bass hit.",
+      "products": "Fast forward fly-through. 0-2s: the character stands in a setting that suits the photo. 2-4s: everything, including the character, dissolves into millions of glowing soft fibres and light streaks in teal and white against pure black, like a fluffy motion-blurred laser scan, as the camera rushes through them. 4-6s: the fibres rebuild into a dramatically different real environment around the same character. Sound: a rising data whoosh, soft crackling, then a deep bass hit.",
+      "both": "Fast forward fly-through. 0-2s: the character stands at the location from the location image. 2-4s: everything, including the character, dissolves into millions of glowing soft fibres and light streaks in teal and white against pure black, like a fluffy motion-blurred laser scan, as the camera rushes through them. 4-6s: the fibres rebuild into a dramatically different real environment around the same character. Sound: a rising data whoosh, soft crackling, then a deep bass hit."
+    }
+  },
+  {
+    "id": "floating-fall",
+    "label": "Floating Fall",
+    "seconds": 8,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "One continuous handheld shot. 0-2s: the character walks toward the camera in natural daylight, relaxed, then trips and tips backward, arms flung up. 2-6s: time slows to almost a freeze with the character suspended mid-fall, and their personal belongings, the things they would plausibly carry drift weightlessly in the air around them, turning slowly. The camera glides forward past the character and passes very close to each floating item in a crisp macro close-up with shallow depth of field, the character blurred behind. 6-8s: the camera pulls back, time eases forward, and the character keeps falling in graceful slow motion. Sound: street ambience turns muffled when time slows, soft airy whooshes as items pass the lens, a light dreamy synth note.",
+      "location": "One continuous handheld shot. 0-2s: the character walks toward the camera in natural daylight, relaxed, then trips and tips backward, arms flung up. 2-6s: time slows to almost a freeze with the character suspended mid-fall, and their personal belongings, the things they would plausibly carry drift weightlessly in the air around them, turning slowly. The camera glides forward past the character and passes very close to each floating item in a crisp macro close-up with shallow depth of field, the character blurred behind. 6-8s: the camera pulls back, time eases forward, and the character keeps falling in graceful slow motion. Sound: street ambience turns muffled when time slows, soft airy whooshes as items pass the lens, a light dreamy synth note.",
+      "products": "One continuous handheld shot. 0-2s: the character walks toward the camera in natural daylight, relaxed, then trips and tips backward, arms flung up. 2-6s: time slows to almost a freeze with the character suspended mid-fall, and the product items from the product images, plus small personal belongings drift weightlessly in the air around them, turning slowly. The camera glides forward past the character and passes very close to each floating item in a crisp macro close-up with shallow depth of field, the character blurred behind. 6-8s: the camera pulls back, time eases forward, and the character keeps falling in graceful slow motion. Sound: street ambience turns muffled when time slows, soft airy whooshes as items pass the lens, a light dreamy synth note.",
+      "both": "One continuous handheld shot. 0-2s: the character walks toward the camera in natural daylight, relaxed, then trips and tips backward, arms flung up. 2-6s: time slows to almost a freeze with the character suspended mid-fall, and the product items from the product images, plus small personal belongings drift weightlessly in the air around them, turning slowly. The camera glides forward past the character and passes very close to each floating item in a crisp macro close-up with shallow depth of field, the character blurred behind. 6-8s: the camera pulls back, time eases forward, and the character keeps falling in graceful slow motion. Sound: street ambience turns muffled when time slows, soft airy whooshes as items pass the lens, a light dreamy synth note."
+    }
+  },
+  {
+    "id": "vanish",
+    "label": "Vanish",
+    "seconds": 5,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Locked-off camera, no camera movement. 0-2s: the character stands fully dressed and calm, looking at the camera, with a small natural movement. At exactly 2s their body vanishes in a single frame, with no dust, no particles, no fade and no glow. The empty clothing keeps its shape in the air for a split second, as if still worn, then drops straight down under gravity and collapses in a flat heap of fabric on the ground, with any accessories landing on top. 3-5s: the empty clothes settle, sleeves flopping, and nothing else moves. No skin or body is visible after the vanish. Sound: quiet ambience, a soft fabric thump as the clothes land, then a beat of comic silence.",
+      "location": "Locked-off camera, no camera movement. 0-2s: the character stands fully dressed and calm, looking at the camera, with a small natural movement. At exactly 2s their body vanishes in a single frame, with no dust, no particles, no fade and no glow. The empty clothing keeps its shape in the air for a split second, as if still worn, then drops straight down under gravity and collapses in a flat heap of fabric on the ground, with any accessories landing on top. 3-5s: the empty clothes settle, sleeves flopping, and nothing else moves. No skin or body is visible after the vanish. Sound: quiet ambience, a soft fabric thump as the clothes land, then a beat of comic silence.",
+      "products": "Locked-off camera, no camera movement. 0-2s: the character stands fully dressed and calm, looking at the camera, with a small natural movement. At exactly 2s their body vanishes in a single frame, with no dust, no particles, no fade and no glow. The empty clothing keeps its shape in the air for a split second, as if still worn, then drops straight down under gravity and collapses in a flat heap of fabric on the ground, with the product items dropping and landing on top of the clothes. 3-5s: the empty clothes settle, sleeves flopping, and nothing else moves. No skin or body is visible after the vanish. Sound: quiet ambience, a soft fabric thump as the clothes land, then a beat of comic silence.",
+      "both": "Locked-off camera, no camera movement. 0-2s: the character stands fully dressed and calm, looking at the camera, with a small natural movement. At exactly 2s their body vanishes in a single frame, with no dust, no particles, no fade and no glow. The empty clothing keeps its shape in the air for a split second, as if still worn, then drops straight down under gravity and collapses in a flat heap of fabric on the ground, with the product items dropping and landing on top of the clothes. 3-5s: the empty clothes settle, sleeves flopping, and nothing else moves. No skin or body is visible after the vanish. Sound: quiet ambience, a soft fabric thump as the clothes land, then a beat of comic silence."
+    }
+  },
+  {
+    "id": "eyes-in",
+    "label": "Eyes In",
+    "seconds": 8,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "One continuous unbroken camera move. 0-3s: starting on a close portrait of the character, the camera accelerates straight toward one eye. Skin, lashes and iris fibres fill the frame in extreme macro detail, with the pupil's reflection glinting. 3-5s: the camera passes through the pupil into total darkness, with the black void rushing past and faint specks of light. 5-8s: the darkness opens seamlessly and the camera flies out into a vast surreal dreamlike landscape that suits the character's mood, slowing to a gentle glide. Sound: a low rising whoosh, a deep heartbeat inside the dark, then an airy open reverb and a soft swell of music as the new scene appears.",
+      "location": "One continuous unbroken camera move. 0-3s: starting on a close portrait of the character, the camera accelerates straight toward one eye. Skin, lashes and iris fibres fill the frame in extreme macro detail, with the pupil's reflection glinting. 3-5s: the camera passes through the pupil into total darkness, with the black void rushing past and faint specks of light. 5-8s: the darkness opens seamlessly and the camera flies out into the location from the location image, wide and cinematic, slowing to a gentle glide. Sound: a low rising whoosh, a deep heartbeat inside the dark, then an airy open reverb and a soft swell of music as the new scene appears.",
+      "products": "One continuous unbroken camera move. 0-3s: starting on a close portrait of the character, the camera accelerates straight toward one eye. Skin, lashes and iris fibres fill the frame in extreme macro detail, with the pupil's reflection glinting. 3-5s: the camera passes through the pupil into total darkness, with the black void rushing past and faint specks of light. 5-8s: the darkness opens seamlessly and the camera flies out into a vast surreal dreamlike landscape that suits the character's mood, slowing to a gentle glide. The product items from the product images sit in that new scene as its focal point. Sound: a low rising whoosh, a deep heartbeat inside the dark, then an airy open reverb and a soft swell of music as the new scene appears.",
+      "both": "One continuous unbroken camera move. 0-3s: starting on a close portrait of the character, the camera accelerates straight toward one eye. Skin, lashes and iris fibres fill the frame in extreme macro detail, with the pupil's reflection glinting. 3-5s: the camera passes through the pupil into total darkness, with the black void rushing past and faint specks of light. 5-8s: the darkness opens seamlessly and the camera flies out into the location from the location image, wide and cinematic, slowing to a gentle glide. The product items from the product images sit in that new scene as its focal point. Sound: a low rising whoosh, a deep heartbeat inside the dark, then an airy open reverb and a soft swell of music as the new scene appears."
+    }
+  },
+  {
+    "id": "melting",
+    "label": "Melting",
+    "seconds": 6,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Static shot in a setting that suits the photo. 0-2s: the character stands calmly and looks down at their hands. 2-5s: their whole figure and clothing soften like warm glossy wax, stretching into smooth colorful liquid trails that run down and pool on the ground. It looks like candy-colored syrup, surreal and clean, with no anatomy, no gore and nothing frightening. 5-6s: only a shiny puddle in the colors of their outfit remains, with a final slow ripple. Sound: soft wet stretching sounds, a slow dreamy synth, one final plop.",
+      "location": "Static shot at the location from the location image. 0-2s: the character stands calmly and looks down at their hands. 2-5s: their whole figure and clothing soften like warm glossy wax, stretching into smooth colorful liquid trails that run down and pool on the ground. It looks like candy-colored syrup, surreal and clean, with no anatomy, no gore and nothing frightening. 5-6s: only a shiny puddle in the colors of their outfit remains, with a final slow ripple. Sound: soft wet stretching sounds, a slow dreamy synth, one final plop.",
+      "products": "Static shot in a setting that suits the photo. 0-2s: the character stands calmly and looks down at their hands. 2-5s: their whole figure and clothing soften like warm glossy wax, stretching into smooth colorful liquid trails that run down and pool on the ground. It looks like candy-colored syrup, surreal and clean, with no anatomy, no gore and nothing frightening. 5-6s: only a shiny puddle in the colors of their outfit remains, with a final slow ripple. The product items sink slowly into the puddle. Sound: soft wet stretching sounds, a slow dreamy synth, one final plop.",
+      "both": "Static shot at the location from the location image. 0-2s: the character stands calmly and looks down at their hands. 2-5s: their whole figure and clothing soften like warm glossy wax, stretching into smooth colorful liquid trails that run down and pool on the ground. It looks like candy-colored syrup, surreal and clean, with no anatomy, no gore and nothing frightening. 5-6s: only a shiny puddle in the colors of their outfit remains, with a final slow ripple. The product items sink slowly into the puddle. Sound: soft wet stretching sounds, a slow dreamy synth, one final plop."
+    }
+  },
+  {
+    "id": "infinite-clones",
+    "label": "Infinite Clones",
+    "seconds": 6,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Static wide-angle shot in a setting that suits the photo with one very small car parked in the center. The character gets out of the car and runs away. Immediately an identical copy climbs out and runs in another direction, then another and another, faster and faster, until dozens of identical copies are scattering across the frame in all directions while more keep coming out of the impossibly small car. Comedic timing, all copies wearing the same outfit. Sound: car door slamming again and again, hurried footsteps, a bouncy comedic tune.",
+      "location": "Static wide-angle shot at the location from the location image with one very small car parked in the center. The character gets out of the car and runs away. Immediately an identical copy climbs out and runs in another direction, then another and another, faster and faster, until dozens of identical copies are scattering across the frame in all directions while more keep coming out of the impossibly small car. Comedic timing, all copies wearing the same outfit. Sound: car door slamming again and again, hurried footsteps, a bouncy comedic tune.",
+      "products": "Static wide-angle shot in a setting that suits the photo with one very small car parked in the center. The character gets out of the car and runs away. Immediately an identical copy climbs out and runs in another direction, then another and another, faster and faster, until dozens of identical copies are scattering across the frame in all directions while more keep coming out of the impossibly small car. Comedic timing, all copies wearing the same outfit. Every copy carries the product items. Sound: car door slamming again and again, hurried footsteps, a bouncy comedic tune.",
+      "both": "Static wide-angle shot at the location from the location image with one very small car parked in the center. The character gets out of the car and runs away. Immediately an identical copy climbs out and runs in another direction, then another and another, faster and faster, until dozens of identical copies are scattering across the frame in all directions while more keep coming out of the impossibly small car. Comedic timing, all copies wearing the same outfit. Every copy carries the product items. Sound: car door slamming again and again, hurried footsteps, a bouncy comedic tune."
+    }
+  },
+  {
+    "id": "street-colossus",
+    "label": "Street Colossus",
+    "seconds": 6,
+    "ownSetting": true,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "A sprawling modern city street. Low-angle shot from street level. The character, enormous and taller than the surrounding buildings, walks slowly down the avenue while normal-sized cars and pedestrians move around their feet. The camera tilts up their giant figure as they pass, with atmospheric haze for true scale. Nothing is damaged and nobody is harmed. Sound: deep slow footstep booms, distant traffic and car horns, a swelling epic score.",
+      "location": "Use the location image as the city. Low-angle shot from street level. The character, enormous and taller than the surrounding buildings, walks slowly down the avenue while normal-sized cars and pedestrians move around their feet. The camera tilts up their giant figure as they pass, with atmospheric haze for true scale. Nothing is damaged and nobody is harmed. Sound: deep slow footstep booms, distant traffic and car horns, a swelling epic score.",
+      "products": "A sprawling modern city street. Low-angle shot from street level. The character, enormous and taller than the surrounding buildings, walks slowly down the avenue while normal-sized cars and pedestrians move around their feet. The camera tilts up their giant figure as they pass, with atmospheric haze for true scale. Nothing is damaged and nobody is harmed. They hold the product items, which are also giant. Sound: deep slow footstep booms, distant traffic and car horns, a swelling epic score.",
+      "both": "Use the location image as the city. Low-angle shot from street level. The character, enormous and taller than the surrounding buildings, walks slowly down the avenue while normal-sized cars and pedestrians move around their feet. The camera tilts up their giant figure as they pass, with atmospheric haze for true scale. Nothing is damaged and nobody is harmed. They hold the product items, which are also giant. Sound: deep slow footstep booms, distant traffic and car horns, a swelling epic score."
+    }
+  },
+  {
+    "id": "earth-zoom",
+    "label": "Earth Zoom",
+    "seconds": 6,
+    "ownSetting": true,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "One unbroken move with no cuts. 0-2s: from orbit, the Earth fills the frame and the camera dives straight down. 2-4s: it punches through bright clouds and rushes over a city grid, accelerating. 4-6s: it decelerates to street level and settles on the character standing on a city street, looking up into the lens. Sound: thin space ambience, roaring wind through the clouds, then a soft landing whoosh and street ambience.",
+      "location": "One unbroken move with no cuts. 0-2s: from orbit, the Earth fills the frame and the camera dives straight down. 2-4s: it punches through bright clouds and rushes over a city grid, accelerating. 4-6s: it decelerates to street level and settles on the character standing at the location from the location image, looking up into the lens. Sound: thin space ambience, roaring wind through the clouds, then a soft landing whoosh and street ambience.",
+      "products": "One unbroken move with no cuts. 0-2s: from orbit, the Earth fills the frame and the camera dives straight down. 2-4s: it punches through bright clouds and rushes over a city grid, accelerating. 4-6s: it decelerates to street level and settles on the character standing on a city street, looking up into the lens. They hold the product items. Sound: thin space ambience, roaring wind through the clouds, then a soft landing whoosh and street ambience.",
+      "both": "One unbroken move with no cuts. 0-2s: from orbit, the Earth fills the frame and the camera dives straight down. 2-4s: it punches through bright clouds and rushes over a city grid, accelerating. 4-6s: it decelerates to street level and settles on the character standing at the location from the location image, looking up into the lens. They hold the product items. Sound: thin space ambience, roaring wind through the clouds, then a soft landing whoosh and street ambience."
+    }
+  },
+  {
+    "id": "monster-dab",
+    "label": "Monster Drop",
+    "seconds": 6,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Medium-wide shot of the character in a setting that suits the photo, facing the camera and unaware. 0-2s: a shadow grows over them. 2-3s: a colossal original fantasy creature drops from the sky behind them and lands with a huge impact, throwing up dust. 3-6s: the creature rises to full height behind the character and matches their pose and attitude, then both look at the camera. The creature's color palette and texture match the character's outfit. Sound: rising wind, a massive ground-shaking thud, a low growl, then a confident music hit.",
+      "location": "Medium-wide shot of the character at the location from the location image, facing the camera and unaware. 0-2s: a shadow grows over them. 2-3s: a colossal original fantasy creature drops from the sky behind them and lands with a huge impact, throwing up dust. 3-6s: the creature rises to full height behind the character and matches their pose and attitude, then both look at the camera. The creature's color palette and texture match the character's outfit. Sound: rising wind, a massive ground-shaking thud, a low growl, then a confident music hit.",
+      "products": "Medium-wide shot of the character in a setting that suits the photo, facing the camera and unaware. 0-2s: a shadow grows over them. 2-3s: a colossal original fantasy creature drops from the sky behind them and lands with a huge impact, throwing up dust. 3-6s: the creature rises to full height behind the character and matches their pose and attitude, then both look at the camera. The creature's color palette and texture match the character's outfit. The character shows off the product items. Sound: rising wind, a massive ground-shaking thud, a low growl, then a confident music hit.",
+      "both": "Medium-wide shot of the character at the location from the location image, facing the camera and unaware. 0-2s: a shadow grows over them. 2-3s: a colossal original fantasy creature drops from the sky behind them and lands with a huge impact, throwing up dust. 3-6s: the creature rises to full height behind the character and matches their pose and attitude, then both look at the camera. The creature's color palette and texture match the character's outfit. The character shows off the product items. Sound: rising wind, a massive ground-shaking thud, a low growl, then a confident music hit."
+    }
+  },
+  {
+    "id": "selfception",
+    "label": "Selfception",
+    "seconds": 6,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Seamless continuous zoom with no cuts. The character stands in a setting that suits the photo holding a miniature identical version of themselves in their open hands. The camera pushes steadily into the miniature figure until it fills the frame and turns out to be a full-size person, holding an even smaller copy in their hands. The camera keeps pushing in and the same image repeats three times, each level identical. Sound: a hypnotic rising tone that never resolves, with a soft whoosh at each level.",
+      "location": "Seamless continuous zoom with no cuts. The character stands at the location from the location image holding a miniature identical version of themselves in their open hands. The camera pushes steadily into the miniature figure until it fills the frame and turns out to be a full-size person, holding an even smaller copy in their hands. The camera keeps pushing in and the same image repeats three times, each level identical. Sound: a hypnotic rising tone that never resolves, with a soft whoosh at each level.",
+      "products": "Seamless continuous zoom with no cuts. The character stands in a setting that suits the photo holding a miniature identical version of themselves in their open hands. The camera pushes steadily into the miniature figure until it fills the frame and turns out to be a full-size person, holding an even smaller copy in their hands. The camera keeps pushing in and the same image repeats three times, each level identical. Sound: a hypnotic rising tone that never resolves, with a soft whoosh at each level.",
+      "both": "Seamless continuous zoom with no cuts. The character stands at the location from the location image holding a miniature identical version of themselves in their open hands. The camera pushes steadily into the miniature figure until it fills the frame and turns out to be a full-size person, holding an even smaller copy in their hands. The camera keeps pushing in and the same image repeats three times, each level identical. Sound: a hypnotic rising tone that never resolves, with a soft whoosh at each level."
+    }
+  },
+  {
+    "id": "frozen-in-motion",
+    "label": "Frozen in Motion",
+    "seconds": 5,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Slow arc camera move in a setting that suits the photo. The character is frozen mid-jump, feet off the ground, clothes and hair stopped mid-flutter, completely motionless like a statue. Around them, pedestrians and traffic carry on at normal speed and glance at them in passing. The character never moves. Sound: normal street ambience, footsteps and traffic, with a thin high suspended tone close to the frozen character.",
+      "location": "Slow arc camera move at the location from the location image. The character is frozen mid-jump, feet off the ground, clothes and hair stopped mid-flutter, completely motionless like a statue. Around them, pedestrians and traffic carry on at normal speed and glance at them in passing. The character never moves. Sound: normal street ambience, footsteps and traffic, with a thin high suspended tone close to the frozen character.",
+      "products": "Slow arc camera move in a setting that suits the photo. The character is frozen mid-jump, feet off the ground, clothes and hair stopped mid-flutter, completely motionless like a statue. Around them, pedestrians and traffic carry on at normal speed and glance at them in passing. The character never moves. The product items hang frozen in the air beside them. Sound: normal street ambience, footsteps and traffic, with a thin high suspended tone close to the frozen character.",
+      "both": "Slow arc camera move at the location from the location image. The character is frozen mid-jump, feet off the ground, clothes and hair stopped mid-flutter, completely motionless like a statue. Around them, pedestrians and traffic carry on at normal speed and glance at them in passing. The character never moves. The product items hang frozen in the air beside them. Sound: normal street ambience, footsteps and traffic, with a thin high suspended tone close to the frozen character."
+    }
+  },
+  {
+    "id": "animal-ride-pigeon",
+    "label": "Pigeon Ride",
+    "seconds": 5,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Tracking shot moving alongside the character in a setting that suits the photo. The character confidently rides a giant realistic pigeon, sitting astride it like a horse. The pigeon struts quickly with its head bobbing, and the character bobs along with total composure. Comedic deadpan tone, realistic lighting. Sound: loud cooing, flapping wings, heavy bird footsteps, a jaunty tune.",
+      "location": "Tracking shot moving alongside the character at the location from the location image. The character confidently rides a giant realistic pigeon, sitting astride it like a horse. The pigeon struts quickly with its head bobbing, and the character bobs along with total composure. Comedic deadpan tone, realistic lighting. Sound: loud cooing, flapping wings, heavy bird footsteps, a jaunty tune.",
+      "products": "Tracking shot moving alongside the character in a setting that suits the photo. The character confidently rides a giant realistic pigeon, sitting astride it like a horse. The pigeon struts quickly with its head bobbing, and the character bobs along with total composure. Comedic deadpan tone, realistic lighting. They hold the product items while riding. Sound: loud cooing, flapping wings, heavy bird footsteps, a jaunty tune.",
+      "both": "Tracking shot moving alongside the character at the location from the location image. The character confidently rides a giant realistic pigeon, sitting astride it like a horse. The pigeon struts quickly with its head bobbing, and the character bobs along with total composure. Comedic deadpan tone, realistic lighting. They hold the product items while riding. Sound: loud cooing, flapping wings, heavy bird footsteps, a jaunty tune."
+    }
+  },
+  {
+    "id": "world-morphing",
+    "label": "World Morphing",
+    "seconds": 6,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Slow pull-back camera. The character stands still in the center in a setting that suits the photo. 1-5s: the ground and buildings on all sides peel upward and fold inward like paper, curving overhead until the landscape forms a vast gravity-defying enclosure around them, with streets and trees running up the walls. The character stays perfectly calm and only looks up. Sound: deep groaning stone and metal, rising orchestral swell, then a resonant quiet.",
+      "location": "Slow pull-back camera. The character stands still in the center at the location from the location image. 1-5s: the ground and buildings on all sides peel upward and fold inward like paper, curving overhead until the landscape forms a vast gravity-defying enclosure around them, with streets and trees running up the walls. The character stays perfectly calm and only looks up. Sound: deep groaning stone and metal, rising orchestral swell, then a resonant quiet.",
+      "products": "Slow pull-back camera. The character stands still in the center in a setting that suits the photo. 1-5s: the ground and buildings on all sides peel upward and fold inward like paper, curving overhead until the landscape forms a vast gravity-defying enclosure around them, with streets and trees running up the walls. The character stays perfectly calm and only looks up. Sound: deep groaning stone and metal, rising orchestral swell, then a resonant quiet.",
+      "both": "Slow pull-back camera. The character stands still in the center at the location from the location image. 1-5s: the ground and buildings on all sides peel upward and fold inward like paper, curving overhead until the landscape forms a vast gravity-defying enclosure around them, with streets and trees running up the walls. The character stays perfectly calm and only looks up. Sound: deep groaning stone and metal, rising orchestral swell, then a resonant quiet."
+    }
+  },
+  {
+    "id": "act-natural",
+    "label": "Act Natural",
+    "seconds": 5,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Handheld shot in a setting that suits the photo. 0-1s: the character is mid-action, tossing something into the air. 1-5s: they and the objects near them stop completely mid-action, as if paused, while everyone and everything else moves on in real time. Passers-by walk around them. Sound: ambience keeps playing, with a soft digital freeze click at the moment of the stop.",
+      "location": "Handheld shot at the location from the location image. 0-1s: the character is mid-action, tossing something into the air. 1-5s: they and the objects near them stop completely mid-action, as if paused, while everyone and everything else moves on in real time. Passers-by walk around them. Sound: ambience keeps playing, with a soft digital freeze click at the moment of the stop.",
+      "products": "Handheld shot in a setting that suits the photo. 0-1s: the character is mid-action, tossing something into the air. 1-5s: they and the objects near them stop completely mid-action, as if paused, while everyone and everything else moves on in real time. Passers-by walk around them. The product items are among the objects paused in the air. Sound: ambience keeps playing, with a soft digital freeze click at the moment of the stop.",
+      "both": "Handheld shot at the location from the location image. 0-1s: the character is mid-action, tossing something into the air. 1-5s: they and the objects near them stop completely mid-action, as if paused, while everyone and everything else moves on in real time. Passers-by walk around them. The product items are among the objects paused in the air. Sound: ambience keeps playing, with a soft digital freeze click at the moment of the stop."
+    }
+  },
+  {
+    "id": "architecture-wave",
+    "label": "Architecture Wave",
+    "seconds": 6,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Steady tracking shot in front of the character walking naturally in a setting that suits the photo. Behind them, towering buildings bend, fold and ripple in a slow giant wave as if made of liquid, and the wave rolls through the skyline. The character does not notice and the ground under them stays normal. Sound: deep rolling rumble, creaking steel, a calm groove underneath.",
+      "location": "Steady tracking shot in front of the character walking naturally at the location from the location image. Behind them, towering buildings bend, fold and ripple in a slow giant wave as if made of liquid, and the wave rolls through the skyline. The character does not notice and the ground under them stays normal. Sound: deep rolling rumble, creaking steel, a calm groove underneath.",
+      "products": "Steady tracking shot in front of the character walking naturally in a setting that suits the photo. Behind them, towering buildings bend, fold and ripple in a slow giant wave as if made of liquid, and the wave rolls through the skyline. The character does not notice and the ground under them stays normal. Sound: deep rolling rumble, creaking steel, a calm groove underneath.",
+      "both": "Steady tracking shot in front of the character walking naturally at the location from the location image. Behind them, towering buildings bend, fold and ripple in a slow giant wave as if made of liquid, and the wave rolls through the skyline. The character does not notice and the ground under them stays normal. Sound: deep rolling rumble, creaking steel, a calm groove underneath."
+    }
+  },
+  {
+    "id": "blue-depth",
+    "label": "Blue Depth",
+    "seconds": 6,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Static shot of the character in a setting that suits the photo, holding completely still. 1-2s: a wall of deep blue water rises silently from below and fills the entire frame without any splash. 2-6s: fish drift slowly past the motionless character in slow motion, with light shafts rippling across them and their hair lifting gently. Sound: everything becomes muffled and underwater, slow bubbles, a low whale-like tone.",
+      "location": "Static shot of the character at the location from the location image, holding completely still. 1-2s: a wall of deep blue water rises silently from below and fills the entire frame without any splash. 2-6s: fish drift slowly past the motionless character in slow motion, with light shafts rippling across them and their hair lifting gently. Sound: everything becomes muffled and underwater, slow bubbles, a low whale-like tone.",
+      "products": "Static shot of the character in a setting that suits the photo, holding completely still. 1-2s: a wall of deep blue water rises silently from below and fills the entire frame without any splash. 2-6s: fish drift slowly past the motionless character in slow motion, with light shafts rippling across them and their hair lifting gently. Sound: everything becomes muffled and underwater, slow bubbles, a low whale-like tone.",
+      "both": "Static shot of the character at the location from the location image, holding completely still. 1-2s: a wall of deep blue water rises silently from below and fills the entire frame without any splash. 2-6s: fish drift slowly past the motionless character in slow motion, with light shafts rippling across them and their hair lifting gently. Sound: everything becomes muffled and underwater, slow bubbles, a low whale-like tone."
+    }
+  },
+  {
+    "id": "boarding-pass",
+    "label": "Boarding Pass",
+    "seconds": 8,
+    "ownSetting": true,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Tracking shot in front of the character walking confidently toward the camera like a runway model. A giant paper boarding pass lies across the ground ahead. Each time they step across one, the whole backdrop and their outfit change in one seamless transition: first a tropical beach, then a snowy mountain village, then a neon city at night. Their face and identity stay the same. Sound: stylish upbeat beat, a jet whoosh and a paper flutter at each transition.",
+      "location": "Tracking shot in front of the character walking confidently toward the camera like a runway model. A giant paper boarding pass lies across the ground ahead. Each time they step across one, the whole backdrop and their outfit change in one seamless transition: first the location from the location image, then a snowy mountain village, then a neon city at night. Their face and identity stay the same. Sound: stylish upbeat beat, a jet whoosh and a paper flutter at each transition.",
+      "products": "Tracking shot in front of the character walking confidently toward the camera like a runway model. A giant paper boarding pass lies across the ground ahead. Each time they step across one, the whole backdrop and their outfit change in one seamless transition: first a tropical beach, then a snowy mountain village, then a neon city at night. Their face and identity stay the same. They carry the product items in every scene. Sound: stylish upbeat beat, a jet whoosh and a paper flutter at each transition.",
+      "both": "Tracking shot in front of the character walking confidently toward the camera like a runway model. A giant paper boarding pass lies across the ground ahead. Each time they step across one, the whole backdrop and their outfit change in one seamless transition: first the location from the location image, then a snowy mountain village, then a neon city at night. Their face and identity stay the same. They carry the product items in every scene. Sound: stylish upbeat beat, a jet whoosh and a paper flutter at each transition."
+    }
+  },
+  {
+    "id": "bullet-time",
+    "label": "Bullet Time",
+    "seconds": 8,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "in a setting that suits the photo. 0-2s: the character trips while carrying a tray, sending cups and plates flying. 2-6s: time freezes with liquid and objects suspended in midair, and the camera sweeps a smooth full 360 degrees around the frozen moment. 6-8s: everything snaps back into place in reverse, and the character stands holding the perfectly restored tray with a knowing smirk at the camera. Sound: crash starting, then a deep time-stop whoomp, airy silence during the sweep, a fast rewind and a cool music sting.",
+      "location": "at the location from the location image. 0-2s: the character trips while carrying a tray, sending cups and plates flying. 2-6s: time freezes with liquid and objects suspended in midair, and the camera sweeps a smooth full 360 degrees around the frozen moment. 6-8s: everything snaps back into place in reverse, and the character stands holding the perfectly restored tray with a knowing smirk at the camera. Sound: crash starting, then a deep time-stop whoomp, airy silence during the sweep, a fast rewind and a cool music sting.",
+      "products": "in a setting that suits the photo. 0-2s: the character trips while carrying a tray, sending cups and plates flying. 2-6s: time freezes with liquid and objects suspended in midair, and the camera sweeps a smooth full 360 degrees around the frozen moment. The product items hang among the flying objects, in sharp focus. 6-8s: everything snaps back into place in reverse, and the character stands holding the perfectly restored tray with a knowing smirk at the camera. Sound: crash starting, then a deep time-stop whoomp, airy silence during the sweep, a fast rewind and a cool music sting.",
+      "both": "at the location from the location image. 0-2s: the character trips while carrying a tray, sending cups and plates flying. 2-6s: time freezes with liquid and objects suspended in midair, and the camera sweeps a smooth full 360 degrees around the frozen moment. The product items hang among the flying objects, in sharp focus. 6-8s: everything snaps back into place in reverse, and the character stands holding the perfectly restored tray with a knowing smirk at the camera. Sound: crash starting, then a deep time-stop whoomp, airy silence during the sweep, a fast rewind and a cool music sting."
+    }
+  },
+  {
+    "id": "burning-man",
+    "label": "Burning Double",
+    "seconds": 6,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Wide cinematic shot in a setting that suits the photo, in profile. The character faces an identical double of themselves whose whole body is made of clean bright stylized flames, a fantasy visual effect. The fire double steps forward and calmly extends a hand, and the character shakes it, completely unharmed and unbothered. Sound: a low steady roar of fire, wind, a slow dramatic guitar note. Safe for work and not violent.",
+      "location": "Wide cinematic shot at the location from the location image, in profile. The character faces an identical double of themselves whose whole body is made of clean bright stylized flames, a fantasy visual effect. The fire double steps forward and calmly extends a hand, and the character shakes it, completely unharmed and unbothered. Sound: a low steady roar of fire, wind, a slow dramatic guitar note. Safe for work and not violent.",
+      "products": "Wide cinematic shot in a setting that suits the photo, in profile. The character faces an identical double of themselves whose whole body is made of clean bright stylized flames, a fantasy visual effect. The fire double steps forward and calmly extends a hand, and the character shakes it, completely unharmed and unbothered. Sound: a low steady roar of fire, wind, a slow dramatic guitar note. Safe for work and not violent.",
+      "both": "Wide cinematic shot at the location from the location image, in profile. The character faces an identical double of themselves whose whole body is made of clean bright stylized flames, a fantasy visual effect. The fire double steps forward and calmly extends a hand, and the character shakes it, completely unharmed and unbothered. Sound: a low steady roar of fire, wind, a slow dramatic guitar note. Safe for work and not violent."
+    }
+  },
+  {
+    "id": "clones",
+    "label": "Clones",
+    "seconds": 6,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Static frontal shot in a setting that suits the photo. The character walks slowly toward the camera. Identical copies wearing the same outfit fade in one by one across the scene, at different distances, each making exactly the same movements in perfect sync. Sound: a tight rhythmic beat with a new layer added as each copy appears.",
+      "location": "Static frontal shot at the location from the location image. The character walks slowly toward the camera. Identical copies wearing the same outfit fade in one by one across the scene, at different distances, each making exactly the same movements in perfect sync. Sound: a tight rhythmic beat with a new layer added as each copy appears.",
+      "products": "Static frontal shot in a setting that suits the photo. The character walks slowly toward the camera. Identical copies wearing the same outfit fade in one by one across the scene, at different distances, each making exactly the same movements in perfect sync. Every copy holds the product items. Sound: a tight rhythmic beat with a new layer added as each copy appears.",
+      "both": "Static frontal shot at the location from the location image. The character walks slowly toward the camera. Identical copies wearing the same outfit fade in one by one across the scene, at different distances, each making exactly the same movements in perfect sync. Every copy holds the product items. Sound: a tight rhythmic beat with a new layer added as each copy appears."
+    }
+  },
+  {
+    "id": "cutout",
+    "label": "Cutout",
+    "seconds": 6,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Static shot of the character in a setting that suits the photo. 1-3s: the surroundings split into flat floating cutout layers like paper collage and drift away, revealing a clean pure white void around the character, who stays fully real. 3-5s: they pose in the white void. 5-6s: the layers fly back and snap into place. Sound: paper rustling, a soft airy pause, then quick paper snaps.",
+      "location": "Static shot of the character at the location from the location image. 1-3s: the surroundings split into flat floating cutout layers like paper collage and drift away, revealing a clean pure white void around the character, who stays fully real. 3-5s: they pose in the white void. 5-6s: the layers fly back and snap into place. Sound: paper rustling, a soft airy pause, then quick paper snaps.",
+      "products": "Static shot of the character in a setting that suits the photo. 1-3s: the surroundings split into flat floating cutout layers like paper collage and drift away, revealing a clean pure white void around the character, who stays fully real. 3-5s: they pose in the white void. 5-6s: the layers fly back and snap into place. The product items float as cutouts beside them. Sound: paper rustling, a soft airy pause, then quick paper snaps.",
+      "both": "Static shot of the character at the location from the location image. 1-3s: the surroundings split into flat floating cutout layers like paper collage and drift away, revealing a clean pure white void around the character, who stays fully real. 3-5s: they pose in the white void. 5-6s: the layers fly back and snap into place. The product items float as cutouts beside them. Sound: paper rustling, a soft airy pause, then quick paper snaps."
+    }
+  },
+  {
+    "id": "fairytale-castle",
+    "label": "Fairytale Castle",
+    "seconds": 8,
+    "ownSetting": true,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Slow rising crane shot. The character walks from behind across an empty field at dusk beside a winding stream. As the camera rises, an original glowing fairytale castle comes into view on the horizon, and fireworks bloom softly overhead. Dreamlike and painterly but photoreal. Sound: crickets, soft strings and music box, gentle distant fireworks.",
+      "location": "Slow rising crane shot. The character walks from behind across an empty field at dusk beside a winding stream. As the camera rises, an original glowing fairytale castle comes into view on the horizon, and fireworks bloom softly overhead. Dreamlike and painterly but photoreal. Sound: crickets, soft strings and music box, gentle distant fireworks.",
+      "products": "Slow rising crane shot. The character walks from behind across an empty field at dusk beside a winding stream. As the camera rises, an original glowing fairytale castle comes into view on the horizon, and fireworks bloom softly overhead. Dreamlike and painterly but photoreal. They carry the product items. Sound: crickets, soft strings and music box, gentle distant fireworks.",
+      "both": "Slow rising crane shot. The character walks from behind across an empty field at dusk beside a winding stream. As the camera rises, an original glowing fairytale castle comes into view on the horizon, and fireworks bloom softly overhead. Dreamlike and painterly but photoreal. They carry the product items. Sound: crickets, soft strings and music box, gentle distant fireworks."
+    }
+  },
+  {
+    "id": "high-flip",
+    "label": "High Flip",
+    "seconds": 6,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "One continuous move. 0-2s: the camera follows the character in a setting that suits the photo, rising above their head. 2-3s: it flips upside down overhead through a blur of motion. 3-6s: it comes down on the other side in a completely different place and time of day, where the same person now has a different bold outfit and strikes a confident pose. Sound: a rising whoosh, a weightless beat at the top of the flip, then a heavy beat drop.",
+      "location": "One continuous move. 0-2s: the camera follows the character at the location from the location image, rising above their head. 2-3s: it flips upside down overhead through a blur of motion. 3-6s: it comes down on the other side in a completely different place and time of day, where the same person now has a different bold outfit and strikes a confident pose. Sound: a rising whoosh, a weightless beat at the top of the flip, then a heavy beat drop.",
+      "products": "One continuous move. 0-2s: the camera follows the character in a setting that suits the photo, rising above their head. 2-3s: it flips upside down overhead through a blur of motion. 3-6s: it comes down on the other side in a completely different place and time of day, where the same person now has a different bold outfit and strikes a confident pose. They hold the product items after the flip. Sound: a rising whoosh, a weightless beat at the top of the flip, then a heavy beat drop.",
+      "both": "One continuous move. 0-2s: the camera follows the character at the location from the location image, rising above their head. 2-3s: it flips upside down overhead through a blur of motion. 3-6s: it comes down on the other side in a completely different place and time of day, where the same person now has a different bold outfit and strikes a confident pose. They hold the product items after the flip. Sound: a rising whoosh, a weightless beat at the top of the flip, then a heavy beat drop."
+    }
+  },
+  {
+    "id": "incline",
+    "label": "Incline",
+    "seconds": 6,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Camera locked to the character in a setting that suits the photo. 1-5s: the whole world tilts steadily to one side, while the character stays upright and unfazed at a strange angle to their surroundings. Loose objects, chairs, cups and bags slide and tumble past them. Sound: creaking, objects scraping and clattering, an offbeat calm tune.",
+      "location": "Camera locked to the character at the location from the location image. 1-5s: the whole world tilts steadily to one side, while the character stays upright and unfazed at a strange angle to their surroundings. Loose objects, chairs, cups and bags slide and tumble past them. Sound: creaking, objects scraping and clattering, an offbeat calm tune.",
+      "products": "Camera locked to the character in a setting that suits the photo. 1-5s: the whole world tilts steadily to one side, while the character stays upright and unfazed at a strange angle to their surroundings. Loose objects, chairs, cups and bags slide and tumble past them. The product items slide by and they catch one casually. Sound: creaking, objects scraping and clattering, an offbeat calm tune.",
+      "both": "Camera locked to the character at the location from the location image. 1-5s: the whole world tilts steadily to one side, while the character stays upright and unfazed at a strange angle to their surroundings. Loose objects, chairs, cups and bags slide and tumble past them. The product items slide by and they catch one casually. Sound: creaking, objects scraping and clattering, an offbeat calm tune."
+    }
+  },
+  {
+    "id": "lacewalker",
+    "label": "Lacewalker",
+    "seconds": 8,
+    "ownSetting": true,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Clean studio set with a soft solid backdrop. 0-3s: a miniature version of the character strolls past the giant version of the same person, who stands still. 3-8s: the miniature climbs up and balances with arms out on a thin strap stretched between two oversized handbags, walking it like a tightrope. Sound: light playful pizzicato strings, tiny footsteps, a small wobble sound.",
+      "location": "Clean studio set with a soft solid backdrop. 0-3s: a miniature version of the character strolls past the giant version of the same person, who stands still. 3-8s: the miniature climbs up and balances with arms out on a thin strap stretched between two oversized handbags, walking it like a tightrope. Sound: light playful pizzicato strings, tiny footsteps, a small wobble sound.",
+      "products": "Clean studio set with a soft solid backdrop. 0-3s: a miniature version of the character strolls past the giant version of the same person, who stands still. 3-8s: the miniature climbs up and balances with arms out on a thin strap stretched between two oversized product items from the product images, walking it like a tightrope. Sound: light playful pizzicato strings, tiny footsteps, a small wobble sound.",
+      "both": "Clean studio set with a soft solid backdrop. 0-3s: a miniature version of the character strolls past the giant version of the same person, who stands still. 3-8s: the miniature climbs up and balances with arms out on a thin strap stretched between two oversized product items from the product images, walking it like a tightrope. Sound: light playful pizzicato strings, tiny footsteps, a small wobble sound."
+    }
+  },
+  {
+    "id": "mighty-fighter",
+    "label": "Mighty Fighter",
+    "seconds": 6,
+    "ownSetting": true,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Slow cinematic push-in. The character, with the same face, now wears dented and battle-worn knight's armor and stands in a misty field of red poppies at dawn, breathing slowly. Poppies sway and a torn banner moves in the wind behind them. Melancholic, painterly lighting. No blood. Sound: wind through the field, faint armor creaks, a lone cello.",
+      "location": "Slow cinematic push-in. The character, with the same face, now wears dented and battle-worn knight's armor and stands in a misty field of red poppies at dawn, breathing slowly. Poppies sway and a torn banner moves in the wind behind them. Melancholic, painterly lighting. No blood. Sound: wind through the field, faint armor creaks, a lone cello.",
+      "products": "Slow cinematic push-in. The character, with the same face, now wears dented and battle-worn knight's armor and stands in a misty field of red poppies at dawn, breathing slowly. Poppies sway and a torn banner moves in the wind behind them. Melancholic, painterly lighting. No blood. Sound: wind through the field, faint armor creaks, a lone cello.",
+      "both": "Slow cinematic push-in. The character, with the same face, now wears dented and battle-worn knight's armor and stands in a misty field of red poppies at dawn, breathing slowly. Poppies sway and a torn banner moves in the wind behind them. Melancholic, painterly lighting. No blood. Sound: wind through the field, faint armor creaks, a lone cello."
+    }
+  },
+  {
+    "id": "moonwalk",
+    "label": "Moonwalk",
+    "seconds": 8,
+    "ownSetting": true,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Whimsical storybook surrealism, one flowing shot. The character wears a small golden crown and walks slowly across the surface of a small Moon, then steps onto a soft glowing Sun without harm, then onto a tiny blue Earth, each globe small enough to walk around, with the starfield turning behind. Sound: a music box, soft celestial choir, gentle footsteps.",
+      "location": "Whimsical storybook surrealism, one flowing shot. The character wears a small golden crown and walks slowly across the surface of a small Moon, then steps onto a soft glowing Sun without harm, then onto a tiny blue Earth, each globe small enough to walk around, with the starfield turning behind. Sound: a music box, soft celestial choir, gentle footsteps.",
+      "products": "Whimsical storybook surrealism, one flowing shot. The character wears a small golden crown and walks slowly across the surface of a small Moon, then steps onto a soft glowing Sun without harm, then onto a tiny blue Earth, each globe small enough to walk around, with the starfield turning behind. Sound: a music box, soft celestial choir, gentle footsteps.",
+      "both": "Whimsical storybook surrealism, one flowing shot. The character wears a small golden crown and walks slowly across the surface of a small Moon, then steps onto a soft glowing Sun without harm, then onto a tiny blue Earth, each globe small enough to walk around, with the starfield turning behind. Sound: a music box, soft celestial choir, gentle footsteps."
+    }
+  },
+  {
+    "id": "animal-ride-dachshund",
+    "label": "Dachshund Ride",
+    "seconds": 5,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Low tracking shot in a setting that suits the photo. The character sits with perfect posture on a giant, extremely long dachshund, trotting happily with ears flapping. Comedic deadpan tone, realistic lighting and fur. Sound: excited panting, a happy bark, quick paws, a jaunty tune.",
+      "location": "Low tracking shot at the location from the location image. The character sits with perfect posture on a giant, extremely long dachshund, trotting happily with ears flapping. Comedic deadpan tone, realistic lighting and fur. Sound: excited panting, a happy bark, quick paws, a jaunty tune.",
+      "products": "Low tracking shot in a setting that suits the photo. The character sits with perfect posture on a giant, extremely long dachshund, trotting happily with ears flapping. Comedic deadpan tone, realistic lighting and fur. They hold the product items. Sound: excited panting, a happy bark, quick paws, a jaunty tune.",
+      "both": "Low tracking shot at the location from the location image. The character sits with perfect posture on a giant, extremely long dachshund, trotting happily with ears flapping. Comedic deadpan tone, realistic lighting and fur. They hold the product items. Sound: excited panting, a happy bark, quick paws, a jaunty tune."
+    }
+  },
+  {
+    "id": "scrapbook-collage",
+    "label": "Scrapbook Collage",
+    "seconds": 5,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "A multi-panel scrapbook layout on a paper background. The center panel shows the character full body in a setting that suits the photo, moving naturally. Smaller inset frames around it show simultaneous moving close-ups of their shoes, hands, hair and outfit details. The panels are in sync, with clean white borders and no text. Sound: a stylish lo-fi beat, soft camera shutter clicks.",
+      "location": "A multi-panel scrapbook layout on a paper background. The center panel shows the character full body at the location from the location image, moving naturally. Smaller inset frames around it show simultaneous moving close-ups of their shoes, hands, hair and outfit details. The panels are in sync, with clean white borders and no text. Sound: a stylish lo-fi beat, soft camera shutter clicks.",
+      "products": "A multi-panel scrapbook layout on a paper background. The center panel shows the character full body in a setting that suits the photo, moving naturally. Smaller inset frames around it show simultaneous moving close-ups of their shoes, hands, hair and outfit details. One inset panel shows the product items in close-up. The panels are in sync, with clean white borders and no text. Sound: a stylish lo-fi beat, soft camera shutter clicks.",
+      "both": "A multi-panel scrapbook layout on a paper background. The center panel shows the character full body at the location from the location image, moving naturally. Smaller inset frames around it show simultaneous moving close-ups of their shoes, hands, hair and outfit details. One inset panel shows the product items in close-up. The panels are in sync, with clean white borders and no text. Sound: a stylish lo-fi beat, soft camera shutter clicks."
+    }
+  },
+  {
+    "id": "smash-and-grab",
+    "label": "Smash and Grab",
+    "seconds": 6,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Playful action-comedy tone. 0-2s: from inside a parked car, the camera frames a shiny gift box on the seat with the character visible through the window in a setting that suits the photo. 2-3s: the glass shatters harmlessly in slow motion and they snatch it. 3-6s: a fast tracking shot follows them sprinting away, grinning, holding it up. Sound: a tense pause, glass smash, a fast funky heist beat, running footsteps.",
+      "location": "Playful action-comedy tone. 0-2s: from inside a parked car, the camera frames a shiny gift box on the seat with the character visible through the window at the location from the location image. 2-3s: the glass shatters harmlessly in slow motion and they snatch it. 3-6s: a fast tracking shot follows them sprinting away, grinning, holding it up. Sound: a tense pause, glass smash, a fast funky heist beat, running footsteps.",
+      "products": "Playful action-comedy tone. 0-2s: from inside a parked car, the camera frames the product items on the seat with the character visible through the window in a setting that suits the photo. 2-3s: the glass shatters harmlessly in slow motion and they snatch it. 3-6s: a fast tracking shot follows them sprinting away, grinning, holding it up. Sound: a tense pause, glass smash, a fast funky heist beat, running footsteps.",
+      "both": "Playful action-comedy tone. 0-2s: from inside a parked car, the camera frames the product items on the seat with the character visible through the window at the location from the location image. 2-3s: the glass shatters harmlessly in slow motion and they snatch it. 3-6s: a fast tracking shot follows them sprinting away, grinning, holding it up. Sound: a tense pause, glass smash, a fast funky heist beat, running footsteps."
+    }
+  },
+  {
+    "id": "studio-slide",
+    "label": "Studio Slide",
+    "seconds": 5,
+    "ownSetting": true,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Solid pastel studio background. Several copies of the character appear at different scales, angles and depths in the same frame, some huge and close, some small and far. They smoothly slide past one another horizontally, creating strong 3D layering. Sound: a slick fashion beat with a soft swoosh for each slide.",
+      "location": "Solid pastel studio background. Several copies of the character appear at different scales, angles and depths in the same frame, some huge and close, some small and far. They smoothly slide past one another horizontally, creating strong 3D layering. Sound: a slick fashion beat with a soft swoosh for each slide.",
+      "products": "Solid pastel studio background. Several copies of the character appear at different scales, angles and depths in the same frame, some huge and close, some small and far. They smoothly slide past one another horizontally, creating strong 3D layering. Each copy holds the product items. Sound: a slick fashion beat with a soft swoosh for each slide.",
+      "both": "Solid pastel studio background. Several copies of the character appear at different scales, angles and depths in the same frame, some huge and close, some small and far. They smoothly slide past one another horizontally, creating strong 3D layering. Each copy holds the product items. Sound: a slick fashion beat with a soft swoosh for each slide."
+    }
+  },
+  {
+    "id": "superstar",
+    "label": "Superstar",
+    "seconds": 5,
+    "ownSetting": true,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Handheld shot from deep inside a huge stadium crowd at night, with a sea of raised phones and sweeping light beams. The camera pushes between people's shoulders and tilts up to reveal the character's face filling the giant stage screen. No readable text, no real performers, no logos. Sound: a roaring crowd chanting, booming bass from the stage.",
+      "location": "Handheld shot from deep inside a huge stadium crowd at night, with a sea of raised phones and sweeping light beams. The camera pushes between people's shoulders and tilts up to reveal the character's face filling the giant stage screen. No readable text, no real performers, no logos. Sound: a roaring crowd chanting, booming bass from the stage.",
+      "products": "Handheld shot from deep inside a huge stadium crowd at night, with a sea of raised phones and sweeping light beams. The camera pushes between people's shoulders and tilts up to reveal the character's face filling the giant stage screen. No readable text, no real performers, no logos. Sound: a roaring crowd chanting, booming bass from the stage.",
+      "both": "Handheld shot from deep inside a huge stadium crowd at night, with a sea of raised phones and sweeping light beams. The camera pushes between people's shoulders and tilts up to reveal the character's face filling the giant stage screen. No readable text, no real performers, no logos. Sound: a roaring crowd chanting, booming bass from the stage."
+    }
+  },
+  {
+    "id": "wild-ride",
+    "label": "Wild Ride",
+    "seconds": 6,
+    "ownSetting": false,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "High-speed controlled camera orbit around the character in a setting that suits the photo as they drift in a spinning open car, with smoke coming off the tires. The camera swings from a high overhead angle down to ground level and back, always keeping them centered. No crash. Sound: screeching tires, an engine roar, a driving electronic beat.",
+      "location": "High-speed controlled camera orbit around the character at the location from the location image as they drift in a spinning open car, with smoke coming off the tires. The camera swings from a high overhead angle down to ground level and back, always keeping them centered. No crash. Sound: screeching tires, an engine roar, a driving electronic beat.",
+      "products": "High-speed controlled camera orbit around the character in a setting that suits the photo as they drift in a spinning vehicle alongside the product items, with smoke coming off the tires. The camera swings from a high overhead angle down to ground level and back, always keeping them centered. No crash. Sound: screeching tires, an engine roar, a driving electronic beat.",
+      "both": "High-speed controlled camera orbit around the character at the location from the location image as they drift in a spinning vehicle alongside the product items, with smoke coming off the tires. The camera swings from a high overhead angle down to ground level and back, always keeping them centered. No crash. Sound: screeching tires, an engine roar, a driving electronic beat."
+    }
+  },
+  {
+    "id": "agamemnon",
+    "label": "Agamemnon",
+    "seconds": 6,
+    "ownSetting": true,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Inside a dark movie theater, seen from the seats. On the screen, the character in ornate bronze Greek armor walks forward and steps out of the screen into the room, larger than life. Armored warriors pour out behind them and rush down the aisles. No blood and no fighting. Sound: a huge orchestral and choir hit, marching feet, surprised gasps from the audience.",
+      "location": "Inside a dark movie theater, seen from the seats. On the screen, the character in ornate bronze Greek armor walks forward and steps out of the screen into the room, larger than life. Armored warriors pour out behind them and rush down the aisles. No blood and no fighting. Sound: a huge orchestral and choir hit, marching feet, surprised gasps from the audience.",
+      "products": "Inside a dark movie theater, seen from the seats. On the screen, the character in ornate bronze Greek armor walks forward and steps out of the screen into the room, larger than life. Armored warriors pour out behind them and rush down the aisles. No blood and no fighting. Sound: a huge orchestral and choir hit, marching feet, surprised gasps from the audience.",
+      "both": "Inside a dark movie theater, seen from the seats. On the screen, the character in ornate bronze Greek armor walks forward and steps out of the screen into the room, larger than life. Armored warriors pour out behind them and rush down the aisles. No blood and no fighting. Sound: a huge orchestral and choir hit, marching feet, surprised gasps from the audience."
+    }
+  },
+  {
+    "id": "masterpiece-pearl-earring",
+    "label": "Masterpiece: Pearl Earring",
+    "seconds": 5,
+    "ownSetting": true,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Vertical split screen. The bottom half shows a still public-domain style 17th-century Dutch oil portrait of a girl in a blue and yellow headscarf with a pearl earring, against a dark background. The top half shows the character recreating that exact portrait, same costume, pose and light, as a painterly living scene, slowly turning to look over their shoulder and blinking. Sound: a soft harpsichord, quiet room tone.",
+      "location": "Vertical split screen. The bottom half shows a still public-domain style 17th-century Dutch oil portrait of a girl in a blue and yellow headscarf with a pearl earring, against a dark background. The top half shows the character recreating that exact portrait, same costume, pose and light, as a painterly living scene, slowly turning to look over their shoulder and blinking. Sound: a soft harpsichord, quiet room tone.",
+      "products": "Vertical split screen. The bottom half shows a still public-domain style 17th-century Dutch oil portrait of a girl in a blue and yellow headscarf with a pearl earring, against a dark background. The top half shows the character recreating that exact portrait, same costume, pose and light, as a painterly living scene, slowly turning to look over their shoulder and blinking. Sound: a soft harpsichord, quiet room tone.",
+      "both": "Vertical split screen. The bottom half shows a still public-domain style 17th-century Dutch oil portrait of a girl in a blue and yellow headscarf with a pearl earring, against a dark background. The top half shows the character recreating that exact portrait, same costume, pose and light, as a painterly living scene, slowly turning to look over their shoulder and blinking. Sound: a soft harpsichord, quiet room tone."
+    }
+  },
+  {
+    "id": "masterpiece-fallen-angel",
+    "label": "Masterpiece: Fallen Angel",
+    "seconds": 5,
+    "ownSetting": true,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Vertical split screen. The bottom half shows a still public-domain style 19th-century academic oil painting of a fallen angel with dark feathered wings on a rock, tearful and glaring. The top half shows the character, fully clothed in dark draped fabric, recreating that pose with large dark wings, as a living painting, with wings stirring and one tear falling. Sound: a low choir, soft wind, a single slow piano note.",
+      "location": "Vertical split screen. The bottom half shows a still public-domain style 19th-century academic oil painting of a fallen angel with dark feathered wings on a rock, tearful and glaring. The top half shows the character, fully clothed in dark draped fabric, recreating that pose with large dark wings, as a living painting, with wings stirring and one tear falling. Sound: a low choir, soft wind, a single slow piano note.",
+      "products": "Vertical split screen. The bottom half shows a still public-domain style 19th-century academic oil painting of a fallen angel with dark feathered wings on a rock, tearful and glaring. The top half shows the character, fully clothed in dark draped fabric, recreating that pose with large dark wings, as a living painting, with wings stirring and one tear falling. Sound: a low choir, soft wind, a single slow piano note.",
+      "both": "Vertical split screen. The bottom half shows a still public-domain style 19th-century academic oil painting of a fallen angel with dark feathered wings on a rock, tearful and glaring. The top half shows the character, fully clothed in dark draped fabric, recreating that pose with large dark wings, as a living painting, with wings stirring and one tear falling. Sound: a low choir, soft wind, a single slow piano note."
+    }
+  },
+  {
+    "id": "masterpiece-cyclops",
+    "label": "Masterpiece: Cyclops",
+    "seconds": 5,
+    "ownSetting": true,
+    "stylized": false,
+    "overlayText": false,
+    "motion": {
+      "none": "Vertical split screen. The bottom half shows a still public-domain style Symbolist oil painting of a shy one-eyed giant peeking over a mountain at a sleeping figure in a flower field. The top half shows the same dreamy painted scene brought to life, with the character as the sleeping figure in the flowers, stirring gently while the giant blinks shyly. Sound: dreamy flute, soft breeze.",
+      "location": "Vertical split screen. The bottom half shows a still public-domain style Symbolist oil painting of a shy one-eyed giant peeking over a mountain at a sleeping figure in a flower field. The top half shows the same dreamy painted scene brought to life, with the character as the sleeping figure in the flowers, stirring gently while the giant blinks shyly. Sound: dreamy flute, soft breeze.",
+      "products": "Vertical split screen. The bottom half shows a still public-domain style Symbolist oil painting of a shy one-eyed giant peeking over a mountain at a sleeping figure in a flower field. The top half shows the same dreamy painted scene brought to life, with the character as the sleeping figure in the flowers, stirring gently while the giant blinks shyly. Sound: dreamy flute, soft breeze.",
+      "both": "Vertical split screen. The bottom half shows a still public-domain style Symbolist oil painting of a shy one-eyed giant peeking over a mountain at a sleeping figure in a flower field. The top half shows the same dreamy painted scene brought to life, with the character as the sleeping figure in the flowers, stirring gently while the giant blinks shyly. Sound: dreamy flute, soft breeze."
+    }
+  }
+]

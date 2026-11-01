@@ -1,15 +1,17 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { ApiError, createGeneration, fetchEffects, fetchHistory, type Effect, type Generation } from "./api";
+import { ApiError, createGeneration, fetchCustomEffect, fetchEffects, fetchHistory, fetchMyEffects, fetchRecipe, workflowUrl, type Effect, type Generation } from "./api";
 import Sidebar, { type FormState } from "./Sidebar";
 import Stage from "./Stage";
 import HowItWorks from "./HowItWorks";
 import LazyClip from "./LazyClip";
 import Masonry from "./Masonry";
-import { CheckIcon, ClockIcon, GridIcon, InfoIcon, SearchIcon } from "./Icons";
+import Studio, { BLANK_RECIPE, type Draft } from "./Studio";
+import { CheckIcon, ClockIcon, GridIcon, InfoIcon, PencilIcon, SearchIcon } from "./Icons";
 
-type Tab = "effects" | "history" | "how";
+type Tab = "effects" | "studio" | "history" | "how";
 
 const viewFromUrl = () => new URLSearchParams(window.location.search).get("v");
+const sharedEffect = () => new URLSearchParams(window.location.search).get("effect");
 
 export default function App() {
   const [effects, setEffects] = useState<Effect[]>([]);
@@ -19,6 +21,7 @@ export default function App() {
   const [viewId, setViewId] = useState<string | null>(viewFromUrl);
   const [seed, setSeed] = useState<Generation | null>(null);
   const [history, setHistory] = useState<Generation[]>([]);
+  const [draft, setDraft] = useState<Draft>({ recipe: BLANK_RECIPE, remixOf: null });
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [toastText, setToastText] = useState<string | null>(null);
@@ -31,10 +34,16 @@ export default function App() {
   });
 
   useEffect(() => {
-    fetchEffects()
-      .then((list) => {
-        setEffects(list);
-        setSelected((cur) => cur ?? list[0]?.id ?? null);
+    const shared = sharedEffect();
+    Promise.all([
+      fetchEffects(),
+      fetchMyEffects().catch(() => [] as Effect[]),
+      shared ? fetchCustomEffect(shared).catch(() => null) : null,
+    ])
+      .then(([builtIn, mine, linked]) => {
+        const custom = linked && !mine.some((e) => e.id === linked.id) ? [linked, ...mine] : mine;
+        setEffects([...custom, ...builtIn]);
+        setSelected((cur) => cur ?? linked?.id ?? builtIn[0]?.id ?? null);
       })
       .catch(() => setError("Can't load effects. Refresh to try again."));
   }, []);
@@ -68,6 +77,42 @@ export default function App() {
   }, []);
 
   const effect = effects.find((e) => e.id === selected) ?? null;
+
+  const counts = useMemo(
+    () => ({ characters: form.uploads.character.length, locations: form.uploads.location.length, products: form.uploads.product.length }),
+    [form.uploads],
+  );
+
+  const remix = async () => {
+    if (!effect) return;
+    setError(null);
+    try {
+      const { recipe } = await fetchRecipe(effect.id);
+      setDraft({ recipe: { ...recipe, name: `${recipe.name} Remix`.slice(0, 40) }, remixOf: effect.id });
+      showTab("studio");
+    } catch {
+      setError("Couldn't open that effect. Try again.");
+    }
+  };
+
+  const copyEffectLink = async () => {
+    if (!effect) return;
+    const url = `${window.location.origin}/?effect=${encodeURIComponent(effect.id)}`;
+    try {
+      await navigator.clipboard.writeText(url);
+      toast("Link copied");
+    } catch {
+      toast(url);
+    }
+  };
+
+  const onEffectSaved = (saved: Effect) => {
+    setEffects((list) => [saved, ...list]);
+    setSelected(saved.id);
+    setDraft({ recipe: BLANK_RECIPE, remixOf: null });
+    showTab("effects");
+    toast(`${saved.label} saved. Add a photo and hit Generate.`);
+  };
 
   const generate = async () => {
     if (!effect) return;
@@ -121,12 +166,16 @@ export default function App() {
           setError={setError}
           onChangeEffect={() => showTab("effects")}
           onGenerate={() => void generate()}
+          onRemix={() => void remix()}
+          onCopyLink={() => void copyEffectLink()}
+          workflowHref={effect ? workflowUrl(effect.id, counts, { note: form.promptOn ? form.prompt : undefined, resolution: form.resolution, aspectRatio: form.aspectRatio }) : null}
         />
 
         <main className="panel">
           <div className="panel-bar">
             <div className="tabs" role="tablist">
               <button type="button" role="tab" aria-selected={!viewId && tab === "effects"} className={!viewId && tab === "effects" ? "on" : ""} onClick={() => showTab("effects")}><GridIcon /> Effects</button>
+              <button type="button" role="tab" aria-selected={!viewId && tab === "studio"} className={!viewId && tab === "studio" ? "on" : ""} onClick={() => showTab("studio")}><PencilIcon /> Studio</button>
               <button type="button" role="tab" aria-selected={!viewId && tab === "history"} className={!viewId && tab === "history" ? "on" : ""} onClick={() => showTab("history")}><ClockIcon /> History</button>
               <button type="button" role="tab" aria-selected={!viewId && tab === "how"} className={!viewId && tab === "how" ? "on" : ""} onClick={() => showTab("how")}><InfoIcon /> How it works</button>
             </div>
@@ -156,7 +205,7 @@ export default function App() {
                       style={{ aspectRatio: e.ratio.replace(":", " / ") }}
                       onClick={() => setSelected(e.id)}
                     >
-                      {e.preview ? <LazyClip src={e.preview} poster={e.poster} /> : <span className="tile-placeholder">No example yet</span>}
+                      {e.preview ? <LazyClip src={e.preview} poster={e.poster} /> : <span className="tile-placeholder">{e.custom ? "Your effect" : "No example yet"}</span>}
                       {e.id === selected && <span className="tile-check"><CheckIcon /></span>}
                       <span className="tile-text">
                         <span className="tile-label">{e.label}</span>
@@ -168,6 +217,8 @@ export default function App() {
               ) : (
                 <p className="muted empty">No effects match that search.</p>
               )
+            ) : tab === "studio" ? (
+              <Studio draft={draft} setDraft={setDraft} counts={counts} onSaved={onEffectSaved} />
             ) : tab === "history" ? (
               history.length ? (
                 <div className="effects-grid">

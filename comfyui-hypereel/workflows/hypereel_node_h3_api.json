@@ -1,0 +1,66 @@
+{
+  "10": {
+    "class_type": "LoadImage",
+    "_meta": {
+      "title": "Character"
+    },
+    "inputs": {
+      "image": "character.png"
+    }
+  },
+  "2": {
+    "class_type": "MinimaxHailuo03ReferenceNode",
+    "_meta": {
+      "title": "MiniMax H3 Max (video + audio from references)"
+    },
+    "inputs": {
+      "model": "MiniMax H3 Max",
+      "model.prompt": [
+        "20",
+        0
+      ],
+      "model.resolution": "480P",
+      "model.ratio": "9:16",
+      "model.duration": [
+        "20",
+        1
+      ],
+      "model.prompt_expansion_mode": "balanced",
+      "model.reference_detail": "standard",
+      "model.reference_images.image_1": [
+        "10",
+        0
+      ],
+      "seed": 42,
+      "watermark": false
+    }
+  },
+  "3": {
+    "class_type": "SaveVideo",
+    "_meta": {
+      "title": "Save video"
+    },
+    "inputs": {
+      "video": [
+        "2",
+        0
+      ],
+      "filename_prefix": "video/hypereel",
+      "format": "auto",
+      "format.codec": "auto"
+    }
+  },
+  "20": {
+    "class_type": "HypereelEffect",
+    "_meta": {
+      "title": "hypereel Effect"
+    },
+    "inputs": {
+      "effect": "gravity-flip",
+      "character_images": 1,
+      "location_images": 0,
+      "product_images": 0,
+      "direction": ""
+    }
+  }
+}

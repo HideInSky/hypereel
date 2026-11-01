@@ -13,6 +13,11 @@ export type Effect = {
   poster: string | null;
   /** Shape of the gallery tile, as "width:height". */
   ratio: string;
+  /** Written in Effect Studio rather than built in. */
+  custom?: boolean;
+  /** Contributed to the repo as a JSON recipe. */
+  community?: boolean;
+  remixOf?: string | null;
 };
 
 export type ReferenceRole = "character" | "location" | "product";
@@ -113,4 +118,58 @@ export function createGeneration(input: {
   }
   // Note: no Content-Type header here. The browser sets the multipart boundary itself.
   return request<Generation>("/api/generations", { method: "POST", body: form });
+}
+
+export type RecipeBeat = { from: number; to: number; action: string };
+
+/** The open effect format, hypereel-effect/1. */
+export type Recipe = {
+  format?: string;
+  name: string;
+  description: string;
+  seconds: number;
+  look: "photoreal" | "stylized";
+  camera: string;
+  beats: RecipeBeat[];
+  product: string;
+  sound: string;
+};
+
+const json = (body: unknown): RequestInit => ({ method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+
+export function fetchMyEffects(): Promise<Effect[]> {
+  return request<Effect[]>("/api/custom-effects");
+}
+
+export function fetchCustomEffect(id: string): Promise<Effect> {
+  return request<Effect>(`/api/custom-effects/${encodeURIComponent(id)}`);
+}
+
+export function saveCustomEffect(recipe: Recipe, remixOf: string | null): Promise<Effect> {
+  return request<Effect>("/api/custom-effects", json({ recipe, remixOf }));
+}
+
+export function fetchRecipe(effectId: string): Promise<{ recipe: Recipe }> {
+  return request<{ recipe: Recipe }>(`/api/effects/${encodeURIComponent(effectId)}/recipe`);
+}
+
+export function fetchCommunityRecipes(): Promise<{ id: string; recipe: Recipe }[]> {
+  return request<{ id: string; recipe: Recipe }[]>("/api/community-recipes");
+}
+
+export type ImageCounts = { characters: number; locations: number; products: number };
+
+const countsQuery = (c: ImageCounts) => new URLSearchParams({ characters: String(Math.max(1, c.characters)), locations: String(c.locations), products: String(c.products) });
+
+export function previewRecipe(recipe: Recipe, counts: ImageCounts): Promise<{ prompt: string }> {
+  return request<{ prompt: string }>(`/api/recipes/preview?${countsQuery(counts)}`, json({ recipe }));
+}
+
+/** A ComfyUI workflow for this effect and these inputs, served as a download. */
+export function workflowUrl(effectId: string, counts: ImageCounts, options: { note?: string; resolution: string; aspectRatio: string }): string {
+  const q = countsQuery(counts);
+  q.set("resolution", options.resolution);
+  q.set("aspectRatio", options.aspectRatio);
+  if (options.note?.trim()) q.set("note", options.note.trim().slice(0, 300));
+  return `/api/effects/${encodeURIComponent(effectId)}/workflow?${q}`;
 }

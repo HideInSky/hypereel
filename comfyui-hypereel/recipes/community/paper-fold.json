@@ -1,0 +1,15 @@
+{
+  "format": "hypereel-effect/1",
+  "name": "Paper Fold",
+  "description": "They crease like a photo print, fold into an origami crane, and fly off.",
+  "seconds": 6,
+  "look": "stylized",
+  "camera": "Locked-off shot of the character {place}, standing still and smiling at the camera.",
+  "beats": [
+    { "from": 0, "to": 2, "action": "Sharp paper creases appear across the character and their clothes, as if they were printed on a glossy photo." },
+    { "from": 2, "to": 4, "action": "They fold along the creases, again and again, with clean paper corners, and become a small origami crane printed with their outfit's colors and patterns, hovering in the air." },
+    { "from": 4, "to": 6, "action": "The crane flaps twice and glides out of the frame. The background stays completely real and unchanged. No body parts are visible once folded." }
+  ],
+  "product": "The product items fold into small paper shapes and follow the crane.",
+  "sound": "crisp paper creases in rhythm, one soft flutter of wings, a gentle marimba."
+}

@@ -1,0 +1,362 @@
+[
+  {
+    "effect": "vanish",
+    "counts": [
+      1,
+      0,
+      0
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Set the scene in a location that suits the character's photo. Locked-off camera, no camera movement. 0-2s: the character stands fully dressed and calm, looking at the camera, with a small natural movement. At exactly 2s their body vanishes in a single frame, with no dust, no particles, no fade and no glow. The empty clothing keeps its shape in the air for a split second, as if still worn, then drops straight down under gravity and collapses in a flat heap of fabric on the ground, with any accessories landing on top. 3-5s: the empty clothes settle, sleeves flopping, and nothing else moves. No skin or body is visible after the vanish. Sound: quiet ambience, a soft fabric thump as the clothes land, then a beat of comic silence. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "vanish",
+    "counts": [
+      2,
+      1,
+      1
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 and Image 2 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 3 shows the location. Set the scene there and match its light. Image 4 shows the product items. Keep their exact shape, color and details. Locked-off camera, no camera movement. 0-2s: the character stands fully dressed and calm, looking at the camera, with a small natural movement. At exactly 2s their body vanishes in a single frame, with no dust, no particles, no fade and no glow. The empty clothing keeps its shape in the air for a split second, as if still worn, then drops straight down under gravity and collapses in a flat heap of fabric on the ground, with the product items dropping and landing on top of the clothes. 3-5s: the empty clothes settle, sleeves flopping, and nothing else moves. No skin or body is visible after the vanish. Sound: quiet ambience, a soft fabric thump as the clothes land, then a beat of comic silence. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "vanish",
+    "counts": [
+      1,
+      0,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Image 2, Image 3 and Image 4 show the product items. Keep their exact shape, color and details. Set the scene in a location that suits the character's photo. Locked-off camera, no camera movement. 0-2s: the character stands fully dressed and calm, looking at the camera, with a small natural movement. At exactly 2s their body vanishes in a single frame, with no dust, no particles, no fade and no glow. The empty clothing keeps its shape in the air for a split second, as if still worn, then drops straight down under gravity and collapses in a flat heap of fabric on the ground, with the product items dropping and landing on top of the clothes. 3-5s: the empty clothes settle, sleeves flopping, and nothing else moves. No skin or body is visible after the vanish. Sound: quiet ambience, a soft fabric thump as the clothes land, then a beat of comic silence. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "vanish",
+    "counts": [
+      4,
+      2,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1, Image 2, Image 3 and Image 4 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 5 and Image 6 show the location. Set the scene there and match its light. Image 7, Image 8 and Image 9 show the product items. Keep their exact shape, color and details. Locked-off camera, no camera movement. 0-2s: the character stands fully dressed and calm, looking at the camera, with a small natural movement. At exactly 2s their body vanishes in a single frame, with no dust, no particles, no fade and no glow. The empty clothing keeps its shape in the air for a split second, as if still worn, then drops straight down under gravity and collapses in a flat heap of fabric on the ground, with the product items dropping and landing on top of the clothes. 3-5s: the empty clothes settle, sleeves flopping, and nothing else moves. No skin or body is visible after the vanish. Sound: quiet ambience, a soft fabric thump as the clothes land, then a beat of comic silence. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "floating-fall",
+    "counts": [
+      1,
+      0,
+      0
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Set the scene in a location that suits the character's photo. One continuous handheld shot. 0-2s: the character walks toward the camera in natural daylight, relaxed, then trips and tips backward, arms flung up. 2-6s: time slows to almost a freeze with the character suspended mid-fall, and their personal belongings, the things they would plausibly carry drift weightlessly in the air around them, turning slowly. The camera glides forward past the character and passes very close to each floating item in a crisp macro close-up with shallow depth of field, the character blurred behind. 6-8s: the camera pulls back, time eases forward, and the character keeps falling in graceful slow motion. Sound: street ambience turns muffled when time slows, soft airy whooshes as items pass the lens, a light dreamy synth note. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "floating-fall",
+    "counts": [
+      2,
+      1,
+      1
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 and Image 2 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 3 shows the location. Set the scene there and match its light. Image 4 shows the product items. Keep their exact shape, color and details. One continuous handheld shot. 0-2s: the character walks toward the camera in natural daylight, relaxed, then trips and tips backward, arms flung up. 2-6s: time slows to almost a freeze with the character suspended mid-fall, and the product items from the product images, plus small personal belongings drift weightlessly in the air around them, turning slowly. The camera glides forward past the character and passes very close to each floating item in a crisp macro close-up with shallow depth of field, the character blurred behind. 6-8s: the camera pulls back, time eases forward, and the character keeps falling in graceful slow motion. Sound: street ambience turns muffled when time slows, soft airy whooshes as items pass the lens, a light dreamy synth note. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "floating-fall",
+    "counts": [
+      1,
+      0,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Image 2, Image 3 and Image 4 show the product items. Keep their exact shape, color and details. Set the scene in a location that suits the character's photo. One continuous handheld shot. 0-2s: the character walks toward the camera in natural daylight, relaxed, then trips and tips backward, arms flung up. 2-6s: time slows to almost a freeze with the character suspended mid-fall, and the product items from the product images, plus small personal belongings drift weightlessly in the air around them, turning slowly. The camera glides forward past the character and passes very close to each floating item in a crisp macro close-up with shallow depth of field, the character blurred behind. 6-8s: the camera pulls back, time eases forward, and the character keeps falling in graceful slow motion. Sound: street ambience turns muffled when time slows, soft airy whooshes as items pass the lens, a light dreamy synth note. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "floating-fall",
+    "counts": [
+      4,
+      2,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1, Image 2, Image 3 and Image 4 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 5 and Image 6 show the location. Set the scene there and match its light. Image 7, Image 8 and Image 9 show the product items. Keep their exact shape, color and details. One continuous handheld shot. 0-2s: the character walks toward the camera in natural daylight, relaxed, then trips and tips backward, arms flung up. 2-6s: time slows to almost a freeze with the character suspended mid-fall, and the product items from the product images, plus small personal belongings drift weightlessly in the air around them, turning slowly. The camera glides forward past the character and passes very close to each floating item in a crisp macro close-up with shallow depth of field, the character blurred behind. 6-8s: the camera pulls back, time eases forward, and the character keeps falling in graceful slow motion. Sound: street ambience turns muffled when time slows, soft airy whooshes as items pass the lens, a light dreamy synth note. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "canvas",
+    "counts": [
+      1,
+      0,
+      0
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Set the scene in a location that suits the character's photo. The character moves naturally in a setting that suits the photo in a real, unaltered photographic scene. A thick rough white spray-paint outline hugs their silhouette like a sticker border and redraws slightly on every frame. Colored marker scribbles in red, green and yellow, simple graffiti shapes and childish doodles with no readable words, are drawn over the buildings and background and wiggle as they animate. Sound: spray can hiss, marker squeaks, a loose hip-hop beat. Additional direction from the user: make it raining, with a red coat. Cinematic and safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "canvas",
+    "counts": [
+      2,
+      1,
+      1
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 and Image 2 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 3 shows the location. Set the scene there and match its light. Image 4 shows the product items. Keep their exact shape, color and details. The character moves naturally at the location from the location image in a real, unaltered photographic scene. A thick rough white spray-paint outline hugs their silhouette like a sticker border and redraws slightly on every frame. Colored marker scribbles in red, green and yellow, simple graffiti shapes and childish doodles with no readable words, are drawn over the buildings and background and wiggle as they animate. Sound: spray can hiss, marker squeaks, a loose hip-hop beat. Additional direction from the user: make it raining, with a red coat. Cinematic and safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "canvas",
+    "counts": [
+      1,
+      0,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Image 2, Image 3 and Image 4 show the product items. Keep their exact shape, color and details. Set the scene in a location that suits the character's photo. The character moves naturally in a setting that suits the photo in a real, unaltered photographic scene. A thick rough white spray-paint outline hugs their silhouette like a sticker border and redraws slightly on every frame. Colored marker scribbles in red, green and yellow, simple graffiti shapes and childish doodles with no readable words, are drawn over the buildings and background and wiggle as they animate. Sound: spray can hiss, marker squeaks, a loose hip-hop beat. Additional direction from the user: make it raining, with a red coat. Cinematic and safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "canvas",
+    "counts": [
+      4,
+      2,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1, Image 2, Image 3 and Image 4 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 5 and Image 6 show the location. Set the scene there and match its light. Image 7, Image 8 and Image 9 show the product items. Keep their exact shape, color and details. The character moves naturally at the location from the location image in a real, unaltered photographic scene. A thick rough white spray-paint outline hugs their silhouette like a sticker border and redraws slightly on every frame. Colored marker scribbles in red, green and yellow, simple graffiti shapes and childish doodles with no readable words, are drawn over the buildings and background and wiggle as they animate. Sound: spray can hiss, marker squeaks, a loose hip-hop beat. Additional direction from the user: make it raining, with a red coat. Cinematic and safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "tracking",
+    "counts": [
+      1,
+      0,
+      0
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Set the scene in a location that suits the character's photo. The character moves with energy in a setting that suits the photo, in a gritty real film look. A computer-vision overlay follows them: small hollow white squares lock on to their joints and clothing, thin white curved lines sweep between the squares and out of the frame, and small flickering decimal numbers such as 44.73 and -51.41 sit beside the squares. Slight digital glitch streaks. Sound: data blips, a tense electronic pulse. Additional direction from the user: make it raining, with a red coat. Cinematic and safe for work. The only on-screen text is the overlay described above. No subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "tracking",
+    "counts": [
+      2,
+      1,
+      1
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 and Image 2 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 3 shows the location. Set the scene there and match its light. Image 4 shows the product items. Keep their exact shape, color and details. The character moves with energy at the location from the location image, in a gritty real film look. A computer-vision overlay follows them: small hollow white squares lock on to their joints and clothing, thin white curved lines sweep between the squares and out of the frame, and small flickering decimal numbers such as 44.73 and -51.41 sit beside the squares. Slight digital glitch streaks. Sound: data blips, a tense electronic pulse. Additional direction from the user: make it raining, with a red coat. Cinematic and safe for work. The only on-screen text is the overlay described above. No subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "tracking",
+    "counts": [
+      1,
+      0,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Image 2, Image 3 and Image 4 show the product items. Keep their exact shape, color and details. Set the scene in a location that suits the character's photo. The character moves with energy in a setting that suits the photo, in a gritty real film look. A computer-vision overlay follows them: small hollow white squares lock on to their joints and clothing, thin white curved lines sweep between the squares and out of the frame, and small flickering decimal numbers such as 44.73 and -51.41 sit beside the squares. Slight digital glitch streaks. Sound: data blips, a tense electronic pulse. Additional direction from the user: make it raining, with a red coat. Cinematic and safe for work. The only on-screen text is the overlay described above. No subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "tracking",
+    "counts": [
+      4,
+      2,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1, Image 2, Image 3 and Image 4 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 5 and Image 6 show the location. Set the scene there and match its light. Image 7, Image 8 and Image 9 show the product items. Keep their exact shape, color and details. The character moves with energy at the location from the location image, in a gritty real film look. A computer-vision overlay follows them: small hollow white squares lock on to their joints and clothing, thin white curved lines sweep between the squares and out of the frame, and small flickering decimal numbers such as 44.73 and -51.41 sit beside the squares. Slight digital glitch streaks. Sound: data blips, a tense electronic pulse. Additional direction from the user: make it raining, with a red coat. Cinematic and safe for work. The only on-screen text is the overlay described above. No subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "street-colossus",
+    "counts": [
+      1,
+      0,
+      0
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. A sprawling modern city street. Low-angle shot from street level. The character, enormous and taller than the surrounding buildings, walks slowly down the avenue while normal-sized cars and pedestrians move around their feet. The camera tilts up their giant figure as they pass, with atmospheric haze for true scale. Nothing is damaged and nobody is harmed. Sound: deep slow footstep booms, distant traffic and car horns, a swelling epic score. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "street-colossus",
+    "counts": [
+      2,
+      1,
+      1
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 and Image 2 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 3 shows the location. Set the scene there and match its light. Image 4 shows the product items. Keep their exact shape, color and details. Use the location image as the city. Low-angle shot from street level. The character, enormous and taller than the surrounding buildings, walks slowly down the avenue while normal-sized cars and pedestrians move around their feet. The camera tilts up their giant figure as they pass, with atmospheric haze for true scale. Nothing is damaged and nobody is harmed. They hold the product items, which are also giant. Sound: deep slow footstep booms, distant traffic and car horns, a swelling epic score. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "street-colossus",
+    "counts": [
+      1,
+      0,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Image 2, Image 3 and Image 4 show the product items. Keep their exact shape, color and details. A sprawling modern city street. Low-angle shot from street level. The character, enormous and taller than the surrounding buildings, walks slowly down the avenue while normal-sized cars and pedestrians move around their feet. The camera tilts up their giant figure as they pass, with atmospheric haze for true scale. Nothing is damaged and nobody is harmed. They hold the product items, which are also giant. Sound: deep slow footstep booms, distant traffic and car horns, a swelling epic score. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "street-colossus",
+    "counts": [
+      4,
+      2,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1, Image 2, Image 3 and Image 4 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 5 and Image 6 show the location. Set the scene there and match its light. Image 7, Image 8 and Image 9 show the product items. Keep their exact shape, color and details. Use the location image as the city. Low-angle shot from street level. The character, enormous and taller than the surrounding buildings, walks slowly down the avenue while normal-sized cars and pedestrians move around their feet. The camera tilts up their giant figure as they pass, with atmospheric haze for true scale. Nothing is damaged and nobody is harmed. They hold the product items, which are also giant. Sound: deep slow footstep booms, distant traffic and car horns, a swelling epic score. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "superstar",
+    "counts": [
+      1,
+      0,
+      0
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Handheld shot from deep inside a huge stadium crowd at night, with a sea of raised phones and sweeping light beams. The camera pushes between people's shoulders and tilts up to reveal the character's face filling the giant stage screen. No readable text, no real performers, no logos. Sound: a roaring crowd chanting, booming bass from the stage. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "superstar",
+    "counts": [
+      2,
+      1,
+      1
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 and Image 2 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 3 shows the location. Set the scene there and match its light. Image 4 shows the product items. Keep their exact shape, color and details. Handheld shot from deep inside a huge stadium crowd at night, with a sea of raised phones and sweeping light beams. The camera pushes between people's shoulders and tilts up to reveal the character's face filling the giant stage screen. No readable text, no real performers, no logos. Sound: a roaring crowd chanting, booming bass from the stage. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "superstar",
+    "counts": [
+      1,
+      0,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Image 2, Image 3 and Image 4 show the product items. Keep their exact shape, color and details. Handheld shot from deep inside a huge stadium crowd at night, with a sea of raised phones and sweeping light beams. The camera pushes between people's shoulders and tilts up to reveal the character's face filling the giant stage screen. No readable text, no real performers, no logos. Sound: a roaring crowd chanting, booming bass from the stage. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "superstar",
+    "counts": [
+      4,
+      2,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1, Image 2, Image 3 and Image 4 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 5 and Image 6 show the location. Set the scene there and match its light. Image 7, Image 8 and Image 9 show the product items. Keep their exact shape, color and details. Handheld shot from deep inside a huge stadium crowd at night, with a sea of raised phones and sweeping light beams. The camera pushes between people's shoulders and tilts up to reveal the character's face filling the giant stage screen. No readable text, no real performers, no logos. Sound: a roaring crowd chanting, booming bass from the stage. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "gravity-flip",
+    "counts": [
+      1,
+      0,
+      0
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Set the scene in a location that suits the character's photo. Handheld medium-wide shot of the character in a setting that suits the photo, looking at the camera. 0-2s: The character stands relaxed. Small loose things nearby begin to tremble and lift a little off the ground. 2-4s: Gravity reverses. The character's feet leave the ground and they rise slowly, arms out and hair floating upward, while loose objects tumble up past them. 4-6s: The camera tilts up and follows them as they drift higher into the open sky, calm and amused, looking back down at the lens. Sound: a rising low hum, ambience fading away, soft airy wind, a light dreamy synth. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "gravity-flip",
+    "counts": [
+      2,
+      1,
+      1
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 and Image 2 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 3 shows the location. Set the scene there and match its light. Image 4 shows the product items. Keep their exact shape, color and details. Handheld medium-wide shot of the character at the location from the location image, looking at the camera. 0-2s: The character stands relaxed. Small loose things nearby begin to tremble and lift a little off the ground. 2-4s: Gravity reverses. The character's feet leave the ground and they rise slowly, arms out and hair floating upward, while loose objects tumble up past them. 4-6s: The camera tilts up and follows them as they drift higher into the open sky, calm and amused, looking back down at the lens. The product items float up beside them, turning slowly and staying in sharp focus. Sound: a rising low hum, ambience fading away, soft airy wind, a light dreamy synth. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "gravity-flip",
+    "counts": [
+      1,
+      0,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Image 2, Image 3 and Image 4 show the product items. Keep their exact shape, color and details. Set the scene in a location that suits the character's photo. Handheld medium-wide shot of the character in a setting that suits the photo, looking at the camera. 0-2s: The character stands relaxed. Small loose things nearby begin to tremble and lift a little off the ground. 2-4s: Gravity reverses. The character's feet leave the ground and they rise slowly, arms out and hair floating upward, while loose objects tumble up past them. 4-6s: The camera tilts up and follows them as they drift higher into the open sky, calm and amused, looking back down at the lens. The product items float up beside them, turning slowly and staying in sharp focus. Sound: a rising low hum, ambience fading away, soft airy wind, a light dreamy synth. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "gravity-flip",
+    "counts": [
+      4,
+      2,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1, Image 2, Image 3 and Image 4 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 5 and Image 6 show the location. Set the scene there and match its light. Image 7, Image 8 and Image 9 show the product items. Keep their exact shape, color and details. Handheld medium-wide shot of the character at the location from the location image, looking at the camera. 0-2s: The character stands relaxed. Small loose things nearby begin to tremble and lift a little off the ground. 2-4s: Gravity reverses. The character's feet leave the ground and they rise slowly, arms out and hair floating upward, while loose objects tumble up past them. 4-6s: The camera tilts up and follows them as they drift higher into the open sky, calm and amused, looking back down at the lens. The product items float up beside them, turning slowly and staying in sharp focus. Sound: a rising low hum, ambience fading away, soft airy wind, a light dreamy synth. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "paper-fold",
+    "counts": [
+      1,
+      0,
+      0
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Set the scene in a location that suits the character's photo. Locked-off shot of the character in a setting that suits the photo, standing still and smiling at the camera. 0-2s: Sharp paper creases appear across the character and their clothes, as if they were printed on a glossy photo. 2-4s: They fold along the creases, again and again, with clean paper corners, and become a small origami crane printed with their outfit's colors and patterns, hovering in the air. 4-6s: The crane flaps twice and glides out of the frame. The background stays completely real and unchanged. No body parts are visible once folded. Sound: crisp paper creases in rhythm, one soft flutter of wings, a gentle marimba. Additional direction from the user: make it raining, with a red coat. Cinematic and safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "paper-fold",
+    "counts": [
+      2,
+      1,
+      1
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 and Image 2 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 3 shows the location. Set the scene there and match its light. Image 4 shows the product items. Keep their exact shape, color and details. Locked-off shot of the character at the location from the location image, standing still and smiling at the camera. 0-2s: Sharp paper creases appear across the character and their clothes, as if they were printed on a glossy photo. 2-4s: They fold along the creases, again and again, with clean paper corners, and become a small origami crane printed with their outfit's colors and patterns, hovering in the air. 4-6s: The crane flaps twice and glides out of the frame. The background stays completely real and unchanged. No body parts are visible once folded. The product items fold into small paper shapes and follow the crane. Sound: crisp paper creases in rhythm, one soft flutter of wings, a gentle marimba. Additional direction from the user: make it raining, with a red coat. Cinematic and safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "paper-fold",
+    "counts": [
+      1,
+      0,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Image 2, Image 3 and Image 4 show the product items. Keep their exact shape, color and details. Set the scene in a location that suits the character's photo. Locked-off shot of the character in a setting that suits the photo, standing still and smiling at the camera. 0-2s: Sharp paper creases appear across the character and their clothes, as if they were printed on a glossy photo. 2-4s: They fold along the creases, again and again, with clean paper corners, and become a small origami crane printed with their outfit's colors and patterns, hovering in the air. 4-6s: The crane flaps twice and glides out of the frame. The background stays completely real and unchanged. No body parts are visible once folded. The product items fold into small paper shapes and follow the crane. Sound: crisp paper creases in rhythm, one soft flutter of wings, a gentle marimba. Additional direction from the user: make it raining, with a red coat. Cinematic and safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "paper-fold",
+    "counts": [
+      4,
+      2,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1, Image 2, Image 3 and Image 4 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 5 and Image 6 show the location. Set the scene there and match its light. Image 7, Image 8 and Image 9 show the product items. Keep their exact shape, color and details. Locked-off shot of the character at the location from the location image, standing still and smiling at the camera. 0-2s: Sharp paper creases appear across the character and their clothes, as if they were printed on a glossy photo. 2-4s: They fold along the creases, again and again, with clean paper corners, and become a small origami crane printed with their outfit's colors and patterns, hovering in the air. 4-6s: The crane flaps twice and glides out of the frame. The background stays completely real and unchanged. No body parts are visible once folded. The product items fold into small paper shapes and follow the crane. Sound: crisp paper creases in rhythm, one soft flutter of wings, a gentle marimba. Additional direction from the user: make it raining, with a red coat. Cinematic and safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "pocket-world",
+    "counts": [
+      1,
+      0,
+      0
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Set the scene in a location that suits the character's photo. Slow push-in on the character in a setting that suits the photo, framed from the waist up. 0-3s: The character reaches into a pocket and slowly pulls out a tiny, perfectly detailed living street, with little lit windows and cars moving on it, resting on their open palm. 3-6s: They lift it toward the lens. The camera pushes in until the tiny street fills the frame, with tiny cars passing and tiny people walking. 6-8s: A tiny copy of the character on that street looks up and waves at the camera. Sound: soft cloth rustle, tiny traffic and distant city ambience growing as the camera gets closer, a warm music box. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "pocket-world",
+    "counts": [
+      2,
+      1,
+      1
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 and Image 2 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 3 shows the location. Set the scene there and match its light. Image 4 shows the product items. Keep their exact shape, color and details. Slow push-in on the character at the location from the location image, framed from the waist up. 0-3s: The character reaches into a pocket and slowly pulls out a tiny, perfectly detailed living street, with little lit windows and cars moving on it, resting on their open palm. 3-6s: They lift it toward the lens. The camera pushes in until the tiny street fills the frame, with tiny cars passing and tiny people walking. 6-8s: A tiny copy of the character on that street looks up and waves at the camera. One of the product items sits on the tiny street like a giant monument. Sound: soft cloth rustle, tiny traffic and distant city ambience growing as the camera gets closer, a warm music box. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "pocket-world",
+    "counts": [
+      1,
+      0,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1 shows the character. Keep their face, build, hair and outfit exactly the same throughout. Image 2, Image 3 and Image 4 show the product items. Keep their exact shape, color and details. Set the scene in a location that suits the character's photo. Slow push-in on the character in a setting that suits the photo, framed from the waist up. 0-3s: The character reaches into a pocket and slowly pulls out a tiny, perfectly detailed living street, with little lit windows and cars moving on it, resting on their open palm. 3-6s: They lift it toward the lens. The camera pushes in until the tiny street fills the frame, with tiny cars passing and tiny people walking. 6-8s: A tiny copy of the character on that street looks up and waves at the camera. One of the product items sits on the tiny street like a giant monument. Sound: soft cloth rustle, tiny traffic and distant city ambience growing as the camera gets closer, a warm music box. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  },
+  {
+    "effect": "pocket-world",
+    "counts": [
+      4,
+      2,
+      3
+    ],
+    "direction": "  make it\nraining,   with a red coat ",
+    "prompt": "Image 1, Image 2, Image 3 and Image 4 show the character. Keep their face, build, hair and outfit exactly the same throughout. Image 5 and Image 6 show the location. Set the scene there and match its light. Image 7, Image 8 and Image 9 show the product items. Keep their exact shape, color and details. Slow push-in on the character at the location from the location image, framed from the waist up. 0-3s: The character reaches into a pocket and slowly pulls out a tiny, perfectly detailed living street, with little lit windows and cars moving on it, resting on their open palm. 3-6s: They lift it toward the lens. The camera pushes in until the tiny street fills the frame, with tiny cars passing and tiny people walking. 6-8s: A tiny copy of the character on that street looks up and waves at the camera. One of the product items sits on the tiny street like a giant monument. Sound: soft cloth rustle, tiny traffic and distant city ambience growing as the camera gets closer, a warm music box. Additional direction from the user: make it raining, with a red coat. Photorealistic, cinematic, safe for work. No on-screen text, no subtitles, no logos, no watermark."
+  }
+]

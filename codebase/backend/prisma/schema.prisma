@@ -25,6 +25,8 @@ model Generation {
   id          String           @id @default(cuid())
   status      GenerationStatus @default(queued)
   genre       String
+  /// Name of a custom effect at render time (built-in names come from effects.ts)
+  effectName  String?
   caption     String?
   prompt      String
   /// Scene written by the script-writer LLM node (null for static-template clips)
@@ -48,4 +50,19 @@ model Generation {
   @@index([sessionId, createdAt])
   @@index([ip, createdAt])
   @@index([status, createdAt])
+}
+
+/// An effect someone wrote or remixed in Effect Studio. Never edited after saving,
+/// so a shared link always runs the same recipe.
+model CustomEffect {
+  id        String   @id @default(cuid())
+  name      String
+  recipe    Json     // hypereel-effect/1, see src/recipes.ts
+  remixOf   String?  // effect id this started from: built-in id or "custom:<id>"
+  sessionId String
+  ip        String
+  createdAt DateTime @default(now())
+
+  @@index([sessionId, createdAt])
+  @@index([ip, createdAt])
 }

@@ -15,6 +15,7 @@ import type { VideoProvider } from "./services/comfy.js";
 import { LocalStorage, type Storage } from "./services/storage.js";
 import { generationRoutes } from "./routes/generations.js";
 import { shareRoutes } from "./routes/share.js";
+import { customEffectRoutes } from "./routes/customEffects.js";
 
 export interface AppContext {
   cfg: Config;
@@ -91,6 +92,7 @@ export async function buildApp(opts: { cfg: Config; db: PrismaClient; provider: 
   app.decorate("storage", storage);
 
   await generationRoutes(app, ctx);
+  await customEffectRoutes(app, ctx);
   await shareRoutes(app, ctx);
 
   // In production the backend also serves the built frontend (one container,

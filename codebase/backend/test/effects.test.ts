@@ -1,6 +1,9 @@
 import { describe, expect, it } from "vitest";
 import { EFFECTS, buildEffectPrompt, previewUrl, sanitizeUserPrompt, tileRatio } from "../src/effects.js";
 import { SHOWCASE } from "../src/showcase.js";
+import { RecipeSchema, compileMotion, recipeFromEffect } from "../src/recipes.js";
+import { recipePackFiles } from "../src/recipePack.js";
+import { loadCommunityRecipes } from "../src/routes/customEffects.js";
 import { withNetworkRetry, withReferenceSlots } from "../src/services/comfy.js";
 import { toPlayback } from "../src/services/transcode.js";
 
@@ -103,5 +106,42 @@ describe("withNetworkRetry", () => {
     await expect(withNetworkRetry(async () => { calls++; throw new Error("rejected"); }, 3, 1)).rejects.toThrow("rejected");
     expect(calls).toBe(1);
     await expect(withNetworkRetry(async () => { throw new TypeError("fetch failed"); }, 2, 1)).rejects.toThrow("fetch failed");
+  });
+});
+
+describe("recipes", () => {
+  const recipe = { name: "Test", seconds: 5, camera: "Static shot {place}", beats: [{ from: 0, to: 5, action: "They wave" }], product: "They hold the product", sound: "wind" };
+  it("compiles beats, place, product and sound", () => {
+    const r = RecipeSchema.parse(recipe);
+    expect(compileMotion(r, { hasLocation: false, hasProducts: false })).toBe("Static shot in a setting that suits the photo. 0-5s: They wave. Sound: wind.");
+    expect(compileMotion(r, { hasLocation: true, hasProducts: true })).toBe("Static shot at the location from the location image. 0-5s: They wave. They hold the product. Sound: wind.");
+  });
+  it("rejects beats outside the clip or out of order", () => {
+    expect(RecipeSchema.safeParse({ ...recipe, beats: [{ from: 0, to: 6, action: "x" }] }).success).toBe(false);
+    expect(RecipeSchema.safeParse({ ...recipe, beats: [{ from: 3, to: 2, action: "x" }] }).success).toBe(false);
+    expect(RecipeSchema.safeParse({ ...recipe, beats: [{ from: 2, to: 3, action: "x" }, { from: 0, to: 1, action: "y" }] }).success).toBe(false);
+    expect(RecipeSchema.safeParse({ ...recipe, seconds: 7 }).success).toBe(false);
+    expect(RecipeSchema.safeParse({ ...recipe, name: "  " }).success).toBe(false);
+  });
+  it("can open every built-in effect as an editable recipe", () => {
+    for (const e of EFFECTS) {
+      const r = recipeFromEffect(e);
+      const compiled = compileMotion(r, { hasLocation: false, hasProducts: false });
+      const words = (t: string) => t.toLowerCase().replace(/\d+-\d+s:/g, " ").replace(/[^a-z0-9]+/g, " ").trim().split(" ").sort();
+      expect(words(compiled), e.id).toEqual(words(e.motion({ hasLocation: false, hasProducts: false })));
+    }
+  });
+  it("finds what a product photo adds, and uses the location token", () => {
+    const melting = recipeFromEffect(EFFECTS.find((e) => e.id === "melting")!);
+    expect(melting.product).toBe("The product items sink slowly into the puddle.");
+    expect(melting.camera).toContain("{place}");
+  });
+  it("loads the community recipes, and the node pack's files are up to date", async () => {
+    expect(loadCommunityRecipes().map((c) => c.id)).toEqual(expect.arrayContaining(["gravity-flip", "paper-fold", "pocket-world"]));
+    const { readFileSync } = await import("node:fs");
+    for (const [rel, text] of Object.entries(recipePackFiles())) {
+      const file = new URL(rel, new URL("../scripts/", import.meta.url));
+      expect(readFileSync(file, "utf8"), `${rel} is stale: run npm run export-recipes`).toBe(text);
+    }
   });
 });

@@ -1,0 +1,15 @@
+{
+  "format": "hypereel-effect/1",
+  "name": "Pocket World",
+  "description": "They pull a whole miniature street out of their jacket pocket and set it down.",
+  "seconds": 8,
+  "look": "photoreal",
+  "camera": "Slow push-in on the character {place}, framed from the waist up.",
+  "beats": [
+    { "from": 0, "to": 3, "action": "The character reaches into a pocket and slowly pulls out a tiny, perfectly detailed living street, with little lit windows and cars moving on it, resting on their open palm." },
+    { "from": 3, "to": 6, "action": "They lift it toward the lens. The camera pushes in until the tiny street fills the frame, with tiny cars passing and tiny people walking." },
+    { "from": 6, "to": 8, "action": "A tiny copy of the character on that street looks up and waves at the camera." }
+  ],
+  "product": "One of the product items sits on the tiny street like a giant monument.",
+  "sound": "soft cloth rustle, tiny traffic and distant city ambience growing as the camera gets closer, a warm music box."
+}

@@ -6,7 +6,7 @@ import sharp from "sharp";
 import type { GenerateOutput, VideoProvider } from "./comfy.js";
 import type { Storage } from "./storage.js";
 import type { Config } from "../config.js";
-import { buildEffectPrompt, getEffect, type ReferenceRole } from "../effects.js";
+import { buildPromptFor, getEffect, type Effect, type ReferenceRole } from "../effects.js";
 import { checkLimits } from "./limits.js";
 import { toPlayback } from "./transcode.js";
 
@@ -46,7 +46,7 @@ const CAP_LOCK_ID = 727_001;
 export async function createGeneration(
   deps: GeneratorDeps,
   args: {
-    effect: string;
+    effect: Effect;
     references: UploadedReference[]; // already ordered: characters, locations, products
     userPrompt?: string;
     resolution: string;
@@ -55,12 +55,11 @@ export async function createGeneration(
     ip: string;
   },
 ) {
-  const effect = getEffect(args.effect);
-  if (!effect) throw new Error(`Unknown effect: ${args.effect}`);
+  const { effect } = args;
 
   const jpegs = await Promise.all(args.references.map((r) => prepareImage(r.bytes)));
   const paths = await Promise.all(jpegs.map((j) => deps.storage.put(j, "jpg")));
-  const prompt = buildEffectPrompt(args.effect, args.references, args.userPrompt);
+  const prompt = buildPromptFor(effect, args.references, args.userPrompt);
 
   // Checking the caps and inserting the row must be one atomic step. Otherwise parallel
   // requests all see "under the cap" and all get through, each costing real money. The
@@ -74,7 +73,8 @@ export async function createGeneration(
         if (!limit.ok) throw new LimitExceededError(limit.reason, limit.message);
         return tx.generation.create({
           data: {
-            genre: args.effect, // column keeps its old name; it now holds the effect id
+            genre: effect.id, // column keeps its old name; it now holds the effect id
+            effectName: getEffect(effect.id) ? null : effect.label,
             caption: args.userPrompt || null,
             prompt,
             model: deps.provider.name,
