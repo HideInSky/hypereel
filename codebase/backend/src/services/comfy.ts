@@ -25,7 +25,23 @@ export interface GenerateInput {
   signal?: AbortSignal;
 }
 
+/** Any ComfyUI graph: files to upload into it, and the node whose output we keep. */
+export interface GraphJob {
+  graph: Record<string, WorkflowNode>;
+  /** [node id, input name, bytes, file name] */
+  uploads: [string, string, Uint8Array, string][];
+  outputNode: string;
+  kind: "video" | "audio" | "image";
+  /** For the fake provider: how long the result should be. */
+  seconds: number;
+  onProgress?: (percent: number, note?: string) => void;
+  onJobCreated?: (jobId: string) => Promise<void>;
+  signal?: AbortSignal;
+}
+
 export interface ResumeInput {
+  /** Which node holds the result. Defaults to the effects workflow's SaveVideo. */
+  outputNode?: string;
   jobId: string;
   onProgress?: (percent: number, note?: string) => void;
   signal?: AbortSignal;
@@ -41,6 +57,8 @@ export interface GenerateOutput {
 export interface VideoProvider {
   readonly name: string;
   generate(input: GenerateInput): Promise<GenerateOutput>;
+  /** Runs a graph built by services/workflows.ts (story shots, music, sound effects). */
+  runGraph(job: GraphJob): Promise<GenerateOutput>;
   /** Re-attach to a job submitted before a restart, and collect its result. */
   resume(input: ResumeInput): Promise<GenerateOutput>;
 }
@@ -162,16 +180,28 @@ export class WorkflowProvider implements VideoProvider {
     return this.collect(job, map, input);
   }
 
+  async runGraph(input: GraphJob): Promise<GenerateOutput> {
+    const { Comfy } = await import("@comfyorg/sdk");
+    const client = new Comfy({ apiKey: this.cfg.COMFY_API_KEY });
+    const wf = client.workflows.fromJson(input.graph as never);
+    for (const [node, name, bytes, filename] of input.uploads) wf.setInput(node, name, client.assets.fromBytes(bytes, { filename }));
+    input.onProgress?.(5, "Submitting to Comfy Cloud");
+    const job = await withNetworkRetry(() => client.submit(wf, { signal: input.signal, apiKey: this.cfg.COMFY_API_KEY }));
+    await input.onJobCreated?.(job.id);
+    const map = await this.read<WorkflowMap>(this.cfg.COMFY_WORKFLOW_MAP_PATH);
+    return this.collect(job, { ...map, output: input.outputNode }, input);
+  }
+
   async resume(input: ResumeInput): Promise<GenerateOutput> {
     const { Comfy } = await import("@comfyorg/sdk");
     const client = new Comfy({ apiKey: this.cfg.COMFY_API_KEY });
     const map = await this.read<WorkflowMap>(this.cfg.COMFY_WORKFLOW_MAP_PATH);
     const job = await withNetworkRetry(() => client.jobs.get(input.jobId));
-    return this.collect(job, map, input);
+    return this.collect(job, input.outputNode ? { ...map, output: input.outputNode } : map, input);
   }
 
   /** Waits for a submitted job to finish, then downloads the video. */
-  private async collect(job: Job, map: WorkflowMap, input: Pick<GenerateInput, "onProgress" | "signal">): Promise<GenerateOutput> {
+  private async collect(job: Job, map: Pick<WorkflowMap, "output" | "modelLabel">, input: Pick<GenerateInput, "onProgress" | "signal">): Promise<GenerateOutput> {
     // The event stream only drives the progress bar, so losing it must not lose the
     // (already paid for) job: result() below is what decides success.
     try {
@@ -200,7 +230,7 @@ export class WorkflowProvider implements VideoProvider {
     }
 
     const outputs = job.getOutputs(map.output);
-    const video = outputs.find((o) => o.type === "video") ?? outputs[0];
+    const video = outputs.find((o) => o.type === "video" || o.type === "audio") ?? outputs[0];
     if (!video) {
       const seen = job.outputs.map((o) => `${o.name}:${o.type}`).join(", ") || "none";
       throw new Error(`Comfy job ${job.id} (${job.status}) produced no output on node ${map.output}; outputs: ${seen}`);
@@ -222,6 +252,36 @@ export class FakeProvider implements VideoProvider {
     }
     const video = await fs.readFile(fixture);
     return { video: new Uint8Array(video), mime: "video/mp4", model: "fake" };
+  }
+
+  /** Makes a local stand-in with ffmpeg: a still of the first uploaded image (or a test pattern) with a tone. */
+  async runGraph(input: GraphJob): Promise<GenerateOutput> {
+    for (let p = 10; p <= 90; p += 40) {
+      await new Promise((r) => setTimeout(r, this.delayMs / 3));
+      input.onProgress?.(p, "Pretending to render");
+    }
+    const { run, withTempDir } = await import("./transcode.js");
+    const bytes = await withTempDir(async (dir) => {
+      const out = path.join(dir, input.kind === "audio" ? "out.mp3" : "out.mp4");
+      const seconds = String(input.seconds);
+      if (input.kind === "image") {
+        const png = path.join(dir, "out.png");
+        await run(["-f", "lavfi", "-i", "testsrc2=size=768x1024", "-frames:v", "1", png], 30_000);
+        return new Uint8Array(await fs.readFile(png));
+      }
+      if (input.kind === "audio") {
+        await run(["-f", "lavfi", "-i", `sine=frequency=330:duration=${seconds}`, "-ac", "2", out], 60_000);
+      } else {
+        const image = input.uploads.find(([, , , name]) => /\.(jpe?g|png)$/i.test(name));
+        const picture = image ? path.join(dir, "frame.jpg") : null;
+        if (image && picture) await fs.writeFile(picture, image[2]);
+        const source = picture ? ["-loop", "1", "-i", picture] : ["-f", "lavfi", "-i", "testsrc2=size=480x832:rate=24"];
+        await run([...source, "-f", "lavfi", "-i", "sine=frequency=220", "-t", seconds, "-vf", "scale=480:832:force_original_aspect_ratio=increase,crop=480:832,fps=24,format=yuv420p", "-c:v", "libx264", "-preset", "ultrafast", "-c:a", "aac", "-shortest", out], 60_000);
+      }
+      return new Uint8Array(await fs.readFile(out));
+    });
+    const mime = { audio: "audio/mpeg", image: "image/png", video: "video/mp4" }[input.kind];
+    return { video: bytes, mime, model: "fake" };
   }
 
   async resume(): Promise<GenerateOutput> {

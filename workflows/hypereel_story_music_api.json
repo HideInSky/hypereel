@@ -1,0 +1,27 @@
+{
+  "make": {
+    "class_type": "SoniloTextToMusic",
+    "_meta": {
+      "title": "Music"
+    },
+    "inputs": {
+      "prompt": "Upbeat pop dance track, punchy drums, 118 BPM",
+      "duration": 20,
+      "seed": 42
+    }
+  },
+  "out": {
+    "class_type": "SaveAudioMP3",
+    "inputs": {
+      "audio": [
+        "make",
+        0
+      ],
+      "filename_prefix": "hypereel_music",
+      "quality": "V0"
+    },
+    "_meta": {
+      "title": "Save audio"
+    }
+  }
+}

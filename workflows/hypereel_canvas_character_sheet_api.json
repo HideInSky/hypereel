@@ -1,0 +1,68 @@
+{
+  "img_1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "reference_1.png"
+    },
+    "_meta": {
+      "title": "Reference 1"
+    }
+  },
+  "img_2": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "reference_2.png"
+    },
+    "_meta": {
+      "title": "Reference 2"
+    }
+  },
+  "batch_2": {
+    "class_type": "ImageBatch",
+    "inputs": {
+      "image1": [
+        "img_1",
+        0
+      ],
+      "image2": [
+        "img_2",
+        0
+      ]
+    },
+    "_meta": {
+      "title": "Batch the references"
+    }
+  },
+  "make": {
+    "class_type": "GeminiNanoBanana2",
+    "_meta": {
+      "title": "Nano Banana 2"
+    },
+    "inputs": {
+      "prompt": "A clean character reference sheet of the person in the reference images, on a plain light grey background, in one image: a full-body front view, a full-body side view, a full-body back view, and a large face close-up. The same face, hair, body and outfit in every view, evenly lit, photorealistic. No text, no labels, no logos.",
+      "images": [
+        "batch_2",
+        0
+      ],
+      "model": "Nano Banana 2 (Gemini 3.1 Flash Image)",
+      "seed": 42,
+      "aspect_ratio": "16:9",
+      "resolution": "1K",
+      "response_modalities": "IMAGE",
+      "thinking_level": "MINIMAL"
+    }
+  },
+  "out": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "make",
+        0
+      ],
+      "filename_prefix": "hypereel_image"
+    },
+    "_meta": {
+      "title": "Save image"
+    }
+  }
+}

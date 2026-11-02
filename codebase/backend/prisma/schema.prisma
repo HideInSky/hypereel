@@ -27,6 +27,11 @@ model Generation {
   genre       String
   /// Name of a custom effect at render time (built-in names come from effects.ts)
   effectName  String?
+  /// Set when this clip is a shot in a story: "continue" or "restage"
+  shotMode    String?
+  sequenceId  String?
+  /// Set when the clip was made on a canvas
+  canvasId    String?
   caption     String?
   prompt      String
   /// Scene written by the script-writer LLM node (null for static-template clips)
@@ -65,4 +70,83 @@ model CustomEffect {
 
   @@index([sessionId, createdAt])
   @@index([ip, createdAt])
+}
+
+/// A story: clips in order (the first clip, plus shots added before and after it)
+/// and the sound layers that play over all of them.
+model Sequence {
+  id           String    @id @default(cuid())
+  title        String    @default("Untitled story")
+  sourceId     String    // the clip the story grew from
+  shots        Json      // ordered Generation ids
+  audio        Json      @default("[]") // sound layers, see src/services/sequenceAudio.ts
+  sessionId    String
+  ip           String
+  editedAt     DateTime  @default(now()) // last change to shots or sound
+  exportStatus String?   // rendering | ready | failed
+  exportPath   String?
+  exportError  String?
+  exportedAt   DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  @@index([sessionId, createdAt])
+}
+
+/// A sound made for a story: AI music, an AI sound effect, or a clip's own audio.
+model AudioClip {
+  id         String   @id @default(cuid())
+  kind       String   // music | sfx | original
+  shotId     String?  // for "original": the clip it came from, so its layer can move with that clip
+  prompt     String?
+  label      String
+  seconds    Float
+  status     String   @default("queued") // queued | running | succeeded | failed
+  path       String?
+  error      String?
+  comfyJobId String?
+  sessionId  String
+  ip         String
+  createdAt  DateTime @default(now())
+
+  @@index([sessionId, createdAt])
+  @@index([ip, createdAt])
+  @@index([createdAt])
+}
+
+/// A free board of assets and videos. Card positions live in `board`; what the cards
+/// show lives in Asset and Generation rows.
+model Canvas {
+  id        String   @id @default(cuid())
+  title     String   @default("Untitled canvas")
+  board     Json     // { cards: [{ id, kind, refId, x, y }], viewport: { x, y, zoom } }
+  sessionId String
+  ip        String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([sessionId, updatedAt])
+}
+
+/// An image, a character (one or more photos) or a character sheet on a canvas.
+model Asset {
+  id         String   @id @default(cuid())
+  canvasId   String
+  kind       String   // image | character | sheet
+  name       String
+  status     String   @default("queued") // queued | running | succeeded | failed
+  paths      Json     @default("[]") // stored image keys
+  prompt     String?
+  sources    Json     @default("[]") // asset ids it was made from
+  generated  Boolean  @default(false) // made by a model, so it counts against the caps
+  error      String?
+  comfyJobId String?
+  sessionId  String
+  ip         String
+  createdAt  DateTime @default(now())
+
+  @@index([canvasId, createdAt])
+  @@index([sessionId, createdAt])
+  @@index([ip, createdAt])
+  @@index([createdAt])
 }

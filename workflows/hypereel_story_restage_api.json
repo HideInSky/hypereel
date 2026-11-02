@@ -1,0 +1,60 @@
+{
+  "img_1": {
+    "class_type": "LoadImage",
+    "inputs": {
+      "image": "image_1.png"
+    },
+    "_meta": {
+      "title": "Character 1"
+    }
+  },
+  "motion": {
+    "class_type": "LoadVideo",
+    "inputs": {
+      "file": "motion.mp4"
+    },
+    "_meta": {
+      "title": "Video 1: the moves to copy"
+    }
+  },
+  "video": {
+    "class_type": "MinimaxHailuo03ReferenceNode",
+    "_meta": {
+      "title": "MiniMax H3 Max (references)"
+    },
+    "inputs": {
+      "model": "MiniMax H3 Max",
+      "model.prompt": "Image 1 shows the character. Video 1 shows the moves. She performs exactly the same moves as in Video 1, with the same timing and framing, on a rainy city street at night.",
+      "model.resolution": "480P",
+      "model.ratio": "9:16",
+      "model.duration": 5,
+      "model.prompt_expansion_mode": "balanced",
+      "model.reference_detail": "standard",
+      "model.reference_images.image_1": [
+        "img_1",
+        0
+      ],
+      "model.reference_videos.video_1": [
+        "motion",
+        0
+      ],
+      "seed": 42,
+      "watermark": false
+    }
+  },
+  "out": {
+    "class_type": "SaveVideo",
+    "inputs": {
+      "video": [
+        "video",
+        0
+      ],
+      "filename_prefix": "hypereel_restage",
+      "format": "auto",
+      "format.codec": "auto"
+    },
+    "_meta": {
+      "title": "Save video"
+    }
+  }
+}

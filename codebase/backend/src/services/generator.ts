@@ -1,7 +1,7 @@
 // Orchestrates one generation: DB row -> provider call -> store video -> DB row.
 // Runs in-process and async (fire-and-forget from the route). For a hackathon
 // scale this is fine; a queue (BullMQ etc.) would be the next step.
-import type { PrismaClient } from "@prisma/client";
+import type { Prisma, PrismaClient } from "@prisma/client";
 import sharp from "sharp";
 import type { GenerateOutput, VideoProvider } from "./comfy.js";
 import type { Storage } from "./storage.js";
@@ -40,6 +40,9 @@ export class LimitExceededError extends Error {
   }
 }
 
+/** The SaveVideo node in story graphs (services/workflows.ts). */
+export const SHOT_OUTPUT_NODE = "out";
+
 // Any fixed number: it names the Postgres lock that guards "check caps, then insert".
 const CAP_LOCK_ID = 727_001;
 
@@ -53,6 +56,9 @@ export async function createGeneration(
     aspectRatio: string;
     sessionId: string;
     ip: string;
+    /** Set when made on a canvas: the canvas, and which asset each reference came from. */
+    canvasId?: string;
+    assetIds?: string[];
   },
 ) {
   const { effect } = args;
@@ -61,46 +67,63 @@ export async function createGeneration(
   const paths = await Promise.all(jpegs.map((j) => deps.storage.put(j, "jpg")));
   const prompt = buildPromptFor(effect, args.references, args.userPrompt);
 
-  // Checking the caps and inserting the row must be one atomic step. Otherwise parallel
-  // requests all see "under the cap" and all get through, each costing real money. The
-  // lock is released at commit and works across instances, because it lives in Postgres.
-  let row;
-  try {
-    row = await deps.db.$transaction(
-      async (tx) => {
-        await tx.$queryRaw`SELECT pg_advisory_xact_lock(${CAP_LOCK_ID})::text`;
-        const limit = await checkLimits(tx, deps.cfg, { sessionId: args.sessionId, ip: args.ip });
-        if (!limit.ok) throw new LimitExceededError(limit.reason, limit.message);
-        return tx.generation.create({
-          data: {
-            genre: effect.id, // column keeps its old name; it now holds the effect id
-            effectName: getEffect(effect.id) ? null : effect.label,
-            caption: args.userPrompt || null,
-            prompt,
-            model: deps.provider.name,
-            inputPath: paths[0]!,
-            posterPath: paths[0]!, // the character photo doubles as the poster until the video exists
-            references: args.references.map((r, i) => ({ role: r.role, path: paths[i]! })),
-            resolution: args.resolution,
-            aspectRatio: args.aspectRatio,
-            sessionId: args.sessionId,
-            ip: args.ip,
-          },
-        });
-      },
-      { maxWait: 15_000, timeout: 15_000 },
-    );
-  } catch (err) {
-    await Promise.all(paths.map((p) => deps.storage.remove(p).catch(() => {})));
-    throw err;
-  }
+  const row = await reserveGeneration(
+    deps,
+    {
+      genre: effect.id, // column keeps its old name; it now holds the effect id
+      effectName: getEffect(effect.id) ? null : effect.label,
+      caption: args.userPrompt || null,
+      prompt,
+      model: deps.provider.name,
+      inputPath: paths[0]!,
+      posterPath: paths[0]!, // the character photo doubles as the poster until the video exists
+      references: args.references.map((r, i) => ({ role: r.role, path: paths[i]!, ...(args.assetIds?.[i] ? { assetId: args.assetIds[i] } : {}) })),
+      canvasId: args.canvasId ?? null,
+      resolution: args.resolution,
+      aspectRatio: args.aspectRatio,
+      sessionId: args.sessionId,
+      ip: args.ip,
+    },
+    paths,
+  );
   // Fire and forget; status is polled by the client.
   void runGeneration(deps, row.id, jpegs, effect.seconds).catch((err) => deps.log.error({ id: row.id, err }, "generation crashed"));
   return row;
 }
 
+/**
+ * Checks the caps and inserts the row as one atomic step. Otherwise parallel requests
+ * all see "under the cap" and all get through, each costing real money. The lock is
+ * released at commit and works across instances, because it lives in Postgres.
+ * On failure, the given stored files are removed. `afterCreate` runs in the same
+ * transaction, for callers that must link the row somewhere atomically.
+ */
+export async function reserveGeneration(
+  deps: Pick<GeneratorDeps, "db" | "cfg" | "storage">,
+  data: Prisma.GenerationUncheckedCreateInput,
+  ownedPaths: string[],
+  afterCreate?: (tx: Prisma.TransactionClient, id: string) => Promise<void>,
+) {
+  try {
+    return await deps.db.$transaction(
+      async (tx) => {
+        await tx.$queryRaw`SELECT pg_advisory_xact_lock(${CAP_LOCK_ID})::text`;
+        const limit = await checkLimits(tx, deps.cfg, { sessionId: data.sessionId, ip: data.ip });
+        if (!limit.ok) throw new LimitExceededError(limit.reason, limit.message);
+        const row = await tx.generation.create({ data });
+        await afterCreate?.(tx, row.id);
+        return row;
+      },
+      { maxWait: 15_000, timeout: 15_000 },
+    );
+  } catch (err) {
+    await Promise.all(ownedPaths.map((p) => deps.storage.remove(p).catch(() => {})));
+    throw err;
+  }
+}
+
 /** Throttled progress writer: the DB gets at most one update per second. */
-function progressWriter(db: PrismaClient, id: string) {
+export function progressWriter(db: PrismaClient, id: string) {
   let lastWrite = 0;
   return (percent: number) => {
     const now = Date.now();
@@ -111,7 +134,7 @@ function progressWriter(db: PrismaClient, id: string) {
 }
 
 /** Runs a provider call, stores the video, and records the outcome on the row. */
-async function settle(deps: GeneratorDeps, id: string, call: () => Promise<GenerateOutput>): Promise<void> {
+export async function settle(deps: GeneratorDeps, id: string, call: () => Promise<GenerateOutput>): Promise<void> {
   const { db, storage, log } = deps;
   try {
     const out = await call();
@@ -181,6 +204,10 @@ export async function resumeInterrupted(deps: GeneratorDeps): Promise<{ finished
       data: { status: "failed", error: "The server restarted before this render started. Please try again." },
     });
   }
+  // Sound and image jobs cost cents and exports cost nothing, so those are simply marked failed.
+  await db.asset.updateMany({ where: { status: { in: ["queued", "running"] } }, data: { status: "failed", error: "The server restarted. Please try again." } });
+  await db.audioClip.updateMany({ where: { status: { in: ["queued", "running"] } }, data: { status: "failed", error: "The server restarted. Please try again." } });
+  await db.sequence.updateMany({ where: { exportStatus: "rendering" }, data: { exportStatus: "failed", exportError: "The server restarted. Please export again." } });
   const finished = Promise.all(
     rows.flatMap((row) => {
       const jobId = row.comfyJobId;
@@ -188,7 +215,12 @@ export async function resumeInterrupted(deps: GeneratorDeps): Promise<{ finished
       log.info({ id: row.id, jobId }, "resuming interrupted generation");
       return [
         settle(deps, row.id, () =>
-          provider.resume({ jobId, onProgress: progressWriter(db, row.id), signal: AbortSignal.timeout(cfg.JOB_TIMEOUT_MINUTES * 60_000) }),
+          provider.resume({
+            jobId,
+            outputNode: row.shotMode ? SHOT_OUTPUT_NODE : undefined,
+            onProgress: progressWriter(db, row.id),
+            signal: AbortSignal.timeout(cfg.JOB_TIMEOUT_MINUTES * 60_000),
+          }),
         ),
       ];
     }),

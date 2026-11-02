@@ -20,7 +20,8 @@ const PLAYBACK = [...COMMON, "-preset", "veryfast", "-crf", "23", "-maxrate", "1
 /** For gallery tiles: small, silent, and with a steady bitrate so many can play at once. */
 const GALLERY = [...COMMON, "-vf", "scale=480:-2", "-preset", "slow", "-crf", "28", "-maxrate", "1000k", "-bufsize", "2000k", "-an"];
 
-function run(args: string[], timeoutMs: number): Promise<void> {
+/** Runs the bundled ffmpeg. Rejects with the start of stderr if it fails. */
+export function run(args: string[], timeoutMs: number): Promise<void> {
   return new Promise((resolve, reject) => {
     if (!ffmpegPath) return reject(new Error("ffmpeg binary not available on this platform"));
     const child = spawn(ffmpegPath, ["-hide_banner", "-loglevel", "error", "-y", ...args], { stdio: ["ignore", "ignore", "pipe"] });
@@ -36,7 +37,7 @@ function run(args: string[], timeoutMs: number): Promise<void> {
   });
 }
 
-async function withTempDir<T>(fn: (dir: string) => Promise<T>): Promise<T> {
+export async function withTempDir<T>(fn: (dir: string) => Promise<T>): Promise<T> {
   const dir = path.join(os.tmpdir(), `hypereel-${randomBytes(6).toString("hex")}`);
   await fs.mkdir(dir, { recursive: true });
   try {

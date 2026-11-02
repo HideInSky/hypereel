@@ -1,0 +1,30 @@
+{
+  "make": {
+    "class_type": "ElevenLabsTextToSoundEffects",
+    "_meta": {
+      "title": "Sound effect"
+    },
+    "inputs": {
+      "text": "Steady rain on a city street at night",
+      "model": "eleven_sfx_v2",
+      "model.duration": 10,
+      "model.loop": false,
+      "model.prompt_influence": 0.5,
+      "output_format": "mp3_44100_192"
+    }
+  },
+  "out": {
+    "class_type": "SaveAudioMP3",
+    "inputs": {
+      "audio": [
+        "make",
+        0
+      ],
+      "filename_prefix": "hypereel_sfx",
+      "quality": "V0"
+    },
+    "_meta": {
+      "title": "Save audio"
+    }
+  }
+}

@@ -2,6 +2,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { ApiError, createGeneration, fetchCustomEffect, fetchEffects, fetchHistory, fetchMyEffects, fetchRecipe, workflowUrl, type Effect, type Generation } from "./api";
 import Sidebar, { type FormState } from "./Sidebar";
 import Stage from "./Stage";
+import StoryView from "./Story";
+import CanvasView from "./Canvas";
+import CanvasList from "./CanvasList";
 import HowItWorks from "./HowItWorks";
 import LazyClip from "./LazyClip";
 import Masonry from "./Masonry";
@@ -11,6 +14,12 @@ import { CheckIcon, ClockIcon, GridIcon, InfoIcon, PencilIcon, SearchIcon } from
 type Tab = "effects" | "studio" | "history" | "how";
 
 const viewFromUrl = () => new URLSearchParams(window.location.search).get("v");
+const storyFromUrl = () => new URLSearchParams(window.location.search).get("story");
+/** null: not in Canvas. "": the list of canvases. Anything else: one canvas. */
+const canvasFromUrl = () => {
+  const q = new URLSearchParams(window.location.search);
+  return q.has("canvas") ? (q.get("canvas") ?? "") : null;
+};
 const sharedEffect = () => new URLSearchParams(window.location.search).get("effect");
 
 export default function App() {
@@ -20,6 +29,8 @@ export default function App() {
   const [search, setSearch] = useState("");
   const [viewId, setViewId] = useState<string | null>(viewFromUrl);
   const [seed, setSeed] = useState<Generation | null>(null);
+  const [storyId, setStoryId] = useState<string | null>(storyFromUrl);
+  const [canvasId, setCanvasId] = useState<string | null>(canvasFromUrl);
   const [history, setHistory] = useState<Generation[]>([]);
   const [draft, setDraft] = useState<Draft>({ recipe: BLANK_RECIPE, remixOf: null });
   const [busy, setBusy] = useState(false);
@@ -53,9 +64,13 @@ export default function App() {
   }, []);
   useEffect(refreshHistory, [refreshHistory]);
 
-  // The open clip lives in the URL, so refresh, back and shared links all work.
+  // The open clip, story or canvas lives in the URL, so refresh, back and shared links all work.
   useEffect(() => {
-    const onPop = () => setViewId(viewFromUrl());
+    const onPop = () => {
+      setViewId(viewFromUrl());
+      setStoryId(storyFromUrl());
+      setCanvasId(canvasFromUrl());
+    };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
   }, []);
@@ -63,11 +78,22 @@ export default function App() {
     window.history.pushState(null, "", id ? `/?v=${encodeURIComponent(id)}` : "/");
     setSeed(gen);
     setViewId(id);
+    setStoryId(null);
+    setCanvasId(null);
   }, []);
+  /** "" opens the list of canvases. */
+  const openCanvas = useCallback((id: string) => {
+    window.history.pushState(null, "", id ? `/?canvas=${encodeURIComponent(id)}` : "/?canvas");
+    setCanvasId(id);
+    setViewId(null);
+    setStoryId(null);
+  }, []);
+  const inCanvas = canvasId !== null;
+  const open = viewId ?? storyId ?? canvasId;
 
   const showTab = (next: Tab) => {
     setTab(next);
-    if (viewId) openClip(null);
+    if (open !== null) openClip(null);
     if (next === "history") refreshHistory();
   };
 
@@ -149,14 +175,21 @@ export default function App() {
           <img src="/favicon.svg" alt="" width={22} height={22} /> hypereel
         </button>
         <nav className="topnav" aria-label="Main">
-          <button type="button" className={!viewId && tab === "effects" ? "on" : ""} onClick={() => showTab("effects")}>Effects</button>
-          <button type="button" className={!viewId && tab === "history" ? "on" : ""} onClick={() => showTab("history")}>History</button>
+          <button type="button" className={open === null && tab === "effects" ? "on" : ""} onClick={() => showTab("effects")}>Effects</button>
+          <button type="button" className={inCanvas ? "on" : ""} aria-current={inCanvas ? "page" : undefined} onClick={() => openCanvas("")}>Canvas</button>
+          <button type="button" className={open === null && tab === "history" ? "on" : ""} onClick={() => showTab("history")}>History</button>
           <a href="https://github.com/HideInSky/hypereel" target="_blank" rel="noreferrer">GitHub</a>
         </nav>
         <span className="topbar-credit">Built with MiniMax H3 on ComfyUI</span>
       </header>
 
       <div className="workspace">
+        {inCanvas ? (
+          <main className="panel panel--canvas">
+            {canvasId ? <CanvasView key={canvasId} id={canvasId} effects={effects} onList={() => openCanvas("")} toast={toast} /> : <CanvasList onOpen={openCanvas} />}
+          </main>
+        ) : (
+        <>
         <Sidebar
           effect={effect}
           form={form}
@@ -174,12 +207,12 @@ export default function App() {
         <main className="panel">
           <div className="panel-bar">
             <div className="tabs" role="tablist">
-              <button type="button" role="tab" aria-selected={!viewId && tab === "effects"} className={!viewId && tab === "effects" ? "on" : ""} onClick={() => showTab("effects")}><GridIcon /> Effects</button>
-              <button type="button" role="tab" aria-selected={!viewId && tab === "studio"} className={!viewId && tab === "studio" ? "on" : ""} onClick={() => showTab("studio")}><PencilIcon /> Studio</button>
-              <button type="button" role="tab" aria-selected={!viewId && tab === "history"} className={!viewId && tab === "history" ? "on" : ""} onClick={() => showTab("history")}><ClockIcon /> History</button>
-              <button type="button" role="tab" aria-selected={!viewId && tab === "how"} className={!viewId && tab === "how" ? "on" : ""} onClick={() => showTab("how")}><InfoIcon /> How it works</button>
+              <button type="button" role="tab" aria-selected={open === null && tab === "effects"} className={open === null && tab === "effects" ? "on" : ""} onClick={() => showTab("effects")}><GridIcon /> Effects</button>
+              <button type="button" role="tab" aria-selected={open === null && tab === "studio"} className={open === null && tab === "studio" ? "on" : ""} onClick={() => showTab("studio")}><PencilIcon /> Studio</button>
+              <button type="button" role="tab" aria-selected={open === null && tab === "history"} className={open === null && tab === "history" ? "on" : ""} onClick={() => showTab("history")}><ClockIcon /> History</button>
+              <button type="button" role="tab" aria-selected={open === null && tab === "how"} className={open === null && tab === "how" ? "on" : ""} onClick={() => showTab("how")}><InfoIcon /> How it works</button>
             </div>
-            {!viewId && tab === "effects" && (
+            {open === null && tab === "effects" && (
               <label className="search">
                 <SearchIcon />
                 <input type="search" placeholder="Search" aria-label="Search effects" value={search} onChange={(e) => setSearch(e.target.value)} />
@@ -188,7 +221,9 @@ export default function App() {
           </div>
 
           <div className="panel-body">
-            {viewId ? (
+            {storyId ? (
+              <StoryView id={storyId} seed={null} onBack={() => showTab("effects")} onOpenClip={(id) => openClip(id)} toast={toast} />
+            ) : viewId ? (
               <Stage id={viewId} seed={seed} onBack={() => showTab("effects")} onDone={onStageDone} toast={toast} />
             ) : tab === "effects" ? (
               shown.length ? (
@@ -238,6 +273,8 @@ export default function App() {
             )}
           </div>
         </main>
+        </>
+        )}
       </div>
 
       {toastText && <div className="toast" role="status">{toastText}</div>}

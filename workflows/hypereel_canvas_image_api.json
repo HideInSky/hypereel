@@ -1,0 +1,30 @@
+{
+  "make": {
+    "class_type": "GeminiNanoBanana2",
+    "_meta": {
+      "title": "Nano Banana 2"
+    },
+    "inputs": {
+      "prompt": "A sunlit rooftop at golden hour, empty, wide shot. Photorealistic. No text, no logos.",
+      "model": "Nano Banana 2 (Gemini 3.1 Flash Image)",
+      "seed": 42,
+      "aspect_ratio": "9:16",
+      "resolution": "1K",
+      "response_modalities": "IMAGE",
+      "thinking_level": "MINIMAL"
+    }
+  },
+  "out": {
+    "class_type": "SaveImage",
+    "inputs": {
+      "images": [
+        "make",
+        0
+      ],
+      "filename_prefix": "hypereel_image"
+    },
+    "_meta": {
+      "title": "Save image"
+    }
+  }
+}

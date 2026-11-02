@@ -1,20 +1,21 @@
 # Submission kit
 
-## Demo video script (about 90 seconds)
+## Demo video script (about 110 seconds)
 
 Most Innovative requires the demo to explain why the entry is innovative, so say it out loud.
 
 | Time | Shot | Voiceover |
 |---|---|---|
-| 0:00-0:10 | Gallery playing, scroll slowly | "Viral video effects are all closed. You get the ones the app ships. hypereel makes an effect something you can write, remix and share." |
-| 0:10-0:30 | Pick an effect, press Remix. Studio opens with its timed beats and the live prompt | "Any effect opens as an editable recipe: camera, timed beats and sound. On the right is the exact prompt MiniMax H3 will read." |
-| 0:30-0:45 | Change a beat, press Save, press Copy link | "Change a beat, save it, and it has its own link. Anyone who opens it can run it or remix it again." |
-| 0:45-1:00 | Add a photo, Generate, cut to the finished clip with sound | "One photo, and H3 renders picture and sound together." |
-| 1:00-1:20 | Press ComfyUI, drop the file into ComfyUI. Then show the hypereel Effect node's dropdown | "Every effect exports as a normal ComfyUI workflow. There's also a custom node that lists every recipe. An effect is just a JSON file, so adding one is a pull request, no code." |
-| 1:20-1:30 | README and community folder | "Open format, open source, MIT licensed. #OpenSourceHiggsfield" |
+| 0:00-0:08 | The finished story playing: home, then stage, then a rainy street | "This started as one five-second clip." |
+| 0:08-0:25 | Canvas: upload a character, press "Character sheet", add a stage image | "Every AI clip starts from assets. On the canvas you make them: characters, character sheets, places. The sheet keeps the face and outfit the same in every shot." |
+| 0:25-0:40 | Select the cards, "Make a video", the clip appears linked to them | "Pick the cards, and MiniMax H3 renders the clip with sound. The lines show what each clip was made from." |
+| 0:40-1:00 | "+ After" (Continue), then show the clip's last frame next to the new shot's first frame | "Most AI clips are dead ends: the next generation is a different person in a different world. Continue starts on this clip's exact last frame, so the join is invisible. Before works too: we draw an opening frame, and H3 animates into the clip." |
+| 1:00-1:20 | "+ Before" (Restage): same moves, rainy New York. Play the two side by side | "Restage copies the moves into a new world. The clip goes into H3 as Video 1, so the dance stays the same, beat for beat." |
+| 1:20-1:40 | The story strip: original sound, rain from the library, AI music, drag their start times, Export | "One soundtrack across every cut: the original sound, music and sound effects as layers. Export is free." |
+| 1:40-1:50 | The workflows folder in ComfyUI | "Every step is a ComfyUI workflow in the repo. Open source, MIT licensed. #OpenSourceHiggsfield" |
 
 ### Why this is innovative (for the form)
-> Most effect apps treat an effect as a closed preset. hypereel defines an open format, hypereel-effect/1: an effect is a JSON file with camera, timed beats, sound and product rules. The same file runs in the web app, shares by link, remixes, exports as a ComfyUI workflow, and appears in a custom node's dropdown. Anyone can add an effect with a pull request and no code. A parity test keeps the app and the node producing identical MiniMax H3 prompts.
+> Effect apps make isolated five-second clips, and the next generation never matches. hypereel's Canvas treats a clip as the middle of a story. You build assets on a board (characters, open-template character sheets, places), make a clip from them with MiniMax H3, then extend it backwards or forwards. Continue joins through a shared frame, so cuts are invisible: the shot after starts on the clip's last frame, and for the shot before, Nano Banana draws an opening frame that H3 animates into the clip's first frame. Restage feeds the clip to H3 as a reference video to replay the same moves in a new place, style or light. A layered soundtrack (original audio, AI music, AI sound effects, library sounds) runs across every cut. Every step is a ComfyUI workflow included in the repo.
 
 **Tools to mention:** ComfyUI + Comfy Cloud, MiniMax H3 Max (partner node), Nano Banana 2 (example references only), @comfyorg/sdk, Fastify, Prisma/PostgreSQL, React/Vite, sharp, Docker, GitHub Actions, Railway.
 

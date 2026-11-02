@@ -12,6 +12,29 @@ Render example clips for more effects (each one costs real credits):
 npm run previews -w codebase/backend -- melting earth-zoom
 ```
 
+## Canvas: assets, characters and stories on one board
+
+Next to Effects there's a Canvas: a free board you can pan and zoom, where everything you make is a card and lines show what was made from what. A user can keep several canvases, each with its own link.
+
+- **Images.** Upload one, or describe it and Nano Banana 2 makes it, optionally from other cards.
+- **Characters.** A name and up to 4 photos, or describe an invented person.
+- **Character sheets.** One click turns a character into a single image with front, side and back views and a face close-up. Sheets are the usual fix for faces and outfits drifting between clips, and here the template is open: see `SHEET_PROMPT` in [workflows.ts](codebase/backend/src/services/workflows.ts).
+- **Videos.** Pick cards as the character, location and products, then an effect or your own prompt. MiniMax H3 renders picture and sound together.
+- **Stories.** Any finished video can grow before and after (below), shown left to right on the board, with a story strip for sound and export.
+
+Uploads, moving cards and exporting are free. Anything a model makes costs credits, so it goes through daily caps that are checked under a Postgres lock.
+
+## Stories: every clip is the middle of a video
+
+An AI clip is usually a dead end: five seconds, and the next generation is a different person in a different world. In hypereel a finished clip can grow in both directions:
+
+- **Continue** picks up exactly where a clip ends, or leads exactly into where it starts. The shot after a clip begins on that clip's last frame, and the shot before it ends on that clip's first frame, so the join is invisible. A shot before a clip needs an opening frame, so Nano Banana draws one (same person and pose, new place) at the clip's exact size, and H3 animates from it into the clip.
+- **Restage** keeps the moves and changes the world: the neighbouring clip goes into H3 as "Video 1", with the character photos and any new people, and the prompt asks for the same moves in a new place, style or light. Joins are cuts, like a music video.
+- **Sound for the whole story**, as layers that play at the same time: a clip's original sound (keep it, delete it, copy it, move it), AI music (Sonilo) and AI sound effects (ElevenLabs), and ready-made library sounds. Each layer has its own start, length, volume and loop. Once any layer exists, the shots' own sound is muted, so the soundtrack runs across every cut.
+- **Export** joins the shots and mixes the layers into one video with ffmpeg. It costs nothing and takes seconds. Anyone with the link can watch; only the maker can edit.
+
+Every shot is a normal clip underneath, so it goes through the same spending caps and restart recovery. The ComfyUI graphs are built in [workflows.ts](codebase/backend/src/services/workflows.ts), and copies to open in the ComfyUI editor are in [workflows/](workflows) (`hypereel_story_*`).
+
 ## Effects are open recipes
 
 Higgsfield's effects are closed: you get what they ship. In hypereel an effect is a small JSON file in an open format, `hypereel-effect/1`, and that one file works everywhere:
@@ -48,8 +71,9 @@ flowchart LR
 **Example clips.** The clips in `codebase/frontend/public/effects/` were rendered by this project from invented people and products made with Nano Banana 2. They contain no third-party footage. The gallery opens with a showcase where every effect has its own person, scene and shape: see [render-showcase.ts](codebase/backend/scripts/render-showcase.ts) and [showcase.ts](codebase/backend/src/showcase.ts).
 
 ### Tools and models used
-- **ComfyUI / Comfy Cloud** runs the workflow. **MiniMax H3 Max** is the core model, via its ComfyUI partner node.
-- **Nano Banana 2** (a ComfyUI partner node) made the fictional reference images for the example clips only. It is not used at runtime.
+- **ComfyUI / Comfy Cloud** runs the workflows. **MiniMax H3 Max** is the core model, via its ComfyUI partner nodes: Reference to Video for effects and Restage, First-Last-Frame to Video for Continue.
+- **Sonilo** (music) and **ElevenLabs** (sound effects) partner nodes make story sound on request.
+- **Nano Banana 2** (a ComfyUI partner node) draws the opening frame for a Continue shot placed before a clip. It also made the fictional reference images for the example clips.
 - **@comfyorg/sdk** submits jobs, streams progress and downloads outputs.
 - Fastify, Prisma + PostgreSQL, React + Vite, sharp.
 
