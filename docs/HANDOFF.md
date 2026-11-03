@@ -100,7 +100,7 @@ Clone the repo, then copy these by hand from the old laptop:
 - **`.env`** at the repo root, and **`codebase/backend/.env`**. They hold the Comfy API key and local config. Transfer them privately (AirDrop or a USB drive), never through git, chat or email.
 - **`launch-video/`** (about 1.2 GB, kept out of git via `.git/info/exclude`). It holds the launch-film sources: a HyperFrames film, a Remotion montage, and a local voice setup in `.venv` that has to be rebuilt on the new machine.
 - **The demo recordings** on the Desktop (`hypereel-demo-v1.mp4`, `hypereel-demo-v2.mp4`, `hypereel-launch-video.mp4` and the screen recordings), if you want them.
-- **`codebase/backend/test/fixtures/sample.mp4`**, which fake mode needs. Any short mp4 works.
+- **`codebase/backend/test/fixtures/sample.mp4`** (optional): fake mode uses it for effect clips, and makes a test pattern without it.
 - **`codebase/backend/data/`** (optional): the local database and test media. Everything in it was made in fake mode, so a fresh start is fine.
 - **Accounts:** the new laptop needs Railway, GitHub (with push access) and Comfy platform logins. GitHub CLI isn't set up, so pushes use git over HTTPS.
 

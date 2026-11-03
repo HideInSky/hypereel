@@ -21,13 +21,19 @@ Most Innovative requires the demo to explain why the entry is innovative, so say
 
 ## Social post (X / LinkedIn / Reddit)
 
-> One photo. The body vanishes. The clothes hit the floor.
+> AI video apps make 5-second dead ends. The next clip is a different person in a different world.
 >
-> **hypereel** is an open-source take on viral video effects: Floating Fall, Vanish and Eyes In, plus a Studio to write and remix your own. Add a character, plus a location and products if you like, and MiniMax H3 renders the clip with sound, running as a ComfyUI workflow on Comfy Cloud.
+> **hypereel** treats a clip as the middle of a story. Build characters, character sheets and places on a canvas, make a clip with MiniMax H3, then grow it: + After starts on the clip's exact last frame, + Before animates into its first, and Restage replays the same moves somewhere new. One soundtrack runs across every cut, and every step is a ComfyUI workflow on Comfy Cloud.
 >
-> Try it: <APP_URL>
+> Try it: https://hypereel-production.up.railway.app
 > Code (MIT): https://github.com/HideInSky/hypereel
 >
+> #OpenSourceHiggsfield @ComfyUI
+
+**Short version for X** (fits 280 characters; attach the video):
+
+> AI video apps make 5-second dead ends. hypereel turns a clip into a story: build characters on a canvas, make a clip with MiniMax H3, then extend it before and after with seamless cuts. Open source, built on ComfyUI.
+> https://hypereel-production.up.railway.app
 > #OpenSourceHiggsfield @ComfyUI
 
 ## Checklist

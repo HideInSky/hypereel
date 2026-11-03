@@ -39,7 +39,7 @@ npm run lint && npm run typecheck && npm test && npm run build   # all must pass
 `.claude/launch.json` has `db`, `backend`, `backend-fake` and `frontend` configs for the browser preview.
 
 ## Gotchas
-- **Fake mode** needs any mp4 at `codebase/backend/test/fixtures/sample.mp4` (gitignored). Its music and sound effects are a sine tone, so fake "rain" doesn't sound like rain.
+- **Fake mode** uses an mp4 at `codebase/backend/test/fixtures/sample.mp4` if one exists (gitignored); otherwise it makes a 3-second test pattern with ffmpeg. Its music and sound effects are a sine tone, so fake "rain" doesn't sound like rain.
 - **Workflow files:** after changing a workflow in `src/services/workflows.ts`, run `npm run export-workflows -w codebase/backend`. Otherwise the tests fail on stale files in `workflows/`.
 - **Static files:** the backend caches the list of `frontend/dist` files at startup. After a frontend build, restart the backend.
 - **Comfy SDK:** partner nodes need `apiKey` passed again on `client.submit` (separate from the constructor key). `job.wait()` doesn't throw on failure, so use `job.result()`.

@@ -250,7 +250,16 @@ export class FakeProvider implements VideoProvider {
       await new Promise((r) => setTimeout(r, this.delayMs / 5));
       input.onProgress?.(p, "Pretending to render");
     }
-    const video = await fs.readFile(fixture);
+    const video = await fs.readFile(fixture).catch(async (err: NodeJS.ErrnoException) => {
+      if (err.code !== "ENOENT") throw err;
+      // The fixture is gitignored, so CI and fresh clones don't have it: make a short stand-in clip instead.
+      const { run, withTempDir } = await import("./transcode.js");
+      return withTempDir(async (dir) => {
+        const out = path.join(dir, "out.mp4");
+        await run(["-f", "lavfi", "-i", "testsrc2=size=480x832:rate=24", "-f", "lavfi", "-i", "sine=frequency=220", "-t", "3", "-vf", "format=yuv420p", "-c:v", "libx264", "-preset", "ultrafast", "-c:a", "aac", "-shortest", out], 60_000);
+        return fs.readFile(out);
+      });
+    });
     return { video: new Uint8Array(video), mime: "video/mp4", model: "fake" };
   }
 

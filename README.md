@@ -121,7 +121,7 @@ npm run dev -w codebase/backend               # terminal 2: API on :3000
 npm run dev -w codebase/frontend              # terminal 3: app on http://localhost:5173
 ```
 
-`COMFY_MODE=fake` (the default) skips Comfy entirely and returns a placeholder video, so you can work on the UI without spending credits. You need to drop any mp4 at `codebase/backend/test/fixtures/sample.mp4` for that mode.
+`COMFY_MODE=fake` (the default) skips Comfy entirely and returns a placeholder video, so you can work on the UI without spending credits. If you put an mp4 at `codebase/backend/test/fixtures/sample.mp4`, effect clips use it; otherwise fake mode makes a 3-second test pattern with ffmpeg.
 
 **Try the model without the app:**
 ```bash
