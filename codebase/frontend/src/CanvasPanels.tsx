@@ -5,6 +5,7 @@ import SaveToAssets from "./SaveToAssets";
 import SheetChanges from "./SheetChanges";
 import { ASPECT_RATIOS, RESOLUTIONS } from "./Sidebar";
 import { PersonIcon, PinIcon } from "./Icons";
+import { PROMPT_MAX } from "./textLimits";
 
 const KIND_LABEL: Record<Asset["kind"], string> = { image: "Image", character: "Character", sheet: "Character sheet" };
 const MAX_REFS = 4;
@@ -113,7 +114,7 @@ export function AssetForm({ canvas, kind, preset, onDone, onCancel }: AssetFormP
             <span>{character ? "Describe them" : "Describe the image"}</span>
             <textarea
               rows={4}
-              maxLength={600}
+              maxLength={PROMPT_MAX}
               value={prompt}
               placeholder={character ? "A woman in her 30s with short silver hair and a yellow raincoat" : "A quiet rooftop garden at dusk, city lights behind"}
               onChange={(e) => setPrompt(e.target.value)}
@@ -237,7 +238,7 @@ export function VideoForm({ canvas, effects, preset, onDone, onCancel }: VideoFo
         <span>{source === "effect" ? "Extra direction (optional)" : "What happens"}</span>
         <textarea
           rows={3}
-          maxLength={source === "effect" ? 300 : 800}
+          maxLength={PROMPT_MAX}
           value={prompt}
           placeholder={source === "effect" ? "Make it raining, or give them a red coat" : "She walks through the market, stops and smiles at the camera"}
           onChange={(e) => setPrompt(e.target.value)}

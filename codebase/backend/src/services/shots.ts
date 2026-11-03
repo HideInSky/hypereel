@@ -8,6 +8,7 @@ import { z } from "zod";
 import { prepareImage, progressWriter, reserveGeneration, settle, SHOT_OUTPUT_NODE, type GeneratorDeps } from "./generator.js";
 import { closestRatio, frame, probeCached } from "./media.js";
 import { beforeGraph, continueGraph, restageGraph } from "./workflows.js";
+import { DETAIL_MAX, promptText } from "../textLimits.js";
 
 const oneLine = (max: number) => z.string().transform((t) => t.replace(/\s+/g, " ").trim()).pipe(z.string().max(max)).default("");
 
@@ -15,10 +16,10 @@ export const ShotRequestSchema = z.object({
   anchorId: z.string().min(1).max(40),
   side: z.enum(["before", "after"]),
   mode: z.enum(["continue", "restage"]),
-  action: oneLine(500),
-  place: oneLine(200),
-  style: oneLine(200),
-  light: oneLine(200),
+  action: promptText().default(""),
+  place: oneLine(DETAIL_MAX),
+  style: oneLine(DETAIL_MAX),
+  light: oneLine(DETAIL_MAX),
   keepMoves: z.enum(["true", "false"]).default("true").transform((v) => v === "true"),
   seconds: z.coerce.number().pipe(z.union([z.literal(5), z.literal(6), z.literal(8)])).default(5),
 });

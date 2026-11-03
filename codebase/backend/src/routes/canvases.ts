@@ -8,6 +8,7 @@ import type { Asset, Canvas, Prisma } from "@prisma/client";
 import { z } from "zod";
 import type { AppContext } from "../app.js";
 import { getEffect, sanitizeUserPrompt, type Effect, type ReferenceRole } from "../effects.js";
+import { DETAIL_MAX, promptText } from "../textLimits.js";
 import { AssetError, AssetLimitError, copyFiles, generateAsset, pathsOf, publicAsset, uploadAsset, type SheetVariantInput } from "../services/assets.js";
 import { sheetName, VariantSchema } from "./library.js";
 import { createGeneration, LimitExceededError, type GeneratorDeps, type UploadedReference } from "../services/generator.js";
@@ -36,7 +37,7 @@ const ids = z.array(z.string().min(1).max(40)).max(9).default([]);
 
 const VideoSchema = z.object({
   effect: z.string().max(80).optional(),
-  prompt: name(500).optional(),
+  prompt: promptText().optional(),
   characters: ids,
   locations: ids,
   products: ids,
@@ -243,7 +244,7 @@ export async function canvasRoutes(app: FastifyInstance, ctx: AppContext) {
   app.post<{ Params: { id: string } }>("/api/canvases/:id/assets/generate", small, async (req, reply) => {
     const found = await owned(req, reply);
     if (!found) return;
-    const body = z.object({ kind: z.enum(["image", "character"]), name: name(60).default(""), prompt: name(500).pipe(z.string().min(3, "Describe what to make.")), sourceIds: ids.pipe(z.array(z.string()).max(4, "Use 4 reference cards at most.")) }).safeParse(req.body);
+    const body = z.object({ kind: z.enum(["image", "character"]), name: name(60).default(""), prompt: promptText().pipe(z.string().min(3, "Describe what to make.")), sourceIds: ids.pipe(z.array(z.string()).max(4, "Use 4 reference cards at most.")) }).safeParse(req.body);
     if (!body.success) return reply.code(400).send({ error: body.error.issues[0]?.message ?? "Describe what to make." });
     const sources = await assetsById(found.canvas.id, body.data.sourceIds);
     if (typeof sources === "string") return reply.code(409).send({ error: sources });
@@ -255,7 +256,7 @@ export async function canvasRoutes(app: FastifyInstance, ctx: AppContext) {
     const found = await owned(req, reply);
     if (!found) return;
     const variant = VariantSchema.safeParse(req.body ?? {});
-    if (!variant.success) return reply.code(400).send({ error: variant.error.issues[0]?.message ?? "Describe the change in 200 characters or fewer." });
+    if (!variant.success) return reply.code(400).send({ error: variant.error.issues[0]?.message ?? `Describe the change in ${DETAIL_MAX} characters or fewer.` });
     const sources = await assetsById(found.canvas.id, [req.params.assetId]);
     if (typeof sources === "string") return reply.code(409).send({ error: sources });
     const from = sources[0]!;

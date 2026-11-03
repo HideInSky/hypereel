@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { EFFECTS, buildEffectPrompt, previewUrl, sanitizeUserPrompt, tileRatio } from "../src/effects.js";
 import { SHOWCASE } from "../src/showcase.js";
+import { PROMPT_MAX } from "../src/textLimits.js";
 import { RecipeSchema, compileMotion, recipeFromEffect } from "../src/recipes.js";
 import { recipePackFiles } from "../src/recipePack.js";
 import { loadCommunityRecipes } from "../src/routes/customEffects.js";
@@ -38,7 +39,7 @@ describe("effect prompts", () => {
   });
   it("sanitizes the user prompt", () => {
     expect(sanitizeUserPrompt(" a\nb  c ")).toBe("a b c");
-    expect(sanitizeUserPrompt("x".repeat(500)).length).toBe(300);
+    expect(sanitizeUserPrompt("x".repeat(PROMPT_MAX + 500)).length).toBe(PROMPT_MAX);
     expect(sanitizeUserPrompt(undefined)).toBe("");
   });
 });

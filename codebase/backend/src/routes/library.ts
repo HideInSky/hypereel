@@ -10,6 +10,7 @@ import type { AppContext } from "../app.js";
 import { AssetLimitError, copyFiles, generateAsset, pathsOf, publicAsset, uploadAsset, variantOf } from "../services/assets.js";
 import type { GeneratorDeps } from "../services/generator.js";
 import { toPublic } from "./generations.js";
+import { DETAIL_MAX, promptText } from "../textLimits.js";
 
 /** Most items one library holds, so a session can't fill the disk. */
 export const MAX_LIBRARY_ITEMS = 500;
@@ -24,7 +25,7 @@ const BUILT_IN_IDS = new Set<string>(BUILT_IN_CATEGORIES.map((c) => c.id));
 const text = (max: number) => z.string().transform((t) => t.replace(/\s+/g, " ").trim()).pipe(z.string().max(max));
 const libraryId = z.string().min(1).max(40);
 export const VariantSchema = z
-  .object({ outfit: text(200).optional(), style: text(200).optional() })
+  .object({ outfit: promptText(DETAIL_MAX).optional(), style: promptText(DETAIL_MAX).optional() })
   .refine((v) => !(v.outfit && v.style), { message: "Change the outfit or the art style, not both at once." });
 const CategoryField = z.string().min(1).max(40).nullable().optional();
 
@@ -147,7 +148,7 @@ export async function libraryRoutes(app: FastifyInstance, ctx: AppContext) {
 
   app.post("/api/library/generate", small, async (req, reply) => {
     const body = z
-      .object({ kind: z.enum(["image", "character"]), name: text(60).default(""), prompt: text(500).pipe(z.string().min(3, "Describe what to make.")), category: CategoryField, sourceIds: z.array(libraryId).max(4, "Use 4 reference items at most.").default([]) })
+      .object({ kind: z.enum(["image", "character"]), name: text(60).default(""), prompt: promptText().pipe(z.string().min(3, "Describe what to make.")), category: CategoryField, sourceIds: z.array(libraryId).max(4, "Use 4 reference items at most.").default([]) })
       .safeParse(req.body);
     if (!body.success) return reply.code(400).send({ error: body.error.issues[0]?.message ?? "Describe what to make." });
     const sessionId = ctx.getSessionId(req, reply);
@@ -164,7 +165,7 @@ export async function libraryRoutes(app: FastifyInstance, ctx: AppContext) {
     const item = await mine(req, reply);
     if (!item) return;
     const variant = VariantSchema.safeParse(req.body ?? {});
-    if (!variant.success) return reply.code(400).send({ error: variant.error.issues[0]?.message ?? "Describe the change in 200 characters or fewer." });
+    if (!variant.success) return reply.code(400).send({ error: variant.error.issues[0]?.message ?? `Describe the change in ${DETAIL_MAX} characters or fewer.` });
     const change = variant.data;
     if (item.kind !== "character" && item.kind !== "sheet") return reply.code(400).send({ error: "Character sheets are made from a character or another sheet." });
     if (item.kind === "sheet" && !change.outfit && !change.style) return reply.code(400).send({ error: "Describe a new outfit or art style for this sheet." });
@@ -318,6 +319,6 @@ export async function libraryRoutes(app: FastifyInstance, ctx: AppContext) {
 
 export function sheetName(from: Asset, change: { outfit?: string; style?: string }): string {
   const base = from.kind === "sheet" ? from.name.replace(/ \(.*\)$/, "") : `${from.name} sheet`;
-  const extra = change.outfit ?? change.style;
+  const extra = (change.outfit ?? change.style)?.replace(/\s+/g, " ");
   return (extra ? `${base} (${extra})` : base).slice(0, 60);
 }

@@ -2,6 +2,7 @@ import { afterAll, beforeEach, describe, expect, it } from "vitest";
 import { FakeProvider } from "../src/services/comfy.js";
 import { imageGraph } from "../src/services/workflows.js";
 import { db, multipart, testApp, tinyJpeg, waitFor } from "./helpers.js";
+import { PROMPT_MAX } from "../src/textLimits.js";
 
 beforeEach(async () => {
   await db.generation.deleteMany();
@@ -141,6 +142,34 @@ describe("canvas", () => {
     expect(results.filter((r) => r.statusCode === 202)).toHaveLength(20);
     expect(results.filter((r) => r.statusCode === 429)).toHaveLength(5);
     await idle(app, canvas.id, cookie);
+    await app.close();
+  }, 60_000);
+
+  it("takes long, multi-paragraph prompts and keeps their line breaks", async () => {
+    const { app } = await testApp({ LIMIT_PER_SESSION_PER_HOUR: "20" }, new FakeProvider(10));
+    const { canvas, cookie } = await newCanvas(app);
+    const paragraph = "Hard cyan-green neon key light from low front-left, sculpting the collarbones and jaw. ".repeat(4).trim();
+    const long = [`Outfit: ${paragraph}`, `Lighting: ${paragraph}`, `Action: ${paragraph}`, `Camera: ${paragraph}`].join("\n\n");
+    expect(long.length).toBeGreaterThan(1400);
+
+    const made = await app.inject({ method: "POST", url: `/api/canvases/${canvas.id}/assets/generate`, payload: { kind: "character", prompt: `${long}\n\n\n\n  ` }, headers: { cookie } });
+    expect(made.statusCode).toBe(202);
+    const row = await db.asset.findFirstOrThrow({ where: { canvasId: canvas.id, kind: "character" } });
+    expect(row.prompt).toBe(long);
+
+    const tooLong = await app.inject({ method: "POST", url: `/api/canvases/${canvas.id}/assets/generate`, payload: { kind: "image", prompt: "x".repeat(PROMPT_MAX + 1) }, headers: { cookie } });
+    expect(tooLong.statusCode).toBe(400);
+
+    const ready = await idle(app, canvas.id, cookie);
+    const character = ready.assets[0];
+    const outfit = await app.inject({ method: "POST", url: `/api/canvases/${canvas.id}/assets/${character.id}/sheet`, payload: { outfit: paragraph.repeat(2) }, headers: { cookie } });
+    expect(outfit.statusCode).toBe(202);
+
+    const video = await app.inject({ method: "POST", url: `/api/canvases/${canvas.id}/videos`, payload: { prompt: long, characters: [character.id] }, headers: { cookie } });
+    expect(video.statusCode).toBe(202);
+    await idle(app, canvas.id, cookie);
+    const clip = await db.generation.findFirstOrThrow({ where: { canvasId: canvas.id } });
+    expect(clip.prompt).toContain("Camera: Hard cyan-green neon");
     await app.close();
   }, 60_000);
 });

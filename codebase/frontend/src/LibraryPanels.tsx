@@ -20,6 +20,7 @@ import SheetChanges from "./SheetChanges";
 import UploadCard from "./UploadCard";
 import { PersonIcon, PinIcon, StarIcon } from "./Icons";
 import { KIND_LABEL, defaultCategory, itemWorking, usable } from "./useLibrary";
+import { PROMPT_MAX } from "./textLimits";
 
 const message = (err: unknown, fallback: string) => (err instanceof ApiError ? err.message : fallback);
 const NEW = "__new";
@@ -395,7 +396,7 @@ export function AddForm({ how: initialHow, categories, category: initialCategory
               id={promptId}
               className="text-input"
               rows={4}
-              maxLength={600}
+              maxLength={PROMPT_MAX}
               value={prompt}
               placeholder={character ? "A woman in her 30s with short silver hair and a yellow raincoat" : "A quiet rooftop garden at dusk, city lights behind"}
               onChange={(e) => setPrompt(e.target.value)}

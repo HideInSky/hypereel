@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ApiError, addShot, type NewShot, type Shot, type ShotSide, type Story } from "./api";
 import UploadCard from "./UploadCard";
 import { PersonIcon } from "./Icons";
+import { DETAIL_MAX, PROMPT_MAX } from "./textLimits";
 
 const LENGTHS = [5, 6, 8];
 
@@ -78,20 +79,20 @@ export default function ShotForm({ story, anchor, anchorName, side, onAdded, onC
 
       <label className="story-field">
         <span>What happens</span>
-        <textarea rows={3} maxLength={500} value={shot.action} placeholder={restage ? "They dance the same steps on a rooftop" : "She turns, laughs and walks out of frame"} onChange={(e) => set({ action: e.target.value })} />
+        <textarea rows={3} maxLength={PROMPT_MAX} value={shot.action} placeholder={restage ? "They dance the same steps on a rooftop" : "She turns, laughs and walks out of frame"} onChange={(e) => set({ action: e.target.value })} />
       </label>
       <label className="story-field">
         <span>Place</span>
-        <input type="text" maxLength={200} value={shot.place} placeholder="A rainy neon street" onChange={(e) => set({ place: e.target.value })} />
+        <input type="text" maxLength={DETAIL_MAX} value={shot.place} placeholder="A rainy neon street" onChange={(e) => set({ place: e.target.value })} />
       </label>
       <div className="story-field-pair">
         <label className="story-field">
           <span>Style</span>
-          <input type="text" maxLength={200} value={shot.style} placeholder="35mm film" onChange={(e) => set({ style: e.target.value })} />
+          <input type="text" maxLength={DETAIL_MAX} value={shot.style} placeholder="35mm film" onChange={(e) => set({ style: e.target.value })} />
         </label>
         <label className="story-field">
           <span>Light</span>
-          <input type="text" maxLength={200} value={shot.light} placeholder="Golden hour" onChange={(e) => set({ light: e.target.value })} />
+          <input type="text" maxLength={DETAIL_MAX} value={shot.light} placeholder="Golden hour" onChange={(e) => set({ light: e.target.value })} />
         </label>
       </div>
 

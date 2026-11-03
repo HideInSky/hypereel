@@ -6,6 +6,7 @@ import { LimitExceededError, createGeneration, type UploadedReference } from "..
 import type { AppContext } from "../app.js";
 import { communityEffects, resolveEffect } from "./customEffects.js";
 import { SHOWCASE } from "../showcase.js";
+import { PROMPT_MAX } from "../textLimits.js";
 import type { Generation } from "@prisma/client";
 
 export const RESOLUTIONS = ["480P", "768P"] as const;
@@ -16,7 +17,7 @@ const ROLES = Object.keys(ROLE_LIMITS) as ReferenceRole[];
 
 const createSchema = z.object({
   effect: z.string().max(80),
-  prompt: z.string().max(300).optional(),
+  prompt: z.string().max(PROMPT_MAX).optional(),
   resolution: z.enum(RESOLUTIONS).default("480P"),
   aspectRatio: z.enum(ASPECT_RATIOS).default("9:16"),
 });

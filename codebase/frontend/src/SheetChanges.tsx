@@ -1,9 +1,10 @@
 import { useId, useState } from "react";
 import { ApiError, type SheetChange } from "./api";
+import { DETAIL_MAX } from "./textLimits";
 
 export const OUTFIT_PRESETS = ["Winter coat and beanie", "Smart casual (white tee, navy blazer)", "Desert linen and wide-brim hat", "Rain jacket", "Charcoal suit"];
 export const STYLE_PRESETS = ["Anime", "3D animated film", "Pixel art", "Comic book ink", "Claymation"];
-const MAX = 200;
+const MAX = DETAIL_MAX;
 
 type Props = {
   /** Make the new sheet. Throws ApiError with a message to show. */
@@ -63,10 +64,10 @@ export default function SheetChanges({ onMake }: Props) {
           <label className="story-field" htmlFor={fieldId}>
             <span>{what === "outfit" ? "Or describe the outfit" : "Or describe the style"}</span>
           </label>
-          <input
+          <textarea
             id={fieldId}
             className="text-input"
-            type="text"
+            rows={3}
             maxLength={MAX}
             value={text}
             placeholder={what === "outfit" ? "A red tracksuit and white sneakers" : "Watercolor storybook"}

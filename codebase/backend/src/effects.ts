@@ -6,6 +6,7 @@
 
 import { PREVIEWS } from "./previews.js";
 import { SHOWCASE } from "./showcase.js";
+import { PROMPT_MAX } from "./textLimits.js";
 
 export type ReferenceRole = "character" | "location" | "product";
 
@@ -472,10 +473,10 @@ export function getEffect(id: string): Effect | undefined {
   return EFFECTS.find((e) => e.id === id);
 }
 
-/** Clean the optional user prompt so it stays one short line. */
+/** Clean the optional user prompt so it stays on one line. */
 export function sanitizeUserPrompt(text: string | undefined | null): string {
   if (!text) return "";
-  return text.replace(/[\r\n]+/g, " ").replace(/\s+/g, " ").trim().slice(0, 300);
+  return text.replace(/[\r\n]+/g, " ").replace(/\s+/g, " ").trim().slice(0, PROMPT_MAX);
 }
 
 /** Reference images in the exact order they are attached to the H3 node. */

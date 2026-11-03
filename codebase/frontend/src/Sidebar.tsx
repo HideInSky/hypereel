@@ -3,6 +3,7 @@ import type { Effect, ReferenceRole } from "./api";
 import LazyClip from "./LazyClip";
 import UploadCard from "./UploadCard";
 import { BoxIcon, PencilIcon, PersonIcon, PinIcon, SparkIcon } from "./Icons";
+import { PROMPT_MAX } from "./textLimits";
 
 export const RESOLUTIONS = ["480P", "768P"];
 export const ASPECT_RATIOS = ["9:16", "3:4", "1:1", "16:9"];
@@ -78,7 +79,7 @@ export default function Sidebar({ effect, form, setForm, busy, error, setError, 
           {form.promptOn && (
             <textarea
               rows={3}
-              maxLength={300}
+              maxLength={PROMPT_MAX}
               value={form.prompt}
               placeholder="Describe your changes, e.g. make it raining, or give them a red coat"
               onChange={(e) => setForm({ ...form, prompt: e.target.value })}
