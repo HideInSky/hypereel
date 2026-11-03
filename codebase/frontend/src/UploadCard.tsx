@@ -1,4 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import LibraryPicker from "./LibraryPicker";
+import { itemFiles } from "./useLibrary";
 
 type Props = {
   title: string;
@@ -8,14 +10,18 @@ type Props = {
   files: File[];
   onChange: (files: File[]) => void;
   onError: (message: string) => void;
+  /** Offer "From Assets" to fill the slot with saved pictures. */
+  library?: boolean;
 };
 
 const MAX_MB = 10;
 
 /** One upload slot. Holds up to `max` photos, shown as tilted prints with a remove button. */
-export default function UploadCard({ title, icon, optional, max, files, onChange, onError }: Props) {
+export default function UploadCard({ title, icon, optional, max, files, onChange, onError, library }: Props) {
   const input = useRef<HTMLInputElement>(null);
   const [over, setOver] = useState(false);
+  const [picking, setPicking] = useState(false);
+  const room = max - files.length;
   const urls = useMemo(() => files.map((f) => URL.createObjectURL(f)), [files]);
   useEffect(() => () => urls.forEach((u) => URL.revokeObjectURL(u)), [urls]);
 
@@ -79,6 +85,41 @@ export default function UploadCard({ title, icon, optional, max, files, onChange
           ))}
           {files.length < max && <span className="print-add" aria-hidden="true">+</span>}
         </div>
+      )}
+      {library && room > 0 && (
+        <button
+          type="button"
+          className="upload-from"
+          onClick={(e) => {
+            e.stopPropagation();
+            setPicking(true);
+          }}
+          onKeyDown={(e) => e.stopPropagation()}
+        >
+          From Assets
+        </button>
+      )}
+      {picking && (
+        // Keep clicks and keys in the dialog from reaching this card, which would open the file chooser.
+        <span className="upload-picker" onClick={(e) => e.stopPropagation()} onKeyDown={(e) => e.stopPropagation()} onDragOver={(e) => e.stopPropagation()} onDrop={(e) => e.stopPropagation()}>
+          <LibraryPicker
+            title={`${title} from Assets`}
+            max={room}
+            kinds={["image", "character", "sheet"]}
+            confirmLabel={(n) => (n > 1 ? `Use ${n}` : "Use it")}
+            note="Characters add each of their photos."
+            onPick={async (items) => {
+              const total = items.reduce((n, item) => n + item.images.length, 0);
+              const added = await itemFiles(items, room);
+              const tooBig = added.find((f) => f.size > MAX_MB * 1024 * 1024);
+              if (tooBig) throw new Error(`${tooBig.name} is over ${MAX_MB} MB.`);
+              onChange([...files, ...added].slice(0, max));
+              setPicking(false);
+              if (total > room) onError(`${title} takes up to ${max} photo${max === 1 ? "" : "s"}, so only the first ${room} ${room === 1 ? "was" : "were"} added.`);
+            }}
+            onClose={() => setPicking(false)}
+          />
+        </span>
       )}
       <input
         ref={input}

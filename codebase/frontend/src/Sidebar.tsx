@@ -58,11 +58,11 @@ export default function Sidebar({ effect, form, setForm, busy, error, setError, 
 
         <div className="upload-pair">
           <div className={nudge ? "shake" : undefined}>
-            <UploadCard title="Character" icon={<PersonIcon />} max={4} files={form.uploads.character} onChange={(f) => setUploads("character", f)} onError={setError} />
+            <UploadCard title="Character" icon={<PersonIcon />} max={4} files={form.uploads.character} onChange={(f) => setUploads("character", f)} onError={setError} library />
           </div>
-          <UploadCard title="Location" icon={<PinIcon />} optional max={2} files={form.uploads.location} onChange={(f) => setUploads("location", f)} onError={setError} />
+          <UploadCard title="Location" icon={<PinIcon />} optional max={2} files={form.uploads.location} onChange={(f) => setUploads("location", f)} onError={setError} library />
         </div>
-        <UploadCard title="Products" icon={<BoxIcon />} optional max={3} files={form.uploads.product} onChange={(f) => setUploads("product", f)} onError={setError} />
+        <UploadCard title="Products" icon={<BoxIcon />} optional max={3} files={form.uploads.product} onChange={(f) => setUploads("product", f)} onError={setError} library />
 
         <div className="field-card">
           <label className="prompt-head">

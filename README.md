@@ -18,11 +18,22 @@ Next to Effects there's a Canvas: a free board you can pan and zoom, where every
 
 - **Images.** Upload one, or describe it and Nano Banana 2 makes it, optionally from other cards.
 - **Characters.** A name and up to 4 photos, or describe an invented person.
-- **Character sheets.** One click turns a character into a single image with front, side and back views and a face close-up. Sheets are the usual fix for faces and outfits drifting between clips, and here the template is open: see `SHEET_PROMPT` in [workflows.ts](codebase/backend/src/services/workflows.ts).
+- **Character sheets.** One click turns a character into one wide image in three panels: the body from the front with the head left out (so the outfit, build and proportions read clearly), the body from behind, and a tight face close-up looking into the camera. All three sit on flat mid-grey, because a white background brightens the character and a black one darkens it, and the video model carries that over. An invented character's description is written once at the top. From a sheet you can make a **new outfit** (the face and body stay the same) or a **new art style** (anime, 3D animated, pixel art, comic ink, claymation) of the same character. Sheets render at 2K. The template is open: see `sheetPrompt` in [workflows.ts](codebase/backend/src/services/workflows.ts).
 - **Videos.** Pick cards as the character, location and products, then an effect or your own prompt. MiniMax H3 renders picture and sound together.
 - **Stories.** Any finished video can grow before and after (below), shown left to right on the board, with a story strip for sound and export.
 
 Uploads, moving cards and exporting are free. Anything a model makes costs credits, so it goes through daily caps that are checked under a Postgres lock.
+
+## Assets: a library across canvases
+
+**Assets** sits next to Canvas in the top bar. It keeps the images, characters, character sheets and videos someone wants to reuse:
+
+- **Save** any card from a canvas, or any finished clip, with one click. Saving copies the files, so the library item and the canvas card can each be deleted on their own.
+- **Organize** by category (Characters, Places and Props built in, plus your own), mark favorites, rename, and sort by newest, recently used, name or your own drag-and-drop order.
+- **Reuse**: on a canvas, "From Assets" opens a picker with Favorites, Recently used and each category; on the Effects page, each upload slot can pick from Assets too.
+- **Make more** right in Assets: upload, generate an image or an invented character, make a character sheet, a new outfit or art style from a sheet, or regenerate anything that was made from a prompt.
+
+Like canvases, Assets belong to the browser's signed session: nobody else can see or change them.
 
 ## Stories: every clip is the middle of a video
 

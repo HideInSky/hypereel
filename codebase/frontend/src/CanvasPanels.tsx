@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { ApiError, generateAsset, makeSheet, makeVideo, uploadAsset, type Asset, type Canvas, type CanvasVideo, type Effect } from "./api";
 import UploadCard from "./UploadCard";
+import SaveToAssets from "./SaveToAssets";
+import SheetChanges from "./SheetChanges";
 import { ASPECT_RATIOS, RESOLUTIONS } from "./Sidebar";
 import { PersonIcon, PinIcon } from "./Icons";
 
@@ -342,9 +344,11 @@ type AssetDetailsProps = {
   onChanged: (next: Canvas) => void;
   onUseAsReference: () => void;
   onMakeVideo: () => void;
+  /** It was saved to Assets as this item. */
+  onSaved: (libraryId: string) => void;
 };
 
-export function AssetDetails({ canvas, asset, confirming, setConfirming, onDelete, onChanged, onUseAsReference, onMakeVideo }: AssetDetailsProps) {
+export function AssetDetails({ canvas, asset, confirming, setConfirming, onDelete, onChanged, onUseAsReference, onMakeVideo, onSaved }: AssetDetailsProps) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const owner = canvas.isOwner;
@@ -387,7 +391,11 @@ export function AssetDetails({ canvas, asset, confirming, setConfirming, onDelet
         </div>
       )}
       {owner && done && asset.kind === "character" && <p className="muted small">A character sheet is one image with front, side, back and close-ups. Uses credits.</p>}
+      {owner && done && (asset.kind === "character" || asset.kind === "sheet") && (
+        <SheetChanges onMake={async (change) => onChanged(await makeSheet(canvas.id, asset.id, change))} />
+      )}
       {error && <p className="form-error" role="alert">{error}</p>}
+      {owner && done && <SaveToAssets source={{ from: "asset", canvasId: canvas.id, assetId: asset.id }} kind={asset.kind} savedId={asset.savedId ?? null} onSaved={onSaved} />}
       {owner && <DeleteControl confirming={confirming} setConfirming={setConfirming} onDelete={onDelete} what={asset.kind === "sheet" ? "sheet" : asset.kind} />}
     </div>
   );
@@ -401,9 +409,11 @@ type VideoDetailsProps = {
   onDelete: () => Promise<void>;
   /** Open the story strip, optionally straight into adding a shot on one side. */
   onStory: (side?: "before" | "after") => Promise<void>;
+  /** It was saved to Assets as this item. */
+  onSaved: (libraryId: string) => void;
 };
 
-export function VideoDetails({ canvas, video, confirming, setConfirming, onDelete, onStory }: VideoDetailsProps) {
+export function VideoDetails({ canvas, video, confirming, setConfirming, onDelete, onStory, onSaved }: VideoDetailsProps) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const owner = canvas.isOwner;
@@ -454,6 +464,7 @@ export function VideoDetails({ canvas, video, confirming, setConfirming, onDelet
       )}
       {owner && done && <p className="muted small">New shots join this video's story, shown as a row on the board. Each new shot uses credits.</p>}
       {error && <p className="form-error" role="alert">{error}</p>}
+      {owner && done && <SaveToAssets source={{ from: "video", generationId: video.id }} kind="video" savedId={video.savedId ?? null} onSaved={onSaved} />}
       {owner && <DeleteControl confirming={confirming} setConfirming={setConfirming} onDelete={onDelete} what="video" />}
     </div>
   );

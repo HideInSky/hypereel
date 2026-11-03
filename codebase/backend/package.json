@@ -21,7 +21,8 @@
     "previews": "tsx scripts/render-previews.ts",
     "showcase": "tsx scripts/render-showcase.ts",
     "export-recipes": "tsx scripts/export-recipes.ts",
-    "export-workflows": "tsx scripts/export-workflows.ts"
+    "export-workflows": "tsx scripts/export-workflows.ts",
+    "import-sounds": "tsx scripts/import-sounds.ts"
   },
   "dependencies": {
     "@comfyorg/sdk": "^0.5.0",

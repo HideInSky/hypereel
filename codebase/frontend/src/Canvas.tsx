@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { ApiError, deleteAsset, deleteVideo, fetchStory, updateCanvas, videoStory, type Asset, type Canvas, type CanvasVideo, type Effect, type Shot, type ShotSide } from "./api";
+import { ApiError, deleteAsset, deleteVideo, fetchStory, importToCanvas, updateCanvas, videoStory, type Asset, type Canvas, type CanvasVideo, type Effect, type Shot, type ShotSide } from "./api";
 import Board, { type BoardEdge, type BoardNode } from "./Board";
 import { AssetDetails, AssetForm, VideoDetails, VideoForm } from "./CanvasPanels";
+import LibraryPicker from "./LibraryPicker";
 import StoryView from "./Story";
 import { MODE_LABEL, type Selection } from "./StoryTimeline";
 import { useBoardStories, useCanvas } from "./useCanvas";
@@ -36,7 +37,9 @@ export default function CanvasView({ id, effects, onList, toast }: Props) {
   const [strip, setStrip] = useState<Strip>(null);
   const [confirming, setConfirming] = useState(false);
   const [fitRequest, setFitRequest] = useState(0);
+  const [focus, setFocus] = useState<{ ids: string[]; key: number } | null>(null);
   const [title, setTitle] = useState<string | null>(null);
+  const [importing, setImporting] = useState(false);
   const keyHandler = useRef<(e: KeyboardEvent) => void>(() => {});
 
   // On the document, so keys still work after focus falls back to the page (e.g. a closed dialog).
@@ -87,8 +90,11 @@ export default function CanvasView({ id, effects, onList, toast }: Props) {
       const anchor = shotId ?? original?.id;
       const selection: Selection = side && anchor ? { kind: "new", anchorId: anchor, side } : anchor ? { kind: "shot", id: anchor } : null;
       setStrip({ storyId, cue: { selection, key: Date.now() } });
+      // The strip takes the bottom of the screen: frame the story row in what's left.
+      const videoCard = cards.find((c) => c.kind === "video" && c.refId === video.id);
+      if (videoCard) setFocus({ ids: [videoCard.id, ...story.shots.map((s) => `shot:${s.id}`)], key: Date.now() });
     },
-    [canvas, stories, accept, put],
+    [canvas, cards, stories, accept, put],
   );
 
   if (notFound) {
@@ -195,7 +201,7 @@ export default function CanvasView({ id, effects, onList, toast }: Props) {
   keyHandler.current = (e: KeyboardEvent) => {
     const target = e.target as HTMLElement;
     // Typing in a field, or working in the story strip, never moves or deletes board cards.
-    if (target.closest("input, textarea, select, [contenteditable='true'], .canvas-strip, .toast")) return;
+    if (target.closest("input, textarea, select, [contenteditable='true'], .canvas-strip, .toast, dialog")) return;
     if (e.metaKey || e.ctrlKey || e.altKey) return;
     if (e.key === "Escape") {
       if (confirming) setConfirming(false);
@@ -252,6 +258,7 @@ export default function CanvasView({ id, effects, onList, toast }: Props) {
         }}
         onUseAsReference={() => setTool({ kind: "image", preset: [pickedAsset.id] })}
         onMakeVideo={() => setTool({ kind: "video", preset: [pickedAsset.id] })}
+        onSaved={(savedId) => accept((c) => c && { ...c, assets: c.assets.map((a) => (a.id === pickedAsset.id ? { ...a, savedId } : a)) })}
       />
     );
   } else if (pickedVideo && !(strip && strip.storyId === pickedVideo.storyId)) {
@@ -269,6 +276,7 @@ export default function CanvasView({ id, effects, onList, toast }: Props) {
           select(null);
         }}
         onStory={(side) => openStory(pickedVideo, side)}
+        onSaved={(savedId) => accept((c) => c && { ...c, videos: c.videos.map((v) => (v.id === pickedVideo.id ? { ...v, savedId } : v)) })}
       />
     );
   } else if (pickedShot && !strip) {
@@ -334,6 +342,7 @@ export default function CanvasView({ id, effects, onList, toast }: Props) {
             <>
               <button type="button" className={`ghost${tool?.kind === "image" ? " is-on" : ""}`} onClick={() => openTool("image")}>Add image</button>
               <button type="button" className={`ghost${tool?.kind === "character" ? " is-on" : ""}`} onClick={() => openTool("character")}>Add character</button>
+              <button type="button" className="ghost" onClick={() => setImporting(true)}>From Assets</button>
               <button type="button" className={`primary${tool?.kind === "video" ? " is-on" : ""}`} onClick={() => openTool("video")}>Make a video</button>
             </>
           )}
@@ -343,7 +352,7 @@ export default function CanvasView({ id, effects, onList, toast }: Props) {
       {saveError && <p className="form-error canvas-save-error" role="alert">{saveError}</p>}
 
       <div className="canvas-main">
-        <Board nodes={nodes} edges={edges} viewport={viewport} setViewport={setViewport} onMove={moveCard} onSelect={onSelectNode} fitRequest={fitRequest} />
+        <Board nodes={nodes} edges={edges} viewport={viewport} setViewport={setViewport} onMove={moveCard} onSelect={onSelectNode} fitRequest={fitRequest} focus={focus} />
         {!nodes.length && (
           <div className="canvas-empty">
             <strong>{owner ? "Start with a character" : "Nothing on this canvas yet"}</strong>
@@ -352,6 +361,7 @@ export default function CanvasView({ id, effects, onList, toast }: Props) {
               <div className="inspector-actions">
                 <button type="button" className="primary" onClick={() => openTool("character")}>Add character</button>
                 <button type="button" className="ghost" onClick={() => openTool("image")}>Add image</button>
+                <button type="button" className="ghost" onClick={() => setImporting(true)}>From Assets</button>
               </div>
             )}
           </div>
@@ -363,6 +373,27 @@ export default function CanvasView({ id, effects, onList, toast }: Props) {
           </aside>
         )}
       </div>
+
+      {importing && (
+        <LibraryPicker
+          title="Add from Assets"
+          max={10}
+          kinds={["image", "character", "sheet"]}
+          confirmLabel={(n) => (n > 1 ? `Add ${n} to the board` : "Add to the board")}
+          note="Free. Each one becomes a card you can use in videos."
+          onPick={async (items) => {
+            const known = new Set(canvas.board.cards.map((c) => c.id));
+            const next = await importToCanvas(canvas.id, items.map((i) => i.id));
+            added(next);
+            setImporting(false);
+            // Frame the new cards, wherever the server put them.
+            const fresh = next.board.cards.filter((c) => !known.has(c.id)).map((c) => c.id);
+            if (fresh.length) setFocus({ ids: fresh, key: Date.now() });
+            toast(items.length > 1 ? `Added ${items.length} cards` : `Added ${items[0]!.name}`);
+          }}
+          onClose={() => setImporting(false)}
+        />
+      )}
 
       {strip && (
         <section className="canvas-strip" aria-label="Story">

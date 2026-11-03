@@ -8,6 +8,8 @@ import { randomBytes } from "node:crypto";
 export interface Storage {
   /** Save bytes and return a storage key (relative path). */
   put(bytes: Uint8Array, ext: string): Promise<string>;
+  /** Copy a stored file to a new key, so the copy can be deleted on its own. */
+  copy(key: string): Promise<string>;
   /** Delete a stored file. Missing files are not an error. */
   remove(key: string): Promise<void>;
   /** Absolute path on disk for a key (used by the static file route). */
@@ -27,6 +29,13 @@ export class LocalStorage implements Storage {
     const key = `media/${Date.now().toString(36)}-${randomBytes(6).toString("hex")}.${ext}`;
     await fs.writeFile(path.join(this.root, key), bytes);
     return key;
+  }
+
+  async copy(key: string): Promise<string> {
+    const ext = path.extname(key).slice(1) || "bin";
+    const next = `media/${Date.now().toString(36)}-${randomBytes(6).toString("hex")}.${ext}`;
+    await fs.copyFile(this.absolutePath(key), path.join(this.root, next));
+    return next;
   }
 
   async remove(key: string): Promise<void> {

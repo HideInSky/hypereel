@@ -18,6 +18,7 @@ import { shareRoutes } from "./routes/share.js";
 import { customEffectRoutes } from "./routes/customEffects.js";
 import { sequenceRoutes } from "./routes/sequences.js";
 import { canvasRoutes } from "./routes/canvases.js";
+import { libraryRoutes } from "./routes/library.js";
 
 export interface AppContext {
   cfg: Config;
@@ -97,6 +98,7 @@ export async function buildApp(opts: { cfg: Config; db: PrismaClient; provider: 
   await customEffectRoutes(app, ctx);
   await sequenceRoutes(app, ctx);
   await canvasRoutes(app, ctx);
+  await libraryRoutes(app, ctx);
   await shareRoutes(app, ctx);
 
   // In production the backend also serves the built frontend (one container,

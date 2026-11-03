@@ -110,7 +110,12 @@ export async function generationRoutes(app: FastifyInstance, ctx: AppContext) {
   app.get<{ Params: { id: string } }>("/api/generations/:id", async (req, reply) => {
     const g = await ctx.db.generation.findUnique({ where: { id: req.params.id } });
     if (!g) return reply.code(404).send({ error: "Not found" });
-    return toPublic(g, ctx, ctx.readSessionId(req));
+    const viewer = ctx.readSessionId(req);
+    // The owner sees whether the clip is already in their Assets.
+    const saved = viewer && viewer === g.sessionId
+      ? await ctx.db.asset.findFirst({ where: { sessionId: viewer, canvasId: null, originId: `video:${g.id}` }, select: { id: true } })
+      : null;
+    return { ...toPublic(g, ctx, viewer), savedId: saved?.id ?? null };
   });
 
   // This visitor's own clips, for the History tab. Identified by the signed session cookie.

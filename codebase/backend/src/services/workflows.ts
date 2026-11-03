@@ -114,7 +114,7 @@ export function audioGraph(p: { kind: "music" | "sfx"; prompt: string; seconds: 
  * other canvas cards). The images are uploaded at one shared size, so ImageBatch can
  * stack them without stretching.
  */
-export function imageGraph(p: { prompt: string; ratio: string; references: number }): Graph {
+export function imageGraph(p: { prompt: string; ratio: string; references: number; resolution?: "1K" | "2K"; thinking?: "MINIMAL" | "HIGH" }): Graph {
   const graph: Graph = {};
   for (let i = 1; i <= p.references; i++) graph[`img_${i}`] = { class_type: "LoadImage", inputs: { image: `reference_${i}.png` }, _meta: { title: `Reference ${i}` } };
   let batch = p.references > 0 ? "img_1" : "";
@@ -131,9 +131,9 @@ export function imageGraph(p: { prompt: string; ratio: string; references: numbe
       model: "Nano Banana 2 (Gemini 3.1 Flash Image)",
       seed: randomSeed() % 2_147_483_647,
       aspect_ratio: p.ratio,
-      resolution: "1K",
+      resolution: p.resolution ?? "1K",
       response_modalities: "IMAGE",
-      thinking_level: "MINIMAL",
+      thinking_level: p.thinking ?? "MINIMAL",
     },
   };
   graph.out = { class_type: "SaveImage", inputs: { images: ["make", 0], filename_prefix: "hypereel_image" }, _meta: { title: "Save image" } };
@@ -141,8 +141,37 @@ export function imageGraph(p: { prompt: string; ratio: string; references: numbe
 }
 
 /** What a character sheet asks for. Kept here so the app and the example file match. */
-export const SHEET_PROMPT =
-  "A clean character reference sheet of the person in the reference images, on a plain light grey background, in one image: a full-body front view, a full-body side view, a full-body back view, and a large face close-up. The same face, hair, body and outfit in every view, evenly lit, photorealistic. No text, no labels, no logos.";
+export type SheetVariant = { outfit?: string; style?: string };
+
+/**
+ * A character sheet in the layout character-consistency workflows use: one wide image in
+ * three panels. The front view leaves the head out so the outfit, build and proportions
+ * read clearly; the back view shows hair and the back of the outfit; the close-up locks the
+ * face. A flat mid-grey background keeps exposure neutral (white brightens the character,
+ * black darkens it, and the video model carries that over). `identity` describes an
+ * invented character once, up front. A variant changes only the outfit or the art style.
+ */
+export function sheetPrompt(p: { identity?: string | null; variant?: SheetVariant | null } = {}): string {
+  const who = p.identity ? `the character in the reference images (${p.identity.replace(/[.\s]+$/, "")})` : "the person in the reference images";
+  const outfit = p.variant?.outfit;
+  const style = p.variant?.style;
+  const lines = [
+    `A character reference sheet of ${who}. One wide image split into three equal vertical panels side by side, with thin gaps between them.`,
+    "Left panel: the full body from the front, standing straight with arms relaxed at the sides, cropped at the neck so the head is out of frame, showing the outfit, build and proportions clearly.",
+    "Middle panel: the same full body seen from directly behind, head included, showing the hair and the back of the outfit.",
+    "Right panel: a tight close-up of the face looking straight into the camera with a neutral expression, showing the exact face shape, eyes, nose, mouth, skin, hair and any marks.",
+  ];
+  if (outfit) lines.push(`Dress them in a new outfit: ${outfit}. Keep the face, hair, skin tone and body exactly the same as in the reference images; change only the clothes, the same in all three panels.`);
+  if (style) lines.push(`Draw them in this art style: ${style}. Keep their key features (face shape, hairstyle and hair colour, skin tone, outfit and proportions) so they are clearly the same character.`);
+  lines.push(
+    "Every panel has the same flat, neutral mid-grey studio background with no shadows, soft even light and balanced exposure.",
+    `The same face, hair, body and outfit in every panel.${style ? "" : " Photorealistic, sharp, high detail."} No text, no labels, no logos, no borders.`,
+  );
+  return lines.join(" ");
+}
+
+/** The base sheet prompt, for the example workflow file. */
+export const SHEET_PROMPT = sheetPrompt();
 
 /** Example copies for the workflows/ folder, to open in the ComfyUI editor. Seeds are fixed so the files are stable. */
 export function exampleWorkflows(): Record<string, Graph> {
@@ -160,7 +189,7 @@ function examples(): Record<string, Graph> {
     "hypereel_story_restage_api.json": restageGraph({ prompt: "Image 1 shows the character. Video 1 shows the moves. She performs exactly the same moves as in Video 1, with the same timing and framing, on a rainy city street at night.", seconds: 5, resolution: "480P", ratio: "9:16", imageTitles: ["Character 1"] }),
     "hypereel_story_music_api.json": audioGraph({ kind: "music", prompt: "Upbeat pop dance track, punchy drums, 118 BPM", seconds: 20 }),
     "hypereel_story_sfx_api.json": audioGraph({ kind: "sfx", prompt: "Steady rain on a city street at night", seconds: 10 }),
-    "hypereel_canvas_character_sheet_api.json": imageGraph({ prompt: SHEET_PROMPT, ratio: "16:9", references: 2 }),
+    "hypereel_canvas_character_sheet_api.json": imageGraph({ prompt: SHEET_PROMPT, ratio: "16:9", references: 2, resolution: "2K", thinking: "HIGH" }),
     "hypereel_canvas_image_api.json": imageGraph({ prompt: "A sunlit rooftop at golden hour, empty, wide shot. Photorealistic. No text, no logos.", ratio: "9:16", references: 0 }),
   };
 }

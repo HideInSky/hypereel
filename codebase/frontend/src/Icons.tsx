@@ -31,3 +31,15 @@ export const SearchIcon = () => (
 export const CheckIcon = () => (
   <svg {...base} width={12} height={12} strokeWidth={3} aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
 );
+export const StarIcon = ({ filled = false }: { filled?: boolean }) => (
+  <svg {...base} width={16} height={16} fill={filled ? "currentColor" : "none"} aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8-4.2-4.1 5.8-.8L12 3.5z" /></svg>
+);
+export const GripIcon = () => (
+  <svg {...base} width={14} height={14} fill="currentColor" stroke="none" aria-hidden="true"><circle cx="9" cy="6" r="1.6" /><circle cx="15" cy="6" r="1.6" /><circle cx="9" cy="12" r="1.6" /><circle cx="15" cy="12" r="1.6" /><circle cx="9" cy="18" r="1.6" /><circle cx="15" cy="18" r="1.6" /></svg>
+);
+export const LayersIcon = () => (
+  <svg {...base} width={14} height={14} aria-hidden="true"><path d="M12 4l8 4-8 4-8-4 8-4z" /><path d="M4 12l8 4 8-4M4 16l8 4 8-4" /></svg>
+);
+export const TagIcon = () => (
+  <svg {...base} width={14} height={14} aria-hidden="true"><path d="M3.5 12.5V4.5a1 1 0 0 1 1-1h8l8 8-9 9-8-8z" /><circle cx="8" cy="8" r="1.4" /></svg>
+);

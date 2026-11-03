@@ -39,7 +39,7 @@
       "title": "Nano Banana 2"
     },
     "inputs": {
-      "prompt": "A clean character reference sheet of the person in the reference images, on a plain light grey background, in one image: a full-body front view, a full-body side view, a full-body back view, and a large face close-up. The same face, hair, body and outfit in every view, evenly lit, photorealistic. No text, no labels, no logos.",
+      "prompt": "A character reference sheet of the person in the reference images. One wide image split into three equal vertical panels side by side, with thin gaps between them. Left panel: the full body from the front, standing straight with arms relaxed at the sides, cropped at the neck so the head is out of frame, showing the outfit, build and proportions clearly. Middle panel: the same full body seen from directly behind, head included, showing the hair and the back of the outfit. Right panel: a tight close-up of the face looking straight into the camera with a neutral expression, showing the exact face shape, eyes, nose, mouth, skin, hair and any marks. Every panel has the same flat, neutral mid-grey studio background with no shadows, soft even light and balanced exposure. The same face, hair, body and outfit in every panel. Photorealistic, sharp, high detail. No text, no labels, no logos, no borders.",
       "images": [
         "batch_2",
         0
@@ -47,9 +47,9 @@
       "model": "Nano Banana 2 (Gemini 3.1 Flash Image)",
       "seed": 42,
       "aspect_ratio": "16:9",
-      "resolution": "1K",
+      "resolution": "2K",
       "response_modalities": "IMAGE",
-      "thinking_level": "MINIMAL"
+      "thinking_level": "HIGH"
     }
   },
   "out": {

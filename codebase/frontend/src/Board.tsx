@@ -31,6 +31,8 @@ type Props = {
   onSelect: (id: string | null) => void;
   /** Bump to fit every card in view. */
   fitRequest: number;
+  /** Frame just these cards (e.g. a story row when its strip opens). A new `key` reframes. */
+  focus?: { ids: string[]; key: number } | null;
 };
 
 const clampZoom = (z: number) => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, z));
@@ -45,7 +47,7 @@ type Gesture =
  * move it, scroll to pan, pinch or ctrl/cmd-scroll to zoom. Cards and lines live in one
  * "world" layer that is translated and scaled as a whole.
  */
-export default function Board({ nodes, edges, viewport, setViewport, onMove, onSelect, fitRequest }: Props) {
+export default function Board({ nodes, edges, viewport, setViewport, onMove, onSelect, fitRequest, focus }: Props) {
   const surface = useRef<HTMLDivElement>(null);
   const pointers = useRef(new Map<number, { x: number; y: number }>());
   const gesture = useRef<Gesture | null>(null);
@@ -75,22 +77,31 @@ export default function Board({ nodes, edges, viewport, setViewport, onMove, onS
     if (rect) zoomAt(rect.left + rect.width / 2, rect.top + rect.height / 2, factor);
   };
 
-  const fit = useCallback(() => {
+  const fit = useCallback((only?: string[]) => {
     const el = surface.current;
-    const list = latestNodes.current;
+    const list = only ? latestNodes.current.filter((n) => only.includes(n.id)) : latestNodes.current;
     if (!el || !list.length) return;
     const minX = Math.min(...list.map((n) => n.x));
     const minY = Math.min(...list.map((n) => n.y));
     const maxX = Math.max(...list.map((n) => n.x + n.w));
     const maxY = Math.max(...list.map((n) => n.y + n.h));
     const pad = 48;
-    const z = clampZoom(Math.min((el.clientWidth - pad * 2) / (maxX - minX), (el.clientHeight - pad * 2) / (maxY - minY), 1));
-    setViewport({ x: (el.clientWidth - (maxX - minX) * z) / 2 - minX * z, y: (el.clientHeight - (maxY - minY) * z) / 2 - minY * z, zoom: z });
+    // The zoom controls sit in the bottom-left corner: keep cards clear of them.
+    const bottom = 72;
+    const z = clampZoom(Math.min((el.clientWidth - pad * 2) / (maxX - minX), (el.clientHeight - pad - bottom) / (maxY - minY), 1));
+    setViewport({ x: (el.clientWidth - (maxX - minX) * z) / 2 - minX * z, y: pad + (el.clientHeight - pad - bottom - (maxY - minY) * z) / 2 - minY * z, zoom: z });
   }, [setViewport]);
 
   useEffect(() => {
     if (fitRequest) fit();
   }, [fitRequest, fit]);
+
+  // Runs after the commit that opened the strip, so the board has already shrunk.
+  const focusKey = focus?.key;
+  useEffect(() => {
+    if (focus?.ids.length) fit(focus.ids);
+    // Only when a new focus is asked for.
+  }, [focusKey]);
 
   // The viewport is saved per canvas, not per screen: if a phone opens a canvas framed
   // on a desktop and no card is in view, or the saved zoom leaves the cards tiny (a
@@ -246,7 +257,7 @@ export default function Board({ nodes, edges, viewport, setViewport, onMove, onS
         <button type="button" aria-label="Zoom out" onClick={() => zoomCenter(1 / 1.25)} disabled={zoom <= MIN_ZOOM}>−</button>
         <button type="button" aria-label="Zoom to 100%" className="board-zoom-value" onClick={() => zoomCenter(1 / zoom)}>{Math.round(zoom * 100)}%</button>
         <button type="button" aria-label="Zoom in" onClick={() => zoomCenter(1.25)} disabled={zoom >= MAX_ZOOM}>+</button>
-        <button type="button" onClick={fit} disabled={!nodes.length}>Fit</button>
+        <button type="button" onClick={() => fit()} disabled={!nodes.length}>Fit</button>
       </div>
     </div>
   );

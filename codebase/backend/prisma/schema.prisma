@@ -131,8 +131,9 @@ model Canvas {
 /// An image, a character (one or more photos) or a character sheet on a canvas.
 model Asset {
   id         String   @id @default(cuid())
-  canvasId   String
-  kind       String   // image | character | sheet
+  /// null: the asset is in its maker's Assets library rather than on a canvas
+  canvasId   String?
+  kind       String   // image | character | sheet | video (library only)
   name       String
   status     String   @default("queued") // queued | running | succeeded | failed
   paths      Json     @default("[]") // stored image keys
@@ -141,12 +142,35 @@ model Asset {
   generated  Boolean  @default(false) // made by a model, so it counts against the caps
   error      String?
   comfyJobId String?
+  /// Library: a built-in category key (characters, places, props) or an AssetCategory id
+  category   String?
+  favorite   Boolean  @default(false)
+  /// Library: custom order, lower first
+  position   Int?
+  /// Last time it was placed on a canvas or used as a reference
+  usedAt     DateTime?
+  /// What it was copied from: "asset:<id>", "video:<generationId>" or "library:<id>"
+  originId   String?
+  /// Sheets: the change asked for, { outfit } or { style }
+  variant    Json?
   sessionId  String
   ip         String
   createdAt  DateTime @default(now())
 
   @@index([canvasId, createdAt])
+  @@index([sessionId, canvasId])
+  @@index([sessionId, originId])
   @@index([sessionId, createdAt])
   @@index([ip, createdAt])
   @@index([createdAt])
+}
+
+/// A category someone made for their Assets library (built-in ones aren't stored).
+model AssetCategory {
+  id        String   @id @default(cuid())
+  name      String
+  sessionId String
+  createdAt DateTime @default(now())
+
+  @@unique([sessionId, name])
 }

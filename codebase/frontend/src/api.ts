@@ -44,6 +44,8 @@ export type Generation = {
   /** Absolute URL of the share page (/v/:id) */
   shareUrl: string;
   createdAt: string;
+  /** Only sent to the clip's owner: the Assets item it was saved as, or null. */
+  savedId?: string | null;
 };
 
 /**
@@ -324,9 +326,11 @@ export type Asset = {
   sources: string[];
   error: string | null;
   createdAt: string;
+  /** The Assets item it was saved as, or null. */
+  savedId: string | null;
 };
 
-export type CanvasVideo = Generation & { assetIds: string[]; storyId: string | null };
+export type CanvasVideo = Generation & { assetIds: string[]; storyId: string | null; savedId: string | null };
 
 export type Canvas = { id: string; title: string; isOwner: boolean; board: Board; assets: Asset[]; videos: CanvasVideo[]; shareUrl: string };
 
@@ -368,9 +372,20 @@ export function generateAsset(canvasId: string, input: { kind: "image" | "charac
   return request<Canvas>(`${canvasPath(canvasId)}/assets/generate`, json({ ...input, name: input.name.trim(), prompt: input.prompt.trim() }));
 }
 
-/** Make a character sheet (front, side, back, close-ups) from a character asset. Uses credits. */
-export function makeSheet(canvasId: string, assetId: string): Promise<Canvas> {
-  return request<Canvas>(`${canvasPath(canvasId)}/assets/${encodeURIComponent(assetId)}/sheet`, { method: "POST" });
+/** A change for a new character sheet: a new outfit or a new art style, never both. */
+export type SheetChange = { outfit?: string; style?: string };
+
+/**
+ * Make a character sheet (front, side, back, close-ups) from a character, or a new version
+ * of a character or a sheet with a different outfit or art style. Uses credits.
+ */
+export function makeSheet(canvasId: string, assetId: string, change: SheetChange = {}): Promise<Canvas> {
+  return request<Canvas>(`${canvasPath(canvasId)}/assets/${encodeURIComponent(assetId)}/sheet`, json(change));
+}
+
+/** Put items from Assets on the board (1-10 images, characters or sheets). */
+export function importToCanvas(canvasId: string, ids: string[]): Promise<Canvas> {
+  return request<Canvas>(`${canvasPath(canvasId)}/assets/import`, json({ ids }));
 }
 
 export function deleteAsset(canvasId: string, assetId: string): Promise<Canvas> {
@@ -402,4 +417,103 @@ export function videoStory(canvasId: string, videoId: string): Promise<{ storyId
 
 export function deleteVideo(canvasId: string, videoId: string): Promise<Canvas> {
   return request<Canvas>(`${canvasPath(canvasId)}/videos/${encodeURIComponent(videoId)}`, { method: "DELETE" });
+}
+
+// ---------- Assets: everything the viewer kept, sorted into categories ----------
+
+export type LibraryKind = "image" | "character" | "sheet" | "video";
+
+export type LibraryItem = {
+  id: string;
+  kind: LibraryKind;
+  name: string;
+  status: GenerationStatus;
+  /** Picture URLs. For a video: [posterUrl] or []. */
+  images: string[];
+  /** Video only. */
+  videoUrl: string | null;
+  /** A category id ("characters", "places", "props" or a custom one); null = uncategorized. */
+  category: string | null;
+  favorite: boolean;
+  /** Custom order, lower first. Null sorts after positioned items, newest first. */
+  position: number | null;
+  /** Last time it was placed on a canvas or used as a reference. */
+  usedAt: string | null;
+  createdAt: string;
+  /** What made it: the image or character prompt, or a sheet's outfit or style change. */
+  prompt: string | null;
+  /** Ids of the items it was made from. */
+  sources: string[];
+  canRegenerate: boolean;
+  /** Only when failed. */
+  error: string | null;
+};
+
+export type LibraryCategory = { id: string; name: string; builtIn: boolean };
+export type Library = { items: LibraryItem[]; categories: LibraryCategory[] };
+
+const libraryPath = (id: string) => `/api/library/${encodeURIComponent(id)}`;
+const categoryPath = (id: string) => `/api/library/categories/${encodeURIComponent(id)}`;
+
+export function fetchLibrary(): Promise<Library> {
+  return request<Library>("/api/library");
+}
+
+/** Upload 1-4 photos as an image or a character. Free. */
+export function uploadLibraryItem(input: { kind: "image" | "character"; name: string; category: string | null; photos: File[] }): Promise<LibraryItem> {
+  const form = new FormData();
+  // Text fields first: the server reads the multipart stream in order.
+  form.append("kind", input.kind);
+  form.append("name", input.name.trim());
+  if (input.category) form.append("category", input.category);
+  for (const photo of input.photos) form.append("photo", photo);
+  return request<LibraryItem>("/api/library/upload", { method: "POST", body: form });
+}
+
+/** Generate an image or a character from a prompt and up to 4 items as references. Uses credits. */
+export function generateLibraryItem(input: { kind: "image" | "character"; name: string; prompt: string; category: string | null; sourceIds: string[] }): Promise<LibraryItem> {
+  return request<LibraryItem>("/api/library/generate", json({ ...input, name: input.name.trim(), prompt: input.prompt.trim() }));
+}
+
+/** A character sheet from a character, or a new outfit or art style from a character or sheet. Uses credits. */
+export function makeLibrarySheet(id: string, change: SheetChange = {}): Promise<LibraryItem> {
+  return request<LibraryItem>(`${libraryPath(id)}/sheet`, json(change));
+}
+
+/** Make it again from the same inputs, as a new item. Uses credits. */
+export function regenerateLibraryItem(id: string): Promise<LibraryItem> {
+  return request<LibraryItem>(`${libraryPath(id)}/regenerate`, { method: "POST" });
+}
+
+export function updateLibraryItem(id: string, changes: { name?: string; category?: string | null; favorite?: boolean }): Promise<LibraryItem> {
+  return request<LibraryItem>(libraryPath(id), patch(changes));
+}
+
+/** Set the custom order of exactly these items, first to last. */
+export async function orderLibrary(ids: string[]): Promise<void> {
+  await request<null>("/api/library/order", put({ ids }));
+}
+
+export async function deleteLibraryItem(id: string): Promise<void> {
+  await request<null>(libraryPath(id), { method: "DELETE" });
+}
+
+export type SaveSource = { from: "asset"; canvasId: string; assetId: string } | { from: "video"; generationId: string };
+
+/** Copy a canvas asset or a finished clip into Assets. Free. Answers with the existing item if it was saved before. */
+export function saveToLibrary(source: SaveSource, category: string | null = null): Promise<LibraryItem> {
+  return request<LibraryItem>("/api/library/save", json({ ...source, category }));
+}
+
+export function createCategory(name: string): Promise<LibraryCategory> {
+  return request<LibraryCategory>("/api/library/categories", json({ name: name.trim() }));
+}
+
+export function renameCategory(id: string, name: string): Promise<LibraryCategory> {
+  return request<LibraryCategory>(categoryPath(id), patch({ name: name.trim() }));
+}
+
+/** Its items move to Uncategorized. */
+export async function deleteCategory(id: string): Promise<void> {
+  await request<null>(categoryPath(id), { method: "DELETE" });
 }

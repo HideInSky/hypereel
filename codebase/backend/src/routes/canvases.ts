@@ -8,7 +8,8 @@ import type { Asset, Canvas, Prisma } from "@prisma/client";
 import { z } from "zod";
 import type { AppContext } from "../app.js";
 import { getEffect, sanitizeUserPrompt, type Effect, type ReferenceRole } from "../effects.js";
-import { AssetError, AssetLimitError, generateAsset, pathsOf, publicAsset, uploadAsset } from "../services/assets.js";
+import { AssetError, AssetLimitError, copyFiles, generateAsset, pathsOf, publicAsset, uploadAsset, type SheetVariantInput } from "../services/assets.js";
+import { sheetName, VariantSchema } from "./library.js";
 import { createGeneration, LimitExceededError, type GeneratorDeps, type UploadedReference } from "../services/generator.js";
 import { toPublic } from "./generations.js";
 
@@ -111,16 +112,30 @@ export async function canvasRoutes(app: FastifyInstance, ctx: AppContext) {
       ? await ctx.db.sequence.findMany({ where: { sourceId: { in: videos.map((v) => v.id) }, sessionId: canvas.sessionId }, select: { id: true, sourceId: true } })
       : [];
     const storyOf = new Map(stories.map((s) => [s.sourceId, s.id]));
+    // Which cards the owner has kept in their Assets (nobody else sees this).
+    const isOwner = viewer !== null && viewer === canvas.sessionId;
+    const origins = [...assets.map((a) => `asset:${a.id}`), ...videos.map((v) => `video:${v.id}`)];
+    const saved = isOwner && origins.length
+      ? await ctx.db.asset.findMany({ where: { sessionId: viewer, canvasId: null, originId: { in: origins } }, select: { id: true, originId: true } })
+      : [];
+    const savedOf = new Map(saved.map((s) => [s.originId, s.id]));
+    // A card brought in from Assets is already there, while its library item lasts.
+    const fromLibrary = assets.flatMap((a) => (a.originId?.startsWith("library:") ? [a.originId.slice(8)] : []));
+    const kept = isOwner && fromLibrary.length
+      ? new Set((await ctx.db.asset.findMany({ where: { id: { in: fromLibrary }, sessionId: viewer, canvasId: null }, select: { id: true } })).map((r) => r.id))
+      : new Set<string>();
+    const savedIdOf = (a: Asset) => savedOf.get(`asset:${a.id}`) ?? (a.originId?.startsWith("library:") && kept.has(a.originId.slice(8)) ? a.originId.slice(8) : null);
     return {
       id: canvas.id,
       title: canvas.title,
-      isOwner: viewer !== null && viewer === canvas.sessionId,
+      isOwner,
       board: boardOf(canvas),
-      assets: assets.map((a) => publicAsset(a, publicPath, viewer)),
+      assets: assets.map((a) => ({ ...publicAsset(a, publicPath, viewer), savedId: savedIdOf(a) })),
       videos: videos.map((v) => ({
         ...toPublic(v, ctx, viewer),
         assetIds: [...new Set(((v.references as { assetId?: string }[] | null) ?? []).flatMap((r) => (r.assetId ? [r.assetId] : [])))],
         storyId: storyOf.get(v.id) ?? null,
+        savedId: savedOf.get(`video:${v.id}`) ?? null,
       })),
       shareUrl: `${ctx.cfg.PUBLIC_URL}/?canvas=${canvas.id}`,
     };
@@ -235,20 +250,52 @@ export async function canvasRoutes(app: FastifyInstance, ctx: AppContext) {
     return startAsset(req, reply, found, { kind: body.data.kind, name: body.data.name || body.data.prompt.slice(0, 40), prompt: body.data.prompt, sources });
   });
 
-  app.post<{ Params: { id: string; assetId: string } }>("/api/canvases/:id/assets/:assetId/sheet", async (req, reply) => {
+  // A character sheet from a character card, or a new outfit or art style from a sheet.
+  app.post<{ Params: { id: string; assetId: string } }>("/api/canvases/:id/assets/:assetId/sheet", small, async (req, reply) => {
     const found = await owned(req, reply);
     if (!found) return;
+    const variant = VariantSchema.safeParse(req.body ?? {});
+    if (!variant.success) return reply.code(400).send({ error: variant.error.issues[0]?.message ?? "Describe the change in 200 characters or fewer." });
     const sources = await assetsById(found.canvas.id, [req.params.assetId]);
     if (typeof sources === "string") return reply.code(409).send({ error: sources });
-    if (sources[0]!.kind !== "character") return reply.code(400).send({ error: "Character sheets are made from a character card." });
-    return startAsset(req, reply, found, { kind: "sheet", name: `${sources[0]!.name} sheet`, prompt: "", sources });
+    const from = sources[0]!;
+    if (from.kind !== "character" && from.kind !== "sheet") return reply.code(400).send({ error: "Character sheets are made from a character card or another sheet." });
+    if (from.kind === "sheet" && !variant.data.outfit && !variant.data.style) return reply.code(400).send({ error: "Describe a new outfit or art style for this sheet." });
+    return startAsset(req, reply, found, { kind: "sheet", name: sheetName(from, variant.data), prompt: "", sources, variant: variant.data });
+  });
+
+  // Copies items from the viewer's Assets onto the board, so each can be deleted on its own.
+  app.post<{ Params: { id: string } }>("/api/canvases/:id/assets/import", small, async (req, reply) => {
+    const found = await owned(req, reply);
+    if (!found) return;
+    const body = z.object({ ids: z.array(z.string().min(1).max(40)).min(1, "Pick something to add.").max(10, "Add 10 items at a time at most.") }).safeParse(req.body);
+    if (!body.success) return reply.code(400).send({ error: body.error.issues[0]?.message ?? "Pick something to add." });
+    const wanted = [...new Set(body.data.ids)];
+    const rows = await ctx.db.asset.findMany({ where: { id: { in: wanted }, sessionId: found.viewer!, canvasId: null } });
+    if (rows.length !== wanted.length) return reply.code(404).send({ error: "One of those items isn't in your Assets any more." });
+    if (rows.some((r) => r.kind === "video")) return reply.code(400).send({ error: "Videos can't go on a canvas yet. Pick images, characters or sheets." });
+    const notReady = rows.find((r) => r.status !== "succeeded");
+    if (notReady) return reply.code(409).send({ error: `"${notReady.name}" isn't ready yet.` });
+    let canvas = found.canvas;
+    for (const id of wanted) {
+      const item = rows.find((r) => r.id === id)!;
+      const copy = await ctx.db.asset.create({
+        data: {
+          canvasId: found.canvas.id, kind: item.kind, name: item.name, status: "succeeded", paths: await copyFiles(deps, pathsOf(item)), prompt: item.prompt,
+          variant: item.variant ?? undefined, generated: false, originId: `library:${item.id}`, sessionId: found.viewer!, ip: ctx.clientIp(req),
+        },
+      });
+      canvas = await addCard(ctx, found.canvas.id, { id: `asset-${copy.id}`, kind: "asset", refId: copy.id }, []);
+    }
+    await ctx.db.asset.updateMany({ where: { id: { in: wanted } }, data: { usedAt: new Date() } });
+    return reply.code(201).send(await present(canvas, found.viewer));
   });
 
   async function startAsset(
     req: FastifyRequest,
     reply: FastifyReply,
     found: { canvas: Canvas; viewer: string | null },
-    args: { kind: "image" | "character" | "sheet"; name: string; prompt: string; sources: Asset[] },
+    args: { kind: "image" | "character" | "sheet"; name: string; prompt: string; sources: Asset[]; variant?: SheetVariantInput },
   ) {
     try {
       const asset = await generateAsset(deps, { canvasId: found.canvas.id, ...args, sessionId: found.viewer!, ip: ctx.clientIp(req) });

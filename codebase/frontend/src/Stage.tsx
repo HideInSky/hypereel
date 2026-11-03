@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import type { Generation } from "./api";
+import { ApiError, saveToLibrary, type Generation } from "./api";
+import { goToAssets } from "./useLibrary";
 import { useGeneration } from "./useGeneration";
 
 type Props = {
@@ -21,6 +22,8 @@ const STATUS_LINES = [
 export default function Stage({ id, seed, onBack, onDone, toast }: Props) {
   const { gen, notFound } = useGeneration(id, seed);
   const [line, setLine] = useState(0);
+  const [saved, setSaved] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
   const status = gen?.status;
 
   useEffect(() => {
@@ -91,6 +94,21 @@ export default function Stage({ id, seed, onBack, onDone, toast }: Props) {
     }
   };
 
+  // Only the owner gets the source photo back as posterUrl, and only they can save the clip.
+  const owner = gen.posterUrl !== null;
+  const savedId = saved ?? gen.savedId ?? null;
+  const save = async () => {
+    setSaving(true);
+    try {
+      setSaved((await saveToLibrary({ from: "video", generationId: gen.id })).id);
+      toast("Saved to Assets");
+    } catch (err) {
+      toast(err instanceof ApiError ? err.message : "Couldn't save it to Assets. Try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
   return (
     <div className="stage">
       <div className="stage-frame">
@@ -101,6 +119,16 @@ export default function Stage({ id, seed, onBack, onDone, toast }: Props) {
         <a className="primary" href={gen.videoUrl ?? "#"} download={`hypereel-${gen.effect}-${gen.id}.mp4`}>Download</a>
         <button type="button" className="ghost" onClick={() => void share()}>Share</button>
         <button type="button" className="ghost" onClick={() => void copyLink()}>Copy link</button>
+        {owner &&
+          (savedId ? (
+            <a className="ghost" href={`/?assets=${encodeURIComponent(savedId)}`} onClick={(e) => {
+              if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+              e.preventDefault();
+              goToAssets(savedId);
+            }}>In your Assets</a>
+          ) : (
+            <button type="button" className="ghost" disabled={saving} onClick={() => void save()}>{saving ? "Saving" : "Save to Assets"}</button>
+          ))}
         <button type="button" className="ghost" onClick={onBack}>Try another effect</button>
       </div>
     </div>

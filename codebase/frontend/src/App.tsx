@@ -5,6 +5,7 @@ import Stage from "./Stage";
 import StoryView from "./Story";
 import CanvasView from "./Canvas";
 import CanvasList from "./CanvasList";
+import Assets from "./Assets";
 import HowItWorks from "./HowItWorks";
 import LazyClip from "./LazyClip";
 import Masonry from "./Masonry";
@@ -20,6 +21,11 @@ const canvasFromUrl = () => {
   const q = new URLSearchParams(window.location.search);
   return q.has("canvas") ? (q.get("canvas") ?? "") : null;
 };
+/** null: not in Assets. "": Assets. Anything else: Assets with that item open. */
+const assetsFromUrl = () => {
+  const q = new URLSearchParams(window.location.search);
+  return q.has("assets") ? (q.get("assets") ?? "") : null;
+};
 const sharedEffect = () => new URLSearchParams(window.location.search).get("effect");
 
 export default function App() {
@@ -31,6 +37,7 @@ export default function App() {
   const [seed, setSeed] = useState<Generation | null>(null);
   const [storyId, setStoryId] = useState<string | null>(storyFromUrl);
   const [canvasId, setCanvasId] = useState<string | null>(canvasFromUrl);
+  const [assetsId, setAssetsId] = useState<string | null>(assetsFromUrl);
   const [history, setHistory] = useState<Generation[]>([]);
   const [draft, setDraft] = useState<Draft>({ recipe: BLANK_RECIPE, remixOf: null });
   const [busy, setBusy] = useState(false);
@@ -70,6 +77,7 @@ export default function App() {
       setViewId(viewFromUrl());
       setStoryId(storyFromUrl());
       setCanvasId(canvasFromUrl());
+      setAssetsId(assetsFromUrl());
     };
     window.addEventListener("popstate", onPop);
     return () => window.removeEventListener("popstate", onPop);
@@ -80,6 +88,7 @@ export default function App() {
     setViewId(id);
     setStoryId(null);
     setCanvasId(null);
+    setAssetsId(null);
   }, []);
   /** "" opens the list of canvases. */
   const openCanvas = useCallback((id: string) => {
@@ -87,9 +96,18 @@ export default function App() {
     setCanvasId(id);
     setViewId(null);
     setStoryId(null);
+    setAssetsId(null);
+  }, []);
+  const openAssets = useCallback(() => {
+    window.history.pushState(null, "", "/?assets");
+    setAssetsId("");
+    setViewId(null);
+    setStoryId(null);
+    setCanvasId(null);
   }, []);
   const inCanvas = canvasId !== null;
-  const open = viewId ?? storyId ?? canvasId;
+  const inAssets = assetsId !== null && !inCanvas;
+  const open = viewId ?? storyId ?? canvasId ?? assetsId;
 
   const showTab = (next: Tab) => {
     setTab(next);
@@ -177,6 +195,7 @@ export default function App() {
         <nav className="topnav" aria-label="Main">
           <button type="button" className={open === null && tab === "effects" ? "on" : ""} onClick={() => showTab("effects")}>Effects</button>
           <button type="button" className={inCanvas ? "on" : ""} aria-current={inCanvas ? "page" : undefined} onClick={() => openCanvas("")}>Canvas</button>
+          <button type="button" className={inAssets ? "on" : ""} aria-current={inAssets ? "page" : undefined} onClick={openAssets}>Assets</button>
           <button type="button" className={open === null && tab === "history" ? "on" : ""} onClick={() => showTab("history")}>History</button>
           <a href="https://github.com/HideInSky/hypereel" target="_blank" rel="noreferrer">GitHub</a>
         </nav>
@@ -187,6 +206,10 @@ export default function App() {
         {inCanvas ? (
           <main className="panel panel--canvas">
             {canvasId ? <CanvasView key={canvasId} id={canvasId} effects={effects} onList={() => openCanvas("")} toast={toast} /> : <CanvasList onOpen={openCanvas} />}
+          </main>
+        ) : inAssets ? (
+          <main className="panel panel--assets">
+            <Assets focusId={assetsId || null} toast={toast} onCanvas={() => openCanvas("")} />
           </main>
         ) : (
         <>
